@@ -8,7 +8,6 @@ const config: Config = {
         './bundles/**/*.{js,ts,jsx,tsx,mdx}',
         './application/**/*.{js,ts,jsx,tsx,mdx}',
         './app/**/*.{js,ts,jsx,tsx,mdx}',
-        // './**/*.{js,ts,jsx,tsx,mdx}',
     ],
     theme: {
         extend: {

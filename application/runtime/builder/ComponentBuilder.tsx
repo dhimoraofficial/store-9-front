@@ -1,7 +1,9 @@
 import { Suspense } from "react";
-import { AppComponents } from "../renders";
 import ClientComponentBuilderContent from "./ClientComponentBuilder";
 import { ComponentSchema } from "./type";
+import { AppComponents } from "../dynamic-components";
+import { getParsedSettings } from "../dynamic-components/base";
+import { ComponentSchemaSettings } from "./settings";
 
 async function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
     if (!schema) return null;
@@ -15,7 +17,13 @@ async function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) 
         return <ClientComponentBuilderContent schema={schema} />
     }
 
-    return <Component {...schema.settings} content={schema.label} value={schema.label}>
+    return <Component
+        // set the settings directly yto the comopennts, 
+        // this will pass all the config values into the style, settings formate 
+        {...getParsedSettings(schema.type, schema.settings as ComponentSchemaSettings)}
+        content={schema.label}
+        value={schema.label}
+    >
         {schema?.children?.map((child, index) => (
             <ComponentBuilder key={child.id || index} schema={child} />
         ))}

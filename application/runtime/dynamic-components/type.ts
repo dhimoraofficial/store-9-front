@@ -10,9 +10,7 @@ export type BaseTypes =
 
 export interface BaseProps {
     id?: string;
-    className?: string;
     style?: React.CSSProperties;
-    dataTestId?: string;
 }
 
 export type ActionObject = {

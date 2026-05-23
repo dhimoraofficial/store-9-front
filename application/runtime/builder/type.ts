@@ -1,10 +1,11 @@
 import { ComponentAction } from "../actions/type"
-import { BaseTypes } from "../renders/type"
+import { BaseTypes } from "../dynamic-components"
+import { ComponentSchemaSettings } from "./settings"
 
 export type ComponentSchema = {
     id: string
     type: BaseTypes
-    settings?: Record<string, any>
+    settings?: ComponentSchemaSettings
     action?: ComponentAction | ComponentAction[]
     label?: string | null
     children?: ComponentSchema[]

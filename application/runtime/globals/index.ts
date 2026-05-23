@@ -1,4 +1,4 @@
-import { ComponentSchema } from "../dynamics/builder/type";
+import { ComponentSchema } from "../builder/type";
 import { Announcement } from "./Announcement";
 import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";

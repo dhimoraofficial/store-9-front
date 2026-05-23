@@ -6,18 +6,15 @@ import AInput from "../Input";
 export default function ASearchQuery(props: any) {
     const router = useRouter()
 
-    console.log("asdasd");
-
-
     return <AInput
         {...props}
         onKeyDown={event => {
-            if (event.key === "enter") return
+            if (event.key !== "Enter") return;
 
-            let query = event?.target?.value?.strip()
+            const query = (event.currentTarget as HTMLInputElement).value?.trim();
             console.log(query);
             if (query) {
-                router?.push(`/search?query=${decodeURIComponent(query)}`)
+                router.push(`/search?query=${encodeURIComponent(query)}`);
             }
         }}
     />

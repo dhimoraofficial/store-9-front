@@ -2,7 +2,9 @@
 
 import { ApplciationActions } from "../actions";
 import { ApplicationActionEvents, ComponentAction, ComponentActionPayload } from "../actions/type";
-import { AppComponents } from "../renders";
+import { AppComponents } from "../dynamic-components";
+import { getParsedSettings } from "../dynamic-components/base";
+import { ComponentSchemaSettings } from "./settings";
 import { ComponentSchema } from "./type";
 
 function getNestedData(fields: string[], thisData: any): string {
@@ -23,7 +25,7 @@ function parseActionPayload(payloads: ComponentActionPayload, runtimeStateData: 
         if (!payloadVALUE?.includes("$context.")) return
 
         let cleanedPayload = payloadVALUE?.replaceAll("$context.", "").split(".")
-        
+
         newPayload[payloadKEY] = getNestedData(cleanedPayload, runtimeStateData)
     })
 
@@ -78,22 +80,17 @@ export default function ClientComponentBuilderContent({ schema }: { schema: Comp
                 product_id: "its-drk-here"
             }
         ) || {})
-    }
+    } as ComponentSchemaSettings
 
-    // the compoennt 
     return <Component
-
-        // this will be used to set the required settings!
-        {...schema.settings}
-
-        // label or content
-        label={schema.label}
+        // set the settings directly yto the comopennts, 
+        // this will pass all the config values into the style, settings formate 
+        {...getParsedSettings(schema.type, schema.settings as ComponentSchemaSettings)}
         content={schema.label}
+        value={schema.label}
     >
-        {/* map the childrens if avaiblenle */}
         {schema?.children?.map((child, index) => (
             <ClientComponentBuilderContent key={child.id || index} schema={child} />
         ))}
-        {/* end */}
     </Component>
 }

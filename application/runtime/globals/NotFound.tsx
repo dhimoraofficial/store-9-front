@@ -1,4 +1,4 @@
-import { ComponentSchema } from "../dynamics/builder/type";
+import { ComponentSchema } from "../builder/type";
 
 export const NotFound: ComponentSchema = {
     id: "storefront-not-found",
@@ -7,7 +7,6 @@ export const NotFound: ComponentSchema = {
         padding: "0",
         background: "transparent",
         border: "none",
-        className: "flex w-full items-center justify-center px-4 py-20",
     },
     children: [
         {
@@ -15,7 +14,6 @@ export const NotFound: ComponentSchema = {
             type: "box",
             settings: {
                 padding: "0",
-                className: "w-full max-w-xl rounded-3xl border border-slate-800 bg-slate-950/85 p-8 text-center shadow-2xl shadow-slate-950/40",
             },
             children: [
                 {
@@ -23,7 +21,6 @@ export const NotFound: ComponentSchema = {
                     type: "box",
                     settings: {
                         padding: "0",
-                        className: "mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300",
                     },
                     children: [
                         {
@@ -44,7 +41,6 @@ export const NotFound: ComponentSchema = {
                         as: "h1",
                         size: "2xl",
                         weight: "bold",
-                        className: "mt-6 text-slate-50",
                     },
                 },
                 {
@@ -55,7 +51,6 @@ export const NotFound: ComponentSchema = {
                         as: "h2",
                         size: "xl",
                         weight: "semibold",
-                        className: "mt-2 text-slate-100",
                     },
                 },
                 {
@@ -65,7 +60,6 @@ export const NotFound: ComponentSchema = {
                     settings: {
                         as: "p",
                         size: "sm",
-                        className: "mt-3 text-slate-400",
                     },
                 },
                 {
@@ -73,7 +67,6 @@ export const NotFound: ComponentSchema = {
                     type: "box",
                     settings: {
                         padding: "0",
-                        className: "mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center",
                     },
                     children: [
                         {
@@ -82,7 +75,6 @@ export const NotFound: ComponentSchema = {
                             label: "Back to home",
                             settings: {
                                 href: "/",
-                                className: "inline-flex items-center justify-center rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-400",
                             },
                         },
                         {
@@ -91,7 +83,6 @@ export const NotFound: ComponentSchema = {
                             label: "Browse laptops",
                             settings: {
                                 href: "/category/laptops",
-                                className: "inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-100 transition-colors hover:border-slate-600 hover:bg-slate-800",
                             },
                         },
                     ],

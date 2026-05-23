@@ -98,8 +98,8 @@ export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID?: s
         shadowHard: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
 
         // 7. Typography
-        fontFamilySans: 'Inter, system-ui, sans-serif',
-        fontFamilyMono: 'JetBrains Mono, monospace',
+        fontFamilySans: 'Roboto',
+        fontFamilyMono: 'Roboto',
         fontSizeRoot: '16px',
         lineHeightBase: '1.5',
     }
