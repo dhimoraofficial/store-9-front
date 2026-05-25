@@ -22,14 +22,26 @@ export type ApplicationRoutes = ApplicationRouteNotFound & {
 
     // the layout or its layout id, here if the page id DP like products
     // then simply set the id to its type name which will act as ID for 
-    // layout definition
+    // layout definition for cross product layout selectiong among rest
     layout?: string | ApplicationRouteTypes | ApplicationLayoutComponent
 }
 
 
 export type ApplicationLayoutComponent = ComponentSchema[]
 
+export type ApplicationLayoutType = "global" | "custom"
+export type ApplicationLayoutFor = "navbar" | "footer" | "main" | "announcement"
+
+// if the ApplicationRoutes.layout is string than the document of layout should look like this
+// and the type:- if the compoennt created is a part of these Omit<ApplicationLayoutType, "main">
+// directly store this doc holding that config/schema edite, on the alyout collection
+// if its DP ie product page, id will be priduct and type will be main
+// if its SP ie home page, ApplicationRoutes.layout will direclty hold the layout config
+// if its just a compoennt like whatsAppButton floating inside all the compoentns than simply:- type: global and id: compeont name or ID
 export type ApplicationLayout = {
-    id: "not_found" | string
+    // the id for given layout, it can be 
+    id: ApplicationRouteTypes | ApplicationLayoutFor | string
+    for: ApplicationLayoutFor
+    type: ApplicationLayoutType
     _c: ApplicationLayoutComponent
 }

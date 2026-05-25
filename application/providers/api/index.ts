@@ -151,11 +151,12 @@ async function POST<T = requestResponse>(
     isFileUpload: boolean = false,
     extraHeaders: RequestHeadersMap = {},
     accessToken?: string,
+    exact_path: boolean = false
 ): Promise<requestResponse | T> {
     // Code //
     const headers = isFileUpload ? extraHeaders : withJson(withAuth(extraHeaders, accessToken));
     const body = isFileUpload ? payload : JSON.stringify(payload);
-    return await request(path, "POST", headers, { body });
+    return await request(path, "POST", headers, { body }, exact_path);
 }
 
 async function UPLOAD(
@@ -186,11 +187,12 @@ async function UPLOAD(
 async function GET<T = requestResponse>(
     path: string,
     extraHeaders: RequestHeadersMap = {},
-    accessToken?: string
+    accessToken?: string,
+    exact_path: boolean = false
 ): Promise<requestResponse | T> {
     // Code //
     const headers = withAuth(extraHeaders, accessToken);
-    return await request(path, "GET", headers, {});
+    return await request(path, "GET", headers, {}, exact_path);
 }
 
 async function DOWNLOAD(

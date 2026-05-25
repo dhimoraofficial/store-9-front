@@ -3,7 +3,7 @@ import ClientComponentBuilderContent from "./ClientComponentBuilder";
 import { ComponentSchema } from "./type";
 import { AppComponents } from "../dynamic-components";
 import { getParsedSettings } from "../dynamic-components/base";
-import { ComponentSchemaSettings } from "./settings";
+import { ComponentSchemaSettings } from "../dynamic-components/core";
 
 async function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
     if (!schema) return null;

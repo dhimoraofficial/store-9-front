@@ -1,6 +1,6 @@
 import { ComponentAction } from "../actions/type"
 import { BaseTypes } from "../dynamic-components"
-import { ComponentSchemaSettings } from "./settings"
+import { ComponentSchemaSettings } from "../dynamic-components/core"
 
 export type ComponentSchema = {
     id: string

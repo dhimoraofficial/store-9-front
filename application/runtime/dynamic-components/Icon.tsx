@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Lucide from 'lucide-react';
 import { BaseProps } from './type';
 
 /**
@@ -10,8 +11,7 @@ export interface IconProps extends BaseProps {
     color?: string;
 }
 
-export default async function AIcon({ label, size, color }: IconProps) {
-    const Lucide = await import("lucide-react");
+export default function AIcon({ label, size, color }: IconProps) {
     const ICO = (Lucide as any)?.[label];
 
     if (!ICO) return null;

@@ -4,7 +4,7 @@ import { ApplciationActions } from "../actions";
 import { ApplicationActionEvents, ComponentAction, ComponentActionPayload } from "../actions/type";
 import { AppComponents } from "../dynamic-components";
 import { getParsedSettings } from "../dynamic-components/base";
-import { ComponentSchemaSettings } from "./settings";
+import { ComponentSchemaSettings } from "../dynamic-components/core";
 import { ComponentSchema } from "./type";
 
 function getNestedData(fields: string[], thisData: any): string {
@@ -69,17 +69,20 @@ export default function ClientComponentBuilderContent({ schema }: { schema: Comp
         return null
     }
 
+    const compoennetActions = returnComponentAction(
+        // passing whats the action to check
+        (schema?.action as ComponentAction | ComponentAction[]),
+
+        // here pass the exact data, 
+        { product_id: "its-drk-here" }
+    ) || {}
+
     // this mapper fucntion automatically sets the required action like onClick={() => handleAddToCart(x, y)}
     schema.settings = {
         ...(schema?.settings || {}),
 
         // this mapper fucntion automatically sets the required action like onClick={() => handleAddToCart(x, y)}
-        ...(returnComponentAction(
-            (schema?.action as ComponentAction | ComponentAction[]),
-            {
-                product_id: "its-drk-here"
-            }
-        ) || {})
+        ...compoennetActions
     } as ComponentSchemaSettings
 
     return <Component

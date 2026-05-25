@@ -1,7 +1,5 @@
-import useAppAPI from "@/bundles/Hooks/useAppAPI"
-import {googleAccountLoginParams} from "@/bundles/callable/types/auth"
-
-const API = useAppAPI({})
+import { APP_API } from "@/application/providers/api";
+import { googleAccountLoginParams } from "./type";
 
 export async function loginGoogleAccount({
                                              sub,
@@ -21,7 +19,7 @@ export async function loginGoogleAccount({
                                              }
                                          }: googleAccountLoginParams
 ) {
-    let response = API.POST(`/v1/${tenant}/${store}/auth/google/register`, {
+    let response = APP_API.POST(`/v1/${tenant}/${store}/auth/google/register`, {
         email,
         email_verified,
         name: user_name,
@@ -33,7 +31,7 @@ export async function loginGoogleAccount({
         sub,
         scope,
         token
-    })
+    });
 
-    return response
+    return response;
 }

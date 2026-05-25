@@ -4,8 +4,9 @@ export const Navbar: ComponentSchema = {
     id: "gn-navbar",
     type: "box",
     settings: {
-        p: 0,
-        w: "full",
+        w: "",
+        pB: "",
+        "box-tp": "container"
     },
     children: [
         // ── TOP BAR ─────────────────────────────────────────────
@@ -13,22 +14,19 @@ export const Navbar: ComponentSchema = {
             id: "gn-navbar-top",
             type: "box",
             settings: {
-                padding: "0",
             },
             children: [
                 // BRAND
                 {
                     id: "gn-navbar-brand",
-                    type: "link",
+                    type: "text",
                     settings: {
-                        href: "/",
                     },
                     children: [
                         {
                             id: "gn-navbar-brand-mark",
                             type: "box",
                             settings: {
-                                padding: "0",
                             },
                             children: [
                                 {
@@ -43,28 +41,27 @@ export const Navbar: ComponentSchema = {
                             id: "gn-navbar-brand-copy",
                             type: "box",
                             settings: {
-                                padding: "0",
+                                children: [
+                                    {
+                                        id: "gn-navbar-brand-name",
+                                        type: "text",
+                                        label: "Generation Nepal",
+                                        settings: {
+                                            as: "span",
+                                        },
+                                    },
+                                    {
+                                        id: "gn-navbar-brand-subtitle",
+                                        type: "text",
+                                        label: "Tech & Hardware Store",
+                                        settings: {
+                                            as: "span",
+                                        },
+                                    },
+                                ],
                             },
-                            children: [
-                                {
-                                    id: "gn-navbar-brand-name",
-                                    type: "text",
-                                    label: "Generation Nepal",
-                                    settings: {
-                                        as: "span",
-                                    },
-                                },
-                                {
-                                    id: "gn-navbar-brand-subtitle",
-                                    type: "text",
-                                    label: "Tech & Hardware Store",
-                                    settings: {
-                                        as: "span",
-                                    },
-                                },
-                            ],
-                        },
-                    ],
+                        }
+                    ]
                 },
 
                 // SEARCH BAR
@@ -72,23 +69,12 @@ export const Navbar: ComponentSchema = {
                     id: "gn-navbar-search",
                     type: "box",
                     settings: {
-                        padding: "0",
                     },
                     children: [
                         {
                             id: "gn-navbar-search-category",
                             type: "input",
                             settings: {
-                                id: "gn-search-category",
-                                inputType: "select",
-                                options: [
-                                    "All Categories",
-                                    "Laptops & Desktops",
-                                    "Apple",
-                                    "PC Components",
-                                    "Accessories",
-                                    "Gaming",
-                                ],
                             },
                         },
                         {
@@ -96,16 +82,12 @@ export const Navbar: ComponentSchema = {
                             type: "icon",
                             label: "Search",
                             settings: {
-                                size: 15,
                             },
                         },
                         {
                             id: "gn-navbar-search-input",
                             type: "input",
                             settings: {
-                                id: "gn-search-input",
-                                placeholder: "Search by name, brand, category…",
-                                inputSize: "sm",
                             },
                         },
                         {
@@ -119,7 +101,9 @@ export const Navbar: ComponentSchema = {
                                     id: "gn-navbar-search-btn-icon",
                                     type: "icon",
                                     label: "Search",
-                                    settings: { size: 16 },
+                                    settings: {
+
+                                    },
                                 },
                             ],
                         },
@@ -131,7 +115,6 @@ export const Navbar: ComponentSchema = {
                     id: "gn-navbar-actions",
                     type: "box",
                     settings: {
-                        padding: "0",
                     },
                     children: [
                         {
@@ -143,10 +126,9 @@ export const Navbar: ComponentSchema = {
                         },
                         {
                             id: "gn-navbar-action-contact",
-                            type: "link",
+                            type: "text",
                             label: "Contact",
                             settings: {
-                                href: "/contact",
                             },
                         },
                     ],
@@ -159,54 +141,47 @@ export const Navbar: ComponentSchema = {
             id: "gn-navbar-bottom",
             type: "box",
             settings: {
-                padding: "0",
             },
             children: [
                 {
                     id: "gn-navbar-nav",
                     type: "box",
                     settings: {
-                        padding: "0",
                     },
                     children: [
                         {
                             id: "gn-nav-laptops",
-                            type: "link",
+                            type: "text",
                             label: "Laptops & Desktops",
                             settings: {
-                                href: "/category/laptops",
                             },
                         },
                         {
                             id: "gn-nav-apple",
-                            type: "link",
+                            type: "text",
                             label: "Apple",
                             settings: {
-                                href: "/category/apple",
                             },
                         },
                         {
                             id: "gn-nav-pc",
-                            type: "link",
+                            type: "text",
                             label: "PC Components",
                             settings: {
-                                href: "/category/pc-components",
                             },
                         },
                         {
                             id: "gn-nav-accessories",
-                            type: "link",
+                            type: "text",
                             label: "Accessories",
                             settings: {
-                                href: "/category/accessories",
                             },
                         },
                         {
                             id: "gn-nav-gaming",
-                            type: "link",
+                            type: "text",
                             label: "Gaming",
                             settings: {
-                                href: "/category/gaming",
                             },
                         },
                         // Spacer
@@ -214,32 +189,28 @@ export const Navbar: ComponentSchema = {
                             id: "gn-nav-spacer",
                             type: "box",
                             settings: {
-                                padding: "0",
                             },
                         },
                         // Right utility links
                         {
                             id: "gn-nav-home",
-                            type: "link",
+                            type: "text",
                             label: "Home",
                             settings: {
-                                href: "/",
                             },
                         },
                         {
                             id: "gn-nav-products",
-                            type: "link",
+                            type: "text",
                             label: "Products",
                             settings: {
-                                href: "/products",
                             },
                         },
                         {
                             id: "gn-nav-warranty",
-                            type: "link",
+                            type: "text",
                             label: "Warranty Policy",
                             settings: {
-                                href: "/warranty",
                             },
                         },
                     ],

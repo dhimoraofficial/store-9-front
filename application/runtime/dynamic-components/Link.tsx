@@ -36,3 +36,11 @@ export default function ALink({
         </Link>
     );
 }
+
+export interface ComponentTextSchemaSettings {
+    as: ""
+}
+
+export interface ComponentTextSchemaSettingsMap {
+    as: ""
+}

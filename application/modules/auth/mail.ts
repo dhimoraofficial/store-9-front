@@ -1,8 +1,7 @@
-import useAppAPI from "@/bundles/Hooks/useAppAPI";
-import {createAndLoginAccountParams, UserCreationResponse} from "@/bundles/callable/types/auth";
+import { APP_API } from "@/application/providers/api";
+import { createAndLoginAccountParams, UserCreationResponse } from "./type";
 
-const API = useAppAPI({})
-
+const API = APP_API;
 
 export async function loginWithEmailAccount({email, password, APP: {tenant, store}}: createAndLoginAccountParams) {
     if (!email || !password) {
@@ -16,11 +15,10 @@ export async function loginWithEmailAccount({email, password, APP: {tenant, stor
             name: "email",
             type: "pass"
         },
-    })
+    });
 
-    return response as UserCreationResponse
+    return response as UserCreationResponse;
 }
-
 
 export async function createAccountWithEmail({email, password, APP: {tenant, store}}: createAndLoginAccountParams) {
     let response = await API.POST(`/v1/${tenant}/${store}/auth/mail/register`, {
@@ -30,7 +28,7 @@ export async function createAccountWithEmail({email, password, APP: {tenant, sto
             name: "email",
             type: "pass"
         },
-    })
+    });
 
-    return response as UserCreationResponse
+    return response as UserCreationResponse;
 }

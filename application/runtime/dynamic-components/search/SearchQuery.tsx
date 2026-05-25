@@ -12,7 +12,6 @@ export default function ASearchQuery(props: any) {
             if (event.key !== "Enter") return;
 
             const query = (event.currentTarget as HTMLInputElement).value?.trim();
-            console.log(query);
             if (query) {
                 router.push(`/search?query=${encodeURIComponent(query)}`);
             }

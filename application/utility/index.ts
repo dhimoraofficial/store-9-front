@@ -32,3 +32,11 @@ export function setCookie(__name: string, value: string, expireInDay = 30, domai
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
+
+export function checkRegX(regx: string | undefined, value: any): boolean | "#1" {
+    if (!regx) {
+        return false;
+    }
+
+    return new RegExp(regx).test(String(value)) ? value : false;
+}
