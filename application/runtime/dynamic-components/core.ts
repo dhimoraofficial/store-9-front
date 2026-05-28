@@ -3,8 +3,6 @@
 
 import { checkRegX } from "@/application/utility";
 import { CSSProperties } from "react";
-import { ComponentBoxSchemaSettings } from "./Box";
-import { ComponentTextSchemaSettings } from "./Text";
 
 
 export type ComponentSchemaSettings = {
@@ -33,7 +31,7 @@ export type ComponentSchemaSettings = {
 
     style?: CSSProperties
     [key: string]: any
-} & ComponentTextSchemaSettings & ComponentBoxSchemaSettings
+}
 
 export interface ComponentSettingsSchema {
     tp: "style" | "prop"
@@ -52,45 +50,45 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
     },
     pL: {
         tp: "style",
-        as: "padding-left",
+        as: "paddingLeft",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     pT: {
         tp: "style",
-        as: "padding-top",
+        as: "paddingTop",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     pR: {
         tp: "style",
-        as: "padding-right",
+        as: "paddingRight",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     pB: {
         tp: "style",
-        as: "padding-bottom",
+        as: "paddingBottom",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     pX: [
         {
             tp: "style",
-            as: "padding-left",
+            as: "paddingLeft",
             rgx: "^\\d*\\.?\\d+(rem)$"
         },
         {
             tp: "style",
-            as: "padding-right",
+            as: "paddingRight",
             rgx: "^\\d*\\.?\\d+(rem)$"
         }
     ],
     pY: [
         {
             tp: "style",
-            as: "padding-top",
+            as: "paddingTop",
             rgx: "^\\d*\\.?\\d+(rem)$"
         },
         {
             tp: "style",
-            as: "padding-bottom",
+            as: "paddingBottom",
             rgx: "^\\d*\\.?\\d+(rem)$"
         }
     ],
@@ -102,45 +100,45 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
     },
     mL: {
         tp: "style",
-        as: "margin-left",
+        as: "marginLeft",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     mT: {
         tp: "style",
-        as: "margin-top",
+        as: "marginTop",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     mR: {
         tp: "style",
-        as: "margin-right",
+        as: "marginRight",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     mB: {
         tp: "style",
-        as: "margin-bottom",
+        as: "marginBottom",
         rgx: "^\\d*\\.?\\d+(rem)$"
     },
     mX: [
         {
             tp: "style",
-            as: "margin-left",
+            as: "marginLeft",
             rgx: "^\\d*\\.?\\d+(rem)$"
         },
         {
             tp: "style",
-            as: "margin-right",
+            as: "marginRight",
             rgx: "^\\d*\\.?\\d+(rem)$"
         }
     ],
     mY: [
         {
             tp: "style",
-            as: "margin-top",
+            as: "marginTop",
             rgx: "^\\d*\\.?\\d+(rem)$"
         },
         {
             tp: "style",
-            as: "margin-bottom",
+            as: "marginBottom",
             rgx: "^\\d*\\.?\\d+(rem)$"
         }
     ],
@@ -165,7 +163,7 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
     },
     mw: {
         tp: "style",
-        as: "max-width",
+        as: "maxWidth",
         rgx: "^\\d*\\.?\\d+(rem)$",
         opt: [
             "100%",
@@ -174,7 +172,7 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
     },
     mh: {
         tp: "style",
-        as: "max-height",
+        as: "maxHeight",
         rgx: "^\\d*\\.?\\d+(rem)$",
         opt: [
             "100%",
@@ -184,6 +182,9 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
 }
 
 export function valdiateComponentSetting(settingConfig: ComponentSettingsSchema, settingValue: string) {
+    if (!settingConfig?.rgx && !settingConfig?.opt) {
+        return true;
+    }
     let verification = checkRegX(settingConfig?.rgx, settingValue)
 
     if (settingConfig?.opt) {

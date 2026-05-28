@@ -14,7 +14,7 @@ export default function Button({
     onClick, setReloadEvent = true, processing, onError, blockScroll = true, buttonLoading,
 
     // DOM elements
-    disabled, className, style, title, htmlRef, children, type = "button"
+    disabled, className, style, title, htmlRef, children, type = "button", id
 }: {
     onClick?: Function | undefined,
     setReloadEvent?: boolean | undefined,
@@ -30,7 +30,8 @@ export default function Button({
     title?: string | undefined,
     htmlRef?: RefObject<HTMLButtonElement> | undefined,
     children?: ReactNode | undefined,
-    type?: "button" | "submit" | "reset" | undefined
+    type?: "button" | "submit" | "reset" | undefined,
+    id?: string | undefined
 }) {
     const [loading, setLoading] = useState(buttonLoading || false)
     const ref = useRef(htmlRef?.current || null)
@@ -91,6 +92,7 @@ export default function Button({
 
     return <>
         <button
+            id={id}
             // HTML ref
             ref={ref}
             type={type}

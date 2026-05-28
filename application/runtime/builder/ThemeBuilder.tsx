@@ -67,5 +67,5 @@ export default function ThemeBuilder({ children, themeConfigs }: {
         // Clean up or reset if necessary when tenant changes
     }, [cssVariables]);
 
-    return <>{children}</>;
+    return children
 }

@@ -67,8 +67,8 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
         onClick: handleClick,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
-        content: schema.label,
-        value: schema.label,
+        content: parsed.content !== undefined ? parsed.content : schema.label,
+        value: parsed.value !== undefined ? parsed.value : schema.label,
     };
 
     return (

@@ -1,6 +1,5 @@
 import { ThemeConfigs } from "@/application/runtime/builder/ThemeBuilder"
 import { ComponentSchema } from "@/application/runtime/builder/type"
-import { AppGlobalsComponents } from "@/application/runtime/globals"
 import { ApplicationLayout, ApplicationRoutes, ApplicationLayoutType } from "@/application/runtime/pages/type"
 import { getLayoutCollection, connectToDatabase } from "@/application/runtime/db/mongo"
 import { APP } from "@/app"
@@ -68,8 +67,7 @@ export async function getApplicationPageRender({ route }: {
     const routesCollection = db.collection("routes");
 
     // Retrieve all routes for this tenant/store to do pattern matching
-    const allRoutes = await routesCollection.find({ tenantId: APP.tenant, storeId: APP.store }).toArray();
-    let routeDoc = allRoutes.find(r => r.route === route || (r.route && matchRoutePattern(r.route, route)));
+    const routeDoc = await routesCollection.findOne({ tenantId: APP.tenant, storeId: APP.store, route: route })
 
     // 2. Handle not_found type
     if (!routeDoc || routeDoc.type === "not_found") {
@@ -99,21 +97,21 @@ export async function getApplicationPageRender({ route }: {
     let layoutDoc = null;
 
     if (typeof layoutKey === "string") {
-        // Query the layouts collection using the layout ID
+        // Query the layouts collection using the layout ID as _id
         layoutDoc = await collection.findOne({
             tenantId: APP.tenant,
             storeId: APP.store,
-            id: layoutKey,
-            for: "main"
+            _id: layoutKey as any,
         });
     }
 
-    if (!layoutDoc && typeof layoutKey === "string") {
-        return {
-            pageLayout: null,
-            pageRoute: {
-                type: "not_found"
-            } as ApplicationRoutes
+    if (!layoutDoc) {
+        // Mock an empty custom layout if not found in DB
+        layoutDoc = {
+            _id: typeof layoutKey === "string" ? layoutKey : (route === "/" ? "homepage" : route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-")),
+            for: "main",
+            type: "custom",
+            _c: []
         };
     }
 
@@ -121,10 +119,10 @@ export async function getApplicationPageRender({ route }: {
 
     return {
         pageLayout: {
-            id: typeof layoutKey === "string" ? layoutKey : routeDoc.route,
+            _id: String(layoutDoc._id),
             for: "main",
-            type: (layoutDoc?.type || "custom") as ApplicationLayoutType,
-            _c: (layoutDoc ? layoutDoc._c : (Array.isArray(layoutKey) ? layoutKey : [])) as ComponentSchema[]
+            type: (layoutDoc.type || "custom") as ApplicationLayoutType,
+            _c: (layoutDoc._c || []) as ComponentSchema[]
         },
         pageRoute: routeWithoutLayout as any as ApplicationRoutes
     };
@@ -137,17 +135,16 @@ export async function getAppGlobalComponent(componentID: string): Promise<Compon
         const doc = await collection.findOne({
             tenantId: APP.tenant,
             storeId: APP.store,
-            id: componentID
+            _id: componentID as any
         });
+        
         if (doc) {
-            const schemaObj = Array.isArray(doc._c) ? doc._c[0] : doc._c;
-            return schemaObj as ComponentSchema;
+            return (doc._c || []) as ComponentSchema[];
         }
-        // Fallback to static defaults
-        return AppGlobalsComponents[componentID] as any;
+
+        return []
     }
 
-    // Load all other global widgets (type: "global", for: "main")
     const docs = await collection.find({
         tenantId: APP.tenant,
         storeId: APP.store,
@@ -159,8 +156,7 @@ export async function getAppGlobalComponent(componentID: string): Promise<Compon
         return docs.flatMap(d => d._c || []) as ComponentSchema[];
     }
 
-    // Default fallback
-    return [AppGlobalsComponents.whatsAppButton] as ComponentSchema[];
+    return [] as ComponentSchema[];
 }
 
 export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID?: string, storeID?: string } = {}): Promise<ThemeConfigs> {

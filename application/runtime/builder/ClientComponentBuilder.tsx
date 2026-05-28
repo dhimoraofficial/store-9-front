@@ -1,5 +1,7 @@
 "use client"
 
+import SplashScreen from "@/application/widgets/splash_screen";
+import { Suspense } from "react";
 import { ApplciationActions } from "../actions";
 import { ApplicationActionEvents, ComponentAction, ComponentActionPayload } from "../actions/type";
 import { AppComponents } from "../dynamic-components";
@@ -61,7 +63,7 @@ function returnComponentAction(actions: ComponentAction | ComponentAction[], run
 }
 
 
-export default function ClientComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
+function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
     if (!schema) return null;
 
     const Component = AppComponents?.[schema.type]
@@ -89,11 +91,15 @@ export default function ClientComponentBuilderContent({ schema }: { schema: Comp
         // set the settings directly yto the comopennts, 
         // this will pass all the config values into the style, settings formate 
         {...getParsedSettings(schema.type, schema.settings as ComponentSchemaSettings)}
-        content={schema.label}
-        value={schema.label}
     >
         {schema?.children?.map((child, index) => (
-            <ClientComponentBuilderContent key={child.id || index} schema={child} />
+            <ComponentBuilderContent key={child.id || index} schema={child} />
         ))}
     </Component>
+}
+
+export default function ClientComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
+    return <Suspense fallback={<SplashScreen />}>
+        <ComponentBuilderContent schema={schema} />
+    </Suspense>
 }

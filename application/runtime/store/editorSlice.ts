@@ -3,11 +3,11 @@ import { ComponentSchema } from "@/application/runtime/builder/type";
 
 export interface EditorState {
     schemas: {
-        announcement: ComponentSchema | null;
-        navbar: ComponentSchema | null;
+        announcement: ComponentSchema[];
+        navbar: ComponentSchema[];
         main: ComponentSchema[]; // The page main content (is an array of components)
-        footer: ComponentSchema | null;
-        whatsAppButton: ComponentSchema | null;
+        footer: ComponentSchema[];
+        whatsAppButton: ComponentSchema[];
     };
     theme: any | null; // Global theme config
     selectedNodeId: string | null;
@@ -18,11 +18,11 @@ export interface EditorState {
 
 const initialState: EditorState = {
     schemas: {
-        announcement: null,
-        navbar: null,
+        announcement: [],
+        navbar: [],
         main: [],
-        footer: null,
-        whatsAppButton: null,
+        footer: [],
+        whatsAppButton: [],
     },
     theme: null,
     selectedNodeId: null,
@@ -108,10 +108,10 @@ function mutateGlobalSchemas(
     id: string,
     modifyFn: (node: ComponentSchema) => void
 ) {
-    if (schemas.announcement && modifyNodeInTree([schemas.announcement], id, modifyFn)) return;
-    if (schemas.navbar && modifyNodeInTree([schemas.navbar], id, modifyFn)) return;
-    if (schemas.footer && modifyNodeInTree([schemas.footer], id, modifyFn)) return;
-    if (schemas.whatsAppButton && modifyNodeInTree([schemas.whatsAppButton], id, modifyFn)) return;
+    if (modifyNodeInTree(schemas.announcement, id, modifyFn)) return;
+    if (modifyNodeInTree(schemas.navbar, id, modifyFn)) return;
+    if (modifyNodeInTree(schemas.footer, id, modifyFn)) return;
+    if (modifyNodeInTree(schemas.whatsAppButton, id, modifyFn)) return;
     modifyNodeInTree(schemas.main, id, modifyFn);
 }
 
@@ -139,13 +139,13 @@ export const editorSlice = createSlice({
                 return found;
             };
 
-            if (findInSection(state.schemas.announcement ? [state.schemas.announcement] : null)) {
+            if (findInSection(state.schemas.announcement)) {
                 state.activeSection = "header";
-            } else if (findInSection(state.schemas.navbar ? [state.schemas.navbar] : null)) {
+            } else if (findInSection(state.schemas.navbar)) {
                 state.activeSection = "header";
-            } else if (findInSection(state.schemas.footer ? [state.schemas.footer] : null)) {
+            } else if (findInSection(state.schemas.footer)) {
                 state.activeSection = "footer";
-            } else if (findInSection(state.schemas.whatsAppButton ? [state.schemas.whatsAppButton] : null)) {
+            } else if (findInSection(state.schemas.whatsAppButton)) {
                 state.activeSection = "global";
             } else if (findInSection(state.schemas.main)) {
                 state.activeSection = "main";
@@ -157,6 +157,18 @@ export const editorSlice = createSlice({
         ) => {
             mutateGlobalSchemas(state.schemas, action.payload.id, (node) => {
                 node.settings = { ...action.payload.settings };
+            });
+        },
+        updateNodeAction: (
+            state,
+            action: PayloadAction<{ id: string; action: any | null }>
+        ) => {
+            mutateGlobalSchemas(state.schemas, action.payload.id, (node) => {
+                if (action.payload.action === null) {
+                    delete node.action;
+                } else {
+                    node.action = action.payload.action;
+                }
             });
         },
         updateNodeLabel: (
@@ -173,29 +185,10 @@ export const editorSlice = createSlice({
                 state.selectedNodeId = null;
             }
 
-            // Attempt deletion from each layout root
-            if (state.schemas.announcement && state.schemas.announcement.id === id) {
-                state.schemas.announcement = null;
-                return;
-            }
-            if (state.schemas.navbar && state.schemas.navbar.id === id) {
-                state.schemas.navbar = null;
-                return;
-            }
-            if (state.schemas.footer && state.schemas.footer.id === id) {
-                state.schemas.footer = null;
-                return;
-            }
-            if (state.schemas.whatsAppButton && state.schemas.whatsAppButton.id === id) {
-                state.schemas.whatsAppButton = null;
-                return;
-            }
-
-            // Recurse to delete
-            if (state.schemas.announcement && removeNodeFromTree([state.schemas.announcement], id)) return;
-            if (state.schemas.navbar && removeNodeFromTree([state.schemas.navbar], id)) return;
-            if (state.schemas.footer && removeNodeFromTree([state.schemas.footer], id)) return;
-            if (state.schemas.whatsAppButton && removeNodeFromTree([state.schemas.whatsAppButton], id)) return;
+            if (removeNodeFromTree(state.schemas.announcement, id)) return;
+            if (removeNodeFromTree(state.schemas.navbar, id)) return;
+            if (removeNodeFromTree(state.schemas.footer, id)) return;
+            if (removeNodeFromTree(state.schemas.whatsAppButton, id)) return;
             removeNodeFromTree(state.schemas.main, id);
         },
         addNode: (
@@ -209,32 +202,37 @@ export const editorSlice = createSlice({
             const { parentId, section, node } = action.payload;
 
             if (parentId) {
-                // Add under a specific parent component in the active tree
-                if (state.schemas.announcement && addChildToNodeInTree([state.schemas.announcement], parentId, node)) return;
-                if (state.schemas.navbar && addChildToNodeInTree([state.schemas.navbar], parentId, node)) return;
-                if (state.schemas.footer && addChildToNodeInTree([state.schemas.footer], parentId, node)) return;
-                if (state.schemas.whatsAppButton && addChildToNodeInTree([state.schemas.whatsAppButton], parentId, node)) return;
+                if (parentId === "announcement") {
+                    state.schemas.announcement.push(node);
+                    return;
+                }
+                if (parentId === "navbar") {
+                    state.schemas.navbar.push(node);
+                    return;
+                }
+                if (parentId === "footer") {
+                    state.schemas.footer.push(node);
+                    return;
+                }
+                if (parentId === "whatsAppButton") {
+                    state.schemas.whatsAppButton.push(node);
+                    return;
+                }
+
+                if (addChildToNodeInTree(state.schemas.announcement, parentId, node)) return;
+                if (addChildToNodeInTree(state.schemas.navbar, parentId, node)) return;
+                if (addChildToNodeInTree(state.schemas.footer, parentId, node)) return;
+                if (addChildToNodeInTree(state.schemas.whatsAppButton, parentId, node)) return;
                 addChildToNodeInTree(state.schemas.main, parentId, node);
             } else {
-                // Add directly as root of the selected section
                 if (section === "main") {
                     state.schemas.main.push(node);
                 } else if (section === "header") {
-                    // Try to append to navbar children if navbar is root
-                    if (state.schemas.navbar) {
-                        if (!state.schemas.navbar.children) state.schemas.navbar.children = [];
-                        state.schemas.navbar.children.push(node);
-                    }
+                    state.schemas.navbar.push(node);
                 } else if (section === "footer") {
-                    if (state.schemas.footer) {
-                        if (!state.schemas.footer.children) state.schemas.footer.children = [];
-                        state.schemas.footer.children.push(node);
-                    }
+                    state.schemas.footer.push(node);
                 } else if (section === "global") {
-                    if (state.schemas.whatsAppButton) {
-                        if (!state.schemas.whatsAppButton.children) state.schemas.whatsAppButton.children = [];
-                        state.schemas.whatsAppButton.children.push(node);
-                    }
+                    state.schemas.whatsAppButton.push(node);
                 }
             }
         },
@@ -244,12 +242,12 @@ export const editorSlice = createSlice({
         ) => {
             const { id, direction } = action.payload;
             const searchRoots = [
-                state.schemas.announcement,
-                state.schemas.navbar,
-                state.schemas.footer,
-                state.schemas.whatsAppButton,
+                ...state.schemas.announcement,
+                ...state.schemas.navbar,
+                ...state.schemas.footer,
+                ...state.schemas.whatsAppButton,
                 ...state.schemas.main,
-            ].filter(Boolean) as ComponentSchema[];
+            ];
 
             const result = findParentAndSiblings(searchRoots, id);
             if (!result) return;
@@ -286,6 +284,7 @@ export const {
     setSchemas,
     selectNode,
     updateNodeSettings,
+    updateNodeAction,
     updateNodeLabel,
     deleteNode,
     addNode,

@@ -2,37 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getLayoutCollection, connectToDatabase } from "@/application/runtime/db/mongo";
 import { APP } from "@/app";
 import { ApplicationLayoutFor, ApplicationLayoutType } from "@/application/runtime/pages/type";
-import { AppGlobalsComponents } from "@/application/runtime/globals";
-
-const DEFAULT_THEME = {
-    primary: '#0F172A',
-    secondary: '#3B82F6',
-    accent: '#8B5CF6',
-    colorSuccess: '#10B981',
-    colorError: '#EF4444',
-    colorWarning: '#F59E0B',
-    colorInfo: '#3B82F6',
-    bgApp: '#F8FAFC',
-    bgSurface: '#FFFFFF',
-    bgNavigation: '#0F172A',
-    textMain: '#1E293B',
-    textMuted: '#64748B',
-    textInverted: '#FFFFFF',
-    btnRadius: '6px',
-    btnPaddingBase: '10px 20px',
-    btnHoverOpacity: '0.9',
-    spacingUnit: '4px',
-    containerMaxWidth: '1280px',
-    gridGutter: '24px',
-    borderPrimary: '#E2E8F0',
-    borderRadiusBase: '8px',
-    borderRadiusLarge: '12px',
-    shadowSoft: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-    shadowHard: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-    fontSizeBase: '14px',
-    fontFamilyBase: 'Inter, system-ui, sans-serif',
-    lineHeightBase: '1.5',
-};
 
 export async function GET(req: NextRequest) {
     try {
@@ -43,7 +12,7 @@ export async function GET(req: NextRequest) {
         const layoutsCollection = await getLayoutCollection();
         const { db } = await connectToDatabase();
         const routesCollection = db.collection("routes");
-        const themesCollection = db.collection("themes");
+        const configsCollection = db.collection("configs");
 
         const tenantId = APP.tenant;
         const storeId = APP.store;
@@ -51,29 +20,20 @@ export async function GET(req: NextRequest) {
         // Scenario 1: Compatibility key parameter lookup
         if (keyParam) {
             if (keyParam === "theme") {
-                const themeDoc = await themesCollection.findOne({ tenantId, storeId });
+                const themeDoc = await configsCollection.findOne({ tenantId, storeId });
                 return NextResponse.json({
                     success: true,
-                    schema: themeDoc ? themeDoc.config : DEFAULT_THEME
+                    schema: themeDoc?.config
                 });
             }
 
             const doc = await layoutsCollection.findOne({
                 tenantId,
                 storeId,
-                id: keyParam
+                _id: keyParam as any
             });
 
             if (!doc) {
-                // Fallback to global defaults if any
-                const defaultSchema = (AppGlobalsComponents as any)[keyParam];
-                if (defaultSchema) {
-                    return NextResponse.json({
-                        success: true,
-                        schema: defaultSchema,
-                        type: "global"
-                    });
-                }
                 return NextResponse.json({ error: `Layout not found: ${keyParam}` }, { status: 404 });
             }
 
@@ -88,100 +48,8 @@ export async function GET(req: NextRequest) {
         if (routeParam) {
             const editorRoute = routeParam;
 
-            // Seed essential global layouts if not present
-            const defaultGlobals = [
-                { id: "navbar", for: "navbar" as const, type: "global" as const, defaultSchema: AppGlobalsComponents.navbar },
-                { id: "footer", for: "footer" as const, type: "global" as const, defaultSchema: AppGlobalsComponents.footer },
-                { id: "announcement", for: "announcement" as const, type: "global" as const, defaultSchema: AppGlobalsComponents.announcement },
-                { id: "whatsAppButton", for: "main" as const, type: "global" as const, defaultSchema: AppGlobalsComponents.whatsAppButton }
-            ];
-
-            for (const g of defaultGlobals) {
-                const doc = await layoutsCollection.findOne({ tenantId, storeId, id: g.id });
-                if (!doc) {
-                    const schemaArray = Array.isArray(g.defaultSchema) ? g.defaultSchema : [g.defaultSchema];
-                    await layoutsCollection.insertOne({
-                        tenantId,
-                        storeId,
-                        id: g.id,
-                        for: g.for,
-                        type: g.type,
-                        _c: schemaArray
-                    });
-                }
-            }
-
-            // Seed theme config if not present
-            let themeDoc: any = await themesCollection.findOne({ tenantId, storeId });
-            if (!themeDoc) {
-                const newTheme = { tenantId, storeId, config: DEFAULT_THEME };
-                await themesCollection.insertOne(newTheme);
-                themeDoc = newTheme;
-            }
-
-            // Find route mapping
-            let routeDoc: any = await routesCollection.findOne({ tenantId, storeId, route: editorRoute });
-            if (!routeDoc) {
-                // Wildcard regex matching pattern search
-                routeDoc = await routesCollection.findOne({
-                    tenantId,
-                    storeId,
-                    route: { $regex: new RegExp("^" + editorRoute + "(?:/|$)") }
-                });
-            }
-            if (!routeDoc) {
-                // Type name match
-                const cleanType = editorRoute.substring(1);
-                routeDoc = await routesCollection.findOne({ tenantId, storeId, type: cleanType });
-            }
-            if (!routeDoc) {
-                // Auto-create/seed path configuration
-                const defaultLayoutId = editorRoute === "/" ? "homepage" : editorRoute.substring(1).replace(/[^a-zA-Z0-9]/g, "-");
-                const newRoute = {
-                    tenantId,
-                    storeId,
-                    route: editorRoute,
-                    type: "SP",
-                    layout: defaultLayoutId
-                };
-                await routesCollection.insertOne(newRoute);
-                routeDoc = newRoute;
-            }
-
-            // Retrieve or seed corresponding page layout
-            let pageLayoutDoc: any = null;
-            if (typeof routeDoc.layout === "string") {
-                pageLayoutDoc = await layoutsCollection.findOne({
-                    tenantId,
-                    storeId,
-                    id: routeDoc.layout,
-                    for: "main"
-                });
-
-                if (!pageLayoutDoc) {
-                    pageLayoutDoc = {
-                        tenantId,
-                        storeId,
-                        id: routeDoc.layout,
-                        for: "main" as const,
-                        type: "custom" as const,
-                        _c: []
-                    };
-                    await layoutsCollection.insertOne(pageLayoutDoc);
-                }
-            } else if (Array.isArray(routeDoc.layout)) {
-                pageLayoutDoc = {
-                    tenantId,
-                    storeId,
-                    id: routeDoc.route,
-                    for: "main" as const,
-                    type: "custom" as const,
-                    _c: routeDoc.layout
-                };
-            }
-
-            // Load global layouts
-            const globals = await layoutsCollection.find({
+            // Retrieve globals strictly from MongoDB matching tenantId and storeId
+            const dbGlobals = await layoutsCollection.find({
                 tenantId,
                 storeId,
                 $or: [
@@ -190,16 +58,68 @@ export async function GET(req: NextRequest) {
                 ]
             }).toArray();
 
-            // Strictly filter response schemas to match ApplicationLayout fields + standard IDs
-            const cleanGlobals = globals.map(g => ({
-                id: g.id,
-                for: g.for,
-                type: g.type,
-                _c: g._c || []
+            const cleanGlobals = dbGlobals.map(dg => ({
+                _id: dg._id,
+                for: dg.for,
+                type: dg.type,
+                _c: dg._c || []
             }));
 
+            // Fetch theme without seeding from configs collection
+            const themeDoc = await configsCollection.findOne({ tenantId, storeId });
+            const themeConfig = themeDoc?.config
+
+            // Find route mapping
+            let routeDoc: any = await routesCollection.findOne({ tenantId, storeId, route: editorRoute });
+            if (!routeDoc) {
+                routeDoc = await routesCollection.findOne({
+                    tenantId,
+                    storeId,
+                    route: { $regex: new RegExp("^" + editorRoute + "(?:/|$)") }
+                });
+            }
+            if (!routeDoc) {
+                const cleanType = editorRoute.substring(1);
+                routeDoc = await routesCollection.findOne({ tenantId, storeId, type: cleanType });
+            }
+            const exists = !!routeDoc;
+
+            if (!routeDoc) {
+                // Mock in-memory route layout representation instead of seeding in DB
+                const defaultLayoutId = editorRoute === "/" ? "homepage" : editorRoute.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
+                routeDoc = {
+                    tenantId,
+                    storeId,
+                    route: editorRoute,
+                    type: "SP",
+                    layout: defaultLayoutId
+                };
+            }
+
+            // Retrieve or mock page layout without seeding in layoutsCollection
+            let pageLayoutDoc: any = null;
+            if (typeof routeDoc.layout === "string") {
+                pageLayoutDoc = await layoutsCollection.findOne({
+                    tenantId,
+                    storeId,
+                    _id: routeDoc.layout,
+                    for: "main"
+                });
+
+                if (!pageLayoutDoc) {
+                    pageLayoutDoc = {
+                        _id: routeDoc.layout,
+                        for: "main" as const,
+                        type: "custom" as const,
+                        _c: []
+                    };
+                }
+            }
+
+            const allRoutes = await routesCollection.find({ tenantId, storeId }).toArray();
+
             const cleanPageLayout = pageLayoutDoc ? {
-                id: pageLayoutDoc.id,
+                _id: pageLayoutDoc._id,
                 for: pageLayoutDoc.for,
                 type: pageLayoutDoc.type,
                 _c: pageLayoutDoc._c || []
@@ -212,10 +132,16 @@ export async function GET(req: NextRequest) {
                 pageRoute: {
                     route: routeDoc.route,
                     type: routeDoc.type,
-                    layout: typeof routeDoc.layout === "string" ? routeDoc.layout : undefined
+                    layout: typeof routeDoc.layout === "string" ? routeDoc.layout : undefined,
+                    exists: exists
                 },
+                allRoutes: allRoutes.map(r => ({
+                    route: r.route,
+                    type: r.type,
+                    layout: typeof r.layout === "string" ? r.layout : undefined
+                })),
                 theme: {
-                    config: themeDoc.config
+                    config: themeConfig
                 }
             });
         }
@@ -232,8 +158,8 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const { key, schema } = body;
 
-        if (!key || schema === undefined) {
-            return NextResponse.json({ error: "Missing key or schema in payload" }, { status: 400 });
+        if (!key) {
+            return NextResponse.json({ error: "Missing key in payload" }, { status: 400 });
         }
 
         const tenantId = APP.tenant;
@@ -241,10 +167,56 @@ export async function POST(req: NextRequest) {
 
         const { db } = await connectToDatabase();
 
-        // Theme saves to themes collection
+        // 1. Create a page/route
+        if (key === "route") {
+            const { route, type, layout } = body;
+            if (!route || !type) {
+                return NextResponse.json({ error: "Missing route or type in payload" }, { status: 400 });
+            }
+            const routesCollection = db.collection("routes");
+            const existing = await routesCollection.findOne({ tenantId, storeId, route });
+            if (existing) {
+                return NextResponse.json({ error: "Route already exists" }, { status: 400 });
+            }
+
+            const slugId = route === "/" ? "homepage" : route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
+
+            const newRouteDoc = {
+                tenantId,
+                storeId,
+                route,
+                type,
+                layout: slugId
+            };
+            await routesCollection.insertOne(newRouteDoc);
+
+            // Automatically create corresponding layout document in layouts collection
+            const layoutsCollection = db.collection("layouts");
+            await layoutsCollection.updateOne(
+                { tenantId, storeId, _id: slugId },
+                {
+                    $setOnInsert: {
+                        _id: slugId,
+                        for: "main",
+                        type: "custom",
+                        _c: Array.isArray(layout) ? layout : [],
+                        tenantId,
+                        storeId
+                    }
+                },
+                { upsert: true }
+            );
+
+            return NextResponse.json({ success: true, route: newRouteDoc });
+        }
+
+        // 2. Theme saves to configs collection
         if (key === "theme") {
-            const themesCollection = db.collection("themes");
-            await themesCollection.updateOne(
+            if (schema === undefined) {
+                return NextResponse.json({ error: "Missing schema for theme" }, { status: 400 });
+            }
+            const configsCollection = db.collection("configs");
+            await configsCollection.updateOne(
                 { tenantId, storeId },
                 { $set: { tenantId, storeId, config: schema } },
                 { upsert: true }
@@ -252,7 +224,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true });
         }
 
-        // Layouts save to layouts collection with strict fields matching ApplicationLayout + tenant/store IDs
+        if (schema === undefined) {
+            return NextResponse.json({ error: "Missing schema in payload" }, { status: 400 });
+        }
+
+        // 3. Layouts save to layouts collection with strict fields matching ApplicationLayout + tenant/store IDs
         const layoutsCollection = await getLayoutCollection();
 
         let forVal: ApplicationLayoutFor = "main";
@@ -266,7 +242,7 @@ export async function POST(req: NextRequest) {
         }
 
         const cleanLayoutDoc = {
-            id: key,
+            _id: key,
             for: forVal,
             type: typeVal,
             _c: Array.isArray(schema) ? schema : [schema],
@@ -275,7 +251,7 @@ export async function POST(req: NextRequest) {
         };
 
         await layoutsCollection.updateOne(
-            { tenantId, storeId, id: key },
+            { tenantId, storeId, _id: key },
             { $set: cleanLayoutDoc },
             { upsert: true }
         );

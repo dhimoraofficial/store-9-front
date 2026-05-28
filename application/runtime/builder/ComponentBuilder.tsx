@@ -21,8 +21,6 @@ async function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) 
         // set the settings directly yto the comopennts, 
         // this will pass all the config values into the style, settings formate 
         {...getParsedSettings(schema.type, schema.settings as ComponentSchemaSettings)}
-        content={schema.label}
-        value={schema.label}
     >
         {schema?.children?.map((child, index) => (
             <ComponentBuilder key={child.id || index} schema={child} />
@@ -32,16 +30,27 @@ async function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) 
 
 export default async function ComponentBuilder({ schema }: { schema: ComponentSchema | ComponentSchema[] }) {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            {/* checks whether the schema is type of array or single dict */}
-            {(schema as ComponentSchema[])?.length ?
+        (schema as ComponentSchema[])?.length ?
 
-                // map the schema
-                (schema as ComponentSchema[]).map((_schema, index) => <ComponentBuilderContent key={index} schema={_schema} />) :
+            // map the schema
+            (schema as ComponentSchema[]).map((_schema, index) => <ComponentBuilderContent key={index} schema={_schema} />) :
 
-                // render the single schema
-                <ComponentBuilderContent schema={schema as ComponentSchema} />
-            }
-        </Suspense>
-    );
+            // render the single schema
+            <ComponentBuilderContent schema={schema as ComponentSchema} />
+    )
+
+    // return (
+    //     // <Suspense fallback={<div>Loading...</div>}>
+    //     {/* checks whether the schema is type of array or single dict */ }
+    //         {
+    //     (schema as ComponentSchema[])?.length ?
+
+    //         // map the schema
+    //         (schema as ComponentSchema[]).map((_schema, index) => <ComponentBuilderContent key={index} schema={_schema} />) :
+
+    //         // render the single schema
+    //         <ComponentBuilderContent schema={schema as ComponentSchema} />
+    // }
+    //     // </Suspense>
+    // );
 }

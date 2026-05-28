@@ -20,10 +20,11 @@ export type ApplicationRoutes = ApplicationRouteNotFound & {
     // Type of the route
     type: ApplicationRouteTypes
 
-    // the layout or its layout id, here if the page id DP like products
-    // then simply set the id to its type name which will act as ID for 
-    // layout definition for cross product layout selectiong among rest
-    layout?: string | ApplicationRouteTypes | ApplicationLayoutComponent
+    // its layout id, here for the layout we need a seperate collection layouts 
+    // which will link via the ApplicationRoutes.layout === ApplicationLayout.id
+    // for any page like /home i want a doc in layout collection, linked to the 
+    // route and route linked to layout via id,
+    layout?: string
 }
 
 
@@ -39,8 +40,9 @@ export type ApplicationLayoutFor = "navbar" | "footer" | "main" | "announcement"
 // if its SP ie home page, ApplicationRoutes.layout will direclty hold the layout config
 // if its just a compoennt like whatsAppButton floating inside all the compoentns than simply:- type: global and id: compeont name or ID
 export type ApplicationLayout = {
-    // the id for given layout, it can be 
-    id: ApplicationRouteTypes | ApplicationLayoutFor | string
+    // the id for given layout, it can be either the store navbar layout, footer block or somehting global
+    // or even the main store product lay
+    _id: string
     for: ApplicationLayoutFor
     type: ApplicationLayoutType
     _c: ApplicationLayoutComponent

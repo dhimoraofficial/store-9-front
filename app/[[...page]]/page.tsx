@@ -4,7 +4,8 @@ import ComponentBuilder from "@/application/runtime/builder/ComponentBuilder";
 import ThemeBuilder from "@/application/runtime/builder/ThemeBuilder";
 import { ApplicationLayout, ApplicationRoutes } from "@/application/runtime/pages/type";
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
-import { getAppGlobalComponent, getApplicationPageRender, getTenantThemeConfig } from './engine';
+import { getApplicationPageRender } from './engine';
+import { announcementBar, footerSchema, globalsComponents, mainPageSchema, navbarSchema, tenantThemeConfig } from "./temp-data";
 import { ApplicationIndexParams } from './types';
 
 async function ApplicationBuildPage({ layout, route }: {
@@ -12,13 +13,13 @@ async function ApplicationBuildPage({ layout, route }: {
     route: ApplicationRoutes
 }) {
     // load all the globals metadata for rendering the pages
-    const [announcementBar, navbarSchema, footerSchema, globalsComponents, tenantThemeConfig] = await Promise.all([
-        getAppGlobalComponent("announcement"),
-        getAppGlobalComponent("navbar"),
-        getAppGlobalComponent("footer"),
-        getAppGlobalComponent("ALL_OTHERS"),
-        getTenantThemeConfig()
-    ]);
+    // const [announcementBar, navbarSchema, footerSchema, globalsComponents, tenantThemeConfig] = await Promise.all([
+    //     getAppGlobalComponent("announcement"),
+    //     getAppGlobalComponent("navbar"),
+    //     getAppGlobalComponent("footer"),
+    //     getAppGlobalComponent("ALL_OTHERS"),
+    //     getTenantThemeConfig()
+    // ]);
 
 
     return <>
@@ -33,7 +34,7 @@ async function ApplicationBuildPage({ layout, route }: {
                 {/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */}
                 {/* Main application page render here */}
                 {/* Main application page render here */}
-                <ComponentBuilder schema={layout?._c} />
+                <ComponentBuilder schema={mainPageSchema} />
                 {/* Main application page render here */}
                 {/* Main application page render here */}
                 {/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */}
@@ -61,7 +62,7 @@ export default async function ApplicationIndexPage({ params, searchParams }: App
 
     const { pageLayout, pageRoute } = await getApplicationPageRender({ route: APPLICATION_CURRENT_PAGE })
 
-    if (pageRoute?.type === "not_found" || pageLayout?.id === "not_found") {
+    if (pageRoute?.type === "not_found" || pageLayout?._id === "not_found") {
         return notFound()
     }
 
@@ -72,7 +73,7 @@ export default async function ApplicationIndexPage({ params, searchParams }: App
     // return the main content, break downed all the pages into x
     return <html lang='en'>
         <head>
- 
+            <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         </head>
         <body>
             <ApplicationBuildPage layout={pageLayout as ApplicationLayout} route={pageRoute as ApplicationRoutes} />
