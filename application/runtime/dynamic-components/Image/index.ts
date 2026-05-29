@@ -24,22 +24,22 @@ export const ComponentImageSchemaSettingsMap = {
     "img-aspect-ratio": {
         as: "aspectRatio",
         tp: "style",
-        rgx: "^\\d+\\/\\d+$"
+        rgx: "^(\\d+\\/\\d+|auto)$"
     },
     "img-width": {
         as: "width",
         tp: "style",
-        rgx: "^(\\d+(px|%)|auto)$"
+        rgx: "^(\\d*\\.?\\d+(px|%|rem)|auto)$"
     },
     "img-height": {
         as: "height",
         tp: "style",
-        rgx: "^(\\d+(px)|auto)$"
+        rgx: "^(\\d*\\.?\\d+(px|%|rem)|auto)$"
     },
     "img-radius": {
         as: "borderRadius",
         tp: "style",
-        rgx: "^\\d+px$"
+        rgx: "^\\d*\\.?\\d+(px|rem|%)?$"
     },
     "img-fallback": {
         as: "fallbackSrc",

@@ -68,7 +68,10 @@ import {
     ShoppingBag,
     FolderOpen,
     ShoppingCart,
-    Images
+    Images,
+    Upload,
+    Copy,
+    Check
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -583,7 +586,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
 function ThemeEditorWorkspace() {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { schemas, theme, selectedNodeId, status } = useSelector(
+    const { schemas, theme, selectedNodeId, status, tenantInfo } = useSelector(
         (state: RootState) => state.editor
     );
 
@@ -597,6 +600,61 @@ function ThemeEditorWorkspace() {
     const [addingToParentId, setAddingToParentId] = useState<string | null>(null);
     const [addingToSection, setAddingToSection] = useState<"header" | "main" | "footer" | "global" | null>(null);
     const [showAddPopup, setShowAddPopup] = useState(false);
+ 
+    // States for schema import
+    const [importSection, setImportSection] = useState<"announcement" | "navbar" | "footer" | "main" | null>(null);
+    const [showImportPopup, setShowImportPopup] = useState(false);
+    const [importJsonText, setImportJsonText] = useState("");
+    const [importError, setImportError] = useState<string | null>(null);
+    const [activeImportTab, setActiveImportTab] = useState<string>("import");
+    const [copied, setCopied] = useState(false);
+
+    const triggerImportPopup = (section: "announcement" | "navbar" | "footer" | "main") => {
+        setImportSection(section);
+        setImportJsonText("");
+        setImportError(null);
+        setActiveImportTab("import");
+        setCopied(false);
+        setShowImportPopup(true);
+    };
+
+    const handleImportSchema = () => {
+        if (!importSection) return;
+        try {
+            const parsed = JSON.parse(importJsonText);
+            if (!Array.isArray(parsed)) {
+                setImportError("Schema must be a JSON array of ComponentSchema objects.");
+                return;
+            }
+            // Basic validation check
+            for (let i = 0; i < parsed.length; i++) {
+                const item = parsed[i];
+                if (!item.id || !item.type) {
+                    setImportError(`Item at index ${i} is missing required 'id' or 'type' fields.`);
+                    return;
+                }
+            }
+            dispatch(setSchemas({ [importSection]: parsed } as any));
+            const sectionDisplayName = importSection === "navbar" 
+                ? "header/navbar" 
+                : importSection === "main" 
+                ? "template layout" 
+                : importSection.replace("_", " ");
+            toast.success(`Successfully imported schema for ${sectionDisplayName}!`);
+            setShowImportPopup(false);
+        } catch (e: any) {
+            setImportError(`Malformed JSON: ${e.message}`);
+        }
+    };
+
+    const handleCopyCurrentSchema = () => {
+        if (!importSection) return;
+        const currentSchema = schemas[importSection];
+        navigator.clipboard.writeText(JSON.stringify(currentSchema, null, 4));
+        setCopied(true);
+        toast.success("Current schema copied to clipboard!");
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     // States for Shopify search component panel
     const [searchQuery, setSearchQuery] = useState("");
@@ -610,12 +668,21 @@ function ThemeEditorWorkspace() {
 
     // Load data
     const loadEditorData = async () => {
+        if (!tenantInfo) return;
         dispatch(setStatus("loading"));
         try {
             const compRes = await APP_API.GET("/api/components", {}, undefined, true);
             if (compRes?.success) setComponentSettingsMap(compRes.components);
 
-            const res = await APP_API.GET(`/api/schema?route=${encodeURIComponent(routePath)}`, {}, undefined, true);
+            const res = await APP_API.GET(
+                `/api/schema?route=${encodeURIComponent(routePath)}`,
+                {
+                    "x-tenant-id": tenantInfo.tenant,
+                    "x-store-id": tenantInfo.store,
+                },
+                undefined,
+                true
+            );
 
             if (res?.success) {
                 // If route doesn't exist in DB and is not root, redirect to editor home
@@ -657,7 +724,11 @@ function ThemeEditorWorkspace() {
         }
     };
 
-    useEffect(() => { loadEditorData(); }, [dispatch, routePath]);
+    useEffect(() => {
+        if (tenantInfo) {
+            loadEditorData();
+        }
+    }, [dispatch, routePath, tenantInfo]);
 
     // Save
     const handleSave = async () => {
@@ -667,16 +738,22 @@ function ThemeEditorWorkspace() {
         }
         dispatch(setStatus("saving"));
         const tid = toast.loading("Saving…");
-        try {
-            await APP_API.POST("/api/schema", { key: "announcement", type: "global", for: "announcement", schema: schemas.announcement } as any, false, {}, undefined, true);
-            await APP_API.POST("/api/schema", { key: "navbar", type: "global", for: "navbar", schema: schemas.navbar } as any, false, {}, undefined, true);
-            await APP_API.POST("/api/schema", { key: "footer", type: "global", for: "footer", schema: schemas.footer } as any, false, {}, undefined, true);
-            await APP_API.POST("/api/schema", { key: "whatsAppButton", type: "global", for: "main", schema: schemas.whatsAppButton } as any, false, {}, undefined, true);
 
-            await APP_API.POST("/api/schema", { key: "theme", type: "global", for: "main", schema: theme } as any, false, {}, undefined, true);
+        const apiHeaders = {
+            "x-tenant-id": tenantInfo?.tenant || "",
+            "x-store-id": tenantInfo?.store || ""
+        };
+
+        try {
+            await APP_API.POST("/api/schema", { key: "announcement", type: "global", for: "announcement", schema: schemas.announcement } as any, false, apiHeaders, undefined, true);
+            await APP_API.POST("/api/schema", { key: "navbar", type: "global", for: "navbar", schema: schemas.navbar } as any, false, apiHeaders, undefined, true);
+            await APP_API.POST("/api/schema", { key: "footer", type: "global", for: "footer", schema: schemas.footer } as any, false, apiHeaders, undefined, true);
+            await APP_API.POST("/api/schema", { key: "whatsAppButton", type: "global", for: "main", schema: schemas.whatsAppButton } as any, false, apiHeaders, undefined, true);
+
+            await APP_API.POST("/api/schema", { key: "theme", type: "global", for: "main", schema: theme } as any, false, apiHeaders, undefined, true);
 
             const layoutId = pageRouteInfo?.layout || (routePath === "/" ? "homepage" : routePath.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-"));
-            await APP_API.POST("/api/schema", { key: layoutId, type: "custom", for: "main", schema: schemas.main } as any, false, {}, undefined, true);
+            await APP_API.POST("/api/schema", { key: layoutId, type: "custom", for: "main", schema: schemas.main } as any, false, apiHeaders, undefined, true);
 
             if (pageRouteInfo && !pageRouteInfo.exists) {
                 await APP_API.POST("/api/schema", {
@@ -684,7 +761,7 @@ function ThemeEditorWorkspace() {
                     route: pageRouteInfo.route,
                     type: pageRouteInfo.type || "SP",
                     layout: schemas.main
-                } as any, false, {}, undefined, true);
+                } as any, false, apiHeaders, undefined, true);
                 setPageRouteInfo({ ...pageRouteInfo, exists: true, layout: layoutId });
             }
 
@@ -831,6 +908,7 @@ function ThemeEditorWorkspace() {
                         toast.success("Removed");
                     }}
                     onAddBlockTrigger={triggerAddPopup}
+                    onImportSchemaTrigger={triggerImportPopup}
                 />
 
                 {/* Center: Preview Workspace (Zoomable and Movable Canvas) */}
@@ -1009,15 +1087,156 @@ function ThemeEditorWorkspace() {
                 </Dialog.Portal>
             </Dialog.Root>
 
+            {/* Import / Export JSON Schema Dialog */}
+            <Dialog.Root open={showImportPopup} onOpenChange={setShowImportPopup}>
+                <Dialog.Portal>
+                    <Dialog.Overlay className="fixed inset-0 bg-zinc-950/20 backdrop-blur-md z-50 transition-all duration-300" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-[760px] h-[580px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] flex flex-col border border-zinc-100 overflow-hidden z-50 outline-none transition-all duration-300">
+                        
+                        {/* Header */}
+                        <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between shrink-0 bg-white">
+                            <div>
+                                <div className="flex items-center gap-1.5 mb-1.5">
+                                    <span className="px-2 py-0.5 bg-indigo-50 text-indigo-650 text-[9px] font-bold uppercase tracking-wider rounded-md">
+                                        Developer Mode
+                                    </span>
+                                </div>
+                                <Dialog.Title className="text-[16px] font-extrabold text-zinc-900 tracking-tight flex items-center gap-2">
+                                    {importSection === "navbar" 
+                                        ? "Header & Navbar" 
+                                        : importSection === "main" 
+                                        ? "Template Layout" 
+                                        : importSection?.replace("_", " ")} Schema Manager
+                                </Dialog.Title>
+                            </div>
+                            <Dialog.Close asChild>
+                                <button className="text-zinc-400 hover:text-zinc-800 p-2 rounded-xl hover:bg-zinc-100 transition-all cursor-pointer outline-none active:scale-95">
+                                    <X className="w-4 h-4" />
+                                </button>
+                            </Dialog.Close>
+                        </div>
+
+                        {/* Tabs Container */}
+                        <Tabs.Root value={activeImportTab} onValueChange={setActiveImportTab} className="flex-1 flex flex-col min-h-0 bg-white px-6 pb-6">
+                            
+                            {/* Sliding apple-like pill tabs */}
+                            <Tabs.List className="flex bg-zinc-100 p-1 rounded-2xl gap-1 shrink-0 max-w-[280px] mb-4 mt-2">
+                                <Tabs.Trigger
+                                    value="import"
+                                    className={`px-4 py-1.5 text-[12px] font-bold rounded-xl transition-all cursor-pointer outline-none ${
+                                        activeImportTab === "import"
+                                            ? "bg-white text-zinc-900 shadow-sm"
+                                            : "text-zinc-450 hover:text-zinc-650"
+                                    }`}
+                                >
+                                    Import JSON
+                                </Tabs.Trigger>
+                                <Tabs.Trigger
+                                    value="export"
+                                    className={`px-4 py-1.5 text-[12px] font-bold rounded-xl transition-all cursor-pointer outline-none ${
+                                        activeImportTab === "export"
+                                            ? "bg-white text-zinc-900 shadow-sm"
+                                            : "text-zinc-450 hover:text-zinc-650"
+                                    }`}
+                                >
+                                    Export JSON
+                                </Tabs.Trigger>
+                            </Tabs.List>
+
+                            {/* Import Tab Content */}
+                            <Tabs.Content value="import" className="flex-1 min-h-0 flex flex-col outline-none">
+                                <div className="mb-4 flex items-start gap-3 p-4 bg-indigo-50/45 border border-indigo-150 rounded-2xl text-indigo-950 text-[11px] leading-relaxed shadow-sm">
+                                    <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                                    <div>
+                                        <strong className="font-bold">Caution:</strong> Importing a custom JSON schema will completely overwrite the existing layout tree for this section. Ensure you copy the backup configuration first.
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 min-h-0 rounded-2xl border border-zinc-200/80 bg-[#0c0d12] overflow-hidden flex flex-col shadow-lg">
+                                    <div className="flex items-center justify-between px-5 py-3 bg-[#11131a] border-b border-zinc-900/60 select-none">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${importJsonText ? (importError ? "bg-rose-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]" : "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]") : "bg-zinc-600"}`} />
+                                            <span className="text-[11px] font-mono text-zinc-350 font-medium tracking-wide">layout_schema.json</span>
+                                        </div>
+                                        <span className="text-[9px] font-mono font-semibold tracking-wider text-zinc-600 bg-zinc-900/80 px-2 py-0.5 rounded-md">JSON EDITOR</span>
+                                    </div>
+                                    <textarea
+                                        value={importJsonText}
+                                        onChange={(e) => {
+                                            setImportJsonText(e.target.value);
+                                            setImportError(null);
+                                        }}
+                                        placeholder={`[\n  {\n    "id": "example_id",\n    "type": "box",\n    "settings": {},\n    "children": []\n  }\n]`}
+                                        className="flex-1 w-full bg-transparent font-mono text-[11.5px] text-[#89ddff] p-5 resize-none outline-none leading-relaxed overflow-y-auto selection:bg-indigo-500/30 placeholder:text-zinc-700"
+                                    />
+                                    {importError && (
+                                        <div className="mx-5 mb-5 p-3 bg-rose-950/60 border border-rose-900/70 rounded-xl text-rose-200 text-[11px] font-mono leading-normal shadow-sm">
+                                            {importError}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="flex justify-end gap-3 mt-5 shrink-0">
+                                    <Dialog.Close asChild>
+                                        <button className="px-5 py-2.5 border border-zinc-200 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50 rounded-2xl text-[12px] font-bold active:scale-[0.98] transition-all cursor-pointer">
+                                            Cancel
+                                        </button>
+                                    </Dialog.Close>
+                                    <button
+                                        onClick={handleImportSchema}
+                                        disabled={!importJsonText.trim()}
+                                        className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-2xl text-[12px] font-bold active:scale-[0.98] transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-indigo-600/15 disabled:opacity-40 disabled:pointer-events-none"
+                                    >
+                                        <Upload className="w-3.5 h-3.5" />
+                                        Apply Schema
+                                    </button>
+                                </div>
+                            </Tabs.Content>
+
+                            {/* Export Tab Content */}
+                            <Tabs.Content value="export" className="flex-1 min-h-0 flex flex-col outline-none">
+                                <div className="mb-4 text-[11.5px] text-zinc-500 leading-normal">
+                                    Copy this JSON schema code to back up your current layout configuration or move it to another template instance.
+                                </div>
+
+                                <div className="flex-1 min-h-0 rounded-2xl border border-zinc-200/80 bg-[#0c0d12] overflow-hidden flex flex-col shadow-lg">
+                                    <div className="flex items-center justify-between px-5 py-3 bg-[#11131a] border-b border-zinc-900/60 select-none">
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                            <span className="text-[11px] font-mono text-zinc-350 font-medium tracking-wide">layout_schema_backup.json</span>
+                                        </div>
+                                        <span className="text-[9px] font-mono font-semibold tracking-wider text-zinc-600 bg-zinc-900/80 px-2 py-0.5 rounded-md">READ ONLY</span>
+                                    </div>
+                                    <pre className="flex-1 w-full bg-transparent font-mono text-[11.5px] text-[#c3e88d] p-5 overflow-y-auto leading-relaxed shadow-inner select-all selection:bg-indigo-500/30">
+                                        {importSection ? JSON.stringify(schemas[importSection], null, 4) : ""}
+                                    </pre>
+                                </div>
+
+                                <div className="flex justify-end gap-3 mt-5 shrink-0">
+                                    <button
+                                        onClick={handleCopyCurrentSchema}
+                                        className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-2xl text-[12px] font-bold active:scale-[0.98] transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-indigo-600/15"
+                                    >
+                                        {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                        {copied ? "Copied!" : "Copy to Clipboard"}
+                                    </button>
+                                    <Dialog.Close asChild>
+                                        <button className="px-5 py-2.5 border border-zinc-200 text-zinc-650 hover:bg-zinc-50 rounded-2xl text-[12px] font-bold active:scale-[0.98] transition-all cursor-pointer">
+                                            Close
+                                        </button>
+                                    </Dialog.Close>
+                                </div>
+                            </Tabs.Content>
+                        </Tabs.Root>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog.Root>
+
             <Toaster position="bottom-right" toastOptions={{ style: { fontSize: "13px" } }} />
         </div>
     );
 }
 
 export default function Page() {
-    return (
-        <EditorStoreProvider>
-            <ThemeEditorWorkspace />
-        </EditorStoreProvider>
-    );
+    return <ThemeEditorWorkspace />;
 }

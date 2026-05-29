@@ -63,6 +63,7 @@ interface SidebarLeftProps {
     onMoveNode: (id: string, direction: "up" | "down") => void;
     onDeleteNode: (id: string) => void;
     onAddBlockTrigger: (parentId: string | null, section: "header" | "main" | "footer" | "global") => void;
+    onImportSchemaTrigger: (section: "announcement" | "navbar" | "footer" | "main") => void;
 }
 
 const LUCIDE_ICONS_MAP: Record<string, React.ComponentType<any>> = {
@@ -181,7 +182,7 @@ function TreeNode({
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="w-full overflow-x-scroll">
+        <div className="overflow-x-hidden">
             {/* Row — full width, overflow clipped so actions stay inside */}
             <div
                 onClick={(e) => { e.stopPropagation(); onSelect(node.id); }}
@@ -265,6 +266,7 @@ export default function SidebarLeft({
     onMoveNode,
     onDeleteNode,
     onAddBlockTrigger,
+    onImportSchemaTrigger,
 }: SidebarLeftProps) {
     const treeProps = {
         selectedId: selectedNodeId,
@@ -280,9 +282,9 @@ export default function SidebarLeft({
     const [footOpen, setFootOpen] = useState(true);
 
     return (
-        <aside className="w-[270px] bg-white border-r border-zinc-200 flex flex-col shrink-0 h-full select-none">
-            <ScrollArea.Root className="flex-1">
-                <ScrollArea.Viewport style={{ overflowY: "scroll", overflowX: "scroll" }}>
+        <aside className="w-[270px] bg-white border-r border-zinc-200 flex flex-col shrink-0 h-full select-none overflow-hidden">
+            <ScrollArea.Root className="flex-1 h-full overflow-hidden">
+                <ScrollArea.Viewport className="h-full w-full" style={{ overflowY: "scroll" }}>
                     <div className="flex flex-col">
                         <div className="border-b border-zinc-100 pb-2">
                             <div className="flex items-center justify-between px-3.5 pt-3 pb-1">
@@ -306,16 +308,25 @@ export default function SidebarLeft({
                                         <Columns className="w-4 h-4 text-zinc-500 shrink-0" />
                                         <span className="text-[12.5px] font-semibold text-zinc-800 truncate flex-1 min-w-0">Announcement bar</span>
                                     </div>
-                                    <button
-                                        onClick={(e) => { e.stopPropagation(); onAddBlockTrigger("announcement", "header"); }}
-                                        className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1.5"
-                                        title="Add block"
-                                    >
-                                        <Plus className="w-3.5 h-3.5" />
-                                    </button>
+                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1.5">
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); onImportSchemaTrigger("announcement"); }}
+                                            className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700"
+                                            title="Import JSON schema"
+                                        >
+                                            <Code className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); onAddBlockTrigger("announcement", "header"); }}
+                                            className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700"
+                                            title="Add block"
+                                        >
+                                            <Plus className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
                                 </div>
                                 {annOpen && (
-                                    <div className="w-full space-y-1 border-l border-zinc-100/85" style={{ marginLeft: "22px" }}>
+                                    <div className="space-y-1 border-l border-zinc-100/85" style={{ marginLeft: "22px" }}>
                                         {schemas.announcement.map((node) => (
                                             <TreeNode key={node.id} node={node} section="header" isRoot={false} {...treeProps} />
                                         ))}
@@ -333,16 +344,25 @@ export default function SidebarLeft({
                                         <Columns className="w-4 h-4 text-zinc-500 shrink-0" />
                                         <span className="text-[12.5px] font-semibold text-zinc-800 truncate flex-1 min-w-0">Header</span>
                                     </div>
-                                    <button
-                                        onClick={(e) => { e.stopPropagation(); onAddBlockTrigger("navbar", "header"); }}
-                                        className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1.5"
-                                        title="Add block"
-                                    >
-                                        <Plus className="w-3.5 h-3.5" />
-                                    </button>
+                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1.5">
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); onImportSchemaTrigger("navbar"); }}
+                                            className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700"
+                                            title="Import JSON schema"
+                                        >
+                                            <Code className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); onAddBlockTrigger("navbar", "header"); }}
+                                            className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700"
+                                            title="Add block"
+                                        >
+                                            <Plus className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
                                 </div>
                                 {navOpen && (
-                                    <div className="w-full space-y-1.5 mt-1  border-l border-zinc-100/85" style={{ marginLeft: "22px" }}>
+                                    <div className="space-y-1.5 mt-1  border-l border-zinc-100/85" style={{ marginLeft: "22px" }}>
                                         {schemas.navbar.map((node) => (
                                             <TreeNode key={node.id} node={node} section="header" isRoot={false} {...treeProps} />
                                         ))}
@@ -354,16 +374,25 @@ export default function SidebarLeft({
                         <div className="border-b border-zinc-100 pb-2">
                             <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1">
                                 <span className="text-[12px] font-bold text-zinc-950 uppercase tracking-wider text-zinc-400">Template</span>
-                                <button
-                                    onClick={() => onAddBlockTrigger(null, "main")}
-                                    className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
-                                    title="Add section to template"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center gap-1.5">
+                                    <button
+                                        onClick={() => onImportSchemaTrigger("main")}
+                                        className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                                        title="Import JSON schema"
+                                    >
+                                        <Code className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => onAddBlockTrigger(null, "main")}
+                                        className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                                        title="Add section to template"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
 
-                            <div className="space-y-1 overflow-x-scroll">
+                            <div className="space-y-1 overflow-x-hidden">
                                 {schemas.main.map((node) => (
                                     <TreeNode key={node.id} node={node} section="main" isRoot={true} {...treeProps} />
                                 ))}
@@ -373,43 +402,28 @@ export default function SidebarLeft({
                         <div className="pb-4">
                             <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1">
                                 <span className="text-[12px] font-bold text-zinc-950 uppercase tracking-wider text-zinc-400">Footer</span>
-                                <button
-                                    onClick={() => onAddBlockTrigger("footer", "footer")}
-                                    className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
-                                    title="Add section to footer"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center gap-1.5">
+                                    <button
+                                        onClick={() => onImportSchemaTrigger("footer")}
+                                        className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                                        title="Import JSON schema"
+                                    >
+                                        <Code className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => onAddBlockTrigger("footer", "footer")}
+                                        className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                                        title="Add section to footer"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
 
-                            <div className="space-y-0.5">
-                                <div className="w-full">
-                                    <div
-                                        onClick={() => setFootOpen(!footOpen)}
-                                        className="group flex items-center justify-between py-[7px] px-3.5 hover:bg-zinc-50 text-zinc-700 cursor-pointer"
-                                    >
-                                        <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
-                                            <ChevronRight className={`w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform ${footOpen ? "rotate-90" : ""}`} />
-                                            <Columns className="w-4 h-4 text-zinc-500 shrink-0" />
-                                            <span className="text-[12.5px] font-semibold text-zinc-800 truncate flex-1 min-w-0">Footer</span>
-                                        </div>
-                                        <button
-                                            onClick={(e) => { e.stopPropagation(); onAddBlockTrigger("footer", "footer"); }}
-                                            className="p-0.5 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1.5"
-                                            title="Add block"
-                                        >
-                                            <Plus className="w-3.5 h-3.5" />
-                                        </button>
-                                    </div>
-
-                                    {footOpen && (
-                                        <div className="w-full space-y-1.5 mt-1 border-l overflow-scroll-x border-zinc-100/85" style={{ marginLeft: "22px" }}>
-                                            {schemas.footer.map((node) => (
-                                                <TreeNode key={node.id} node={node} section="footer" isRoot={false} {...treeProps} />
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                            <div className="space-y-1 overflow-x-hidden">
+                                {schemas.footer.map((node) => (
+                                    <TreeNode key={node.id} node={node} section="footer" isRoot={true} {...treeProps} />
+                                ))}
                             </div>
                         </div>
                     </div>

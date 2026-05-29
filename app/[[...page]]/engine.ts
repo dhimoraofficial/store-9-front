@@ -48,16 +48,11 @@ const DEFAULT_THEME: ThemeConfigs = {
     lineHeightBase: '1.5',
 };
 
-function matchRoutePattern(pattern: string, path: string): boolean {
-    if (!pattern || !path) return false;
-    // Escape regex characters except <...> wildcards
-    const escaped = pattern.replace(/[.+*?^${}()|[\]\\]/g, "\\$&");
-    const regexStr = "^" + escaped.replace(/<[^>]+>/g, "[^/]+") + "$";
-    return new RegExp(regexStr).test(path);
-}
-
-export async function getApplicationPageRender({ route }: {
+export async function getApplicationPageRender({ route, tenant, store, isEditor = false }: {
     route: string
+    tenant: string,
+    store: string,
+    isEditor?: boolean
 }): Promise<{
     pageLayout: ApplicationLayout | null,
     pageRoute: ApplicationRoutes | null
@@ -67,10 +62,31 @@ export async function getApplicationPageRender({ route }: {
     const routesCollection = db.collection("routes");
 
     // Retrieve all routes for this tenant/store to do pattern matching
-    const routeDoc = await routesCollection.findOne({ tenantId: APP.tenant, storeId: APP.store, route: route })
+    let routeDoc = await routesCollection.findOne({ tenantId: tenant, storeId: store, route: route })
+
+    if (!routeDoc) {
+        if (isEditor) {
+            // If route does not exist in DB, defaultly mock/generate representation for view (do not seed yet)
+            const defaultLayoutId = route === "/" ? "homepage" : route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
+            routeDoc = {
+                tenantId: tenant,
+                storeId: store,
+                route: route,
+                type: "SP",
+                layout: defaultLayoutId
+            };
+        } else {
+            return {
+                pageLayout: null,
+                pageRoute: {
+                    type: "not_found"
+                } as ApplicationRoutes
+            };
+        }
+    }
 
     // 2. Handle not_found type
-    if (!routeDoc || routeDoc.type === "not_found") {
+    if (routeDoc.type === "not_found") {
         return {
             pageLayout: null,
             pageRoute: {
@@ -99,8 +115,8 @@ export async function getApplicationPageRender({ route }: {
     if (typeof layoutKey === "string") {
         // Query the layouts collection using the layout ID as _id
         layoutDoc = await collection.findOne({
-            tenantId: APP.tenant,
-            storeId: APP.store,
+            tenantId: tenant,
+            storeId: store,
             _id: layoutKey as any,
         });
     }
@@ -128,16 +144,16 @@ export async function getApplicationPageRender({ route }: {
     };
 }
 
-export async function getAppGlobalComponent(componentID: string): Promise<ComponentSchema | ComponentSchema[]> {
+export async function getAppGlobalComponent(componentID: string, tenant: string, store: string): Promise<ComponentSchema | ComponentSchema[]> {
     const collection = await getLayoutCollection();
 
     if (componentID !== "ALL_OTHERS") {
         const doc = await collection.findOne({
-            tenantId: APP.tenant,
-            storeId: APP.store,
+            tenantId: tenant,
+            storeId: store,
             _id: componentID as any
         });
-        
+
         if (doc) {
             return (doc._c || []) as ComponentSchema[];
         }
@@ -146,8 +162,8 @@ export async function getAppGlobalComponent(componentID: string): Promise<Compon
     }
 
     const docs = await collection.find({
-        tenantId: APP.tenant,
-        storeId: APP.store,
+        tenantId: tenant,
+        storeId: store,
         type: "global",
         for: "main"
     }).toArray();
@@ -159,13 +175,22 @@ export async function getAppGlobalComponent(componentID: string): Promise<Compon
     return [] as ComponentSchema[];
 }
 
-export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID?: string, storeID?: string } = {}): Promise<ThemeConfigs> {
+export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID: string, storeID: string }): Promise<ThemeConfigs> {
     const { db } = await connectToDatabase();
-    const collection = db.collection("themes");
-    const doc = await collection.findOne({
-        tenantId: tenantID || APP.tenant,
-        storeId: storeID || APP.store
+    
+    // First try the configs collection (where the editor saves theme changes)
+    let doc = await db.collection("configs").findOne({
+        tenantId: tenantID,
+        storeId: storeID
     });
+
+    // Fall back to themes collection if not found in configs
+    if (!doc) {
+        doc = await db.collection("themes").findOne({
+            tenantId: tenantID,
+            storeId: storeID
+        });
+    }
 
     if (doc) {
         return doc.config as ThemeConfigs;

@@ -14,6 +14,12 @@ export interface EditorState {
     activeSection: 'header' | 'main' | 'footer' | 'global' | null;
     status: 'idle' | 'loading' | 'saving' | 'failed';
     error: string | null;
+    tenantInfo: {
+        domain: string;
+        slug: string;
+        store: string;
+        tenant: string;
+    } | null;
 }
 
 const initialState: EditorState = {
@@ -29,6 +35,7 @@ const initialState: EditorState = {
     activeSection: null,
     status: 'idle',
     error: null,
+    tenantInfo: null,
 };
 
 // Helper: Recursively search and modify a node in a tree/array of ComponentSchema
@@ -277,6 +284,12 @@ export const editorSlice = createSlice({
         setError: (state, action: PayloadAction<string | null>) => {
             state.error = action.payload;
         },
+        setTenantInfo: (
+            state,
+            action: PayloadAction<EditorState["tenantInfo"]>
+        ) => {
+            state.tenantInfo = action.payload;
+        },
     },
 });
 
@@ -292,6 +305,7 @@ export const {
     setTheme,
     setStatus,
     setError,
+    setTenantInfo,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

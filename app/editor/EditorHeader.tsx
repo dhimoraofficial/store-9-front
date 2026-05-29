@@ -54,7 +54,6 @@ export default function EditorHeader({
     return (
         <Tooltip.Provider delayDuration={200}>
             <header className="h-14 bg-white flex items-center justify-between px-5 shrink-0 select-none border-b border-zinc-200">
-                {/* Left: Logo + breadcrumb */}
                 <div className="flex items-center gap-3 shrink-0">
                     <div className="w-8 h-8 rounded-md bg-zinc-900 flex items-center justify-center">
                         <img src="https://www.dhimora.com/icon.png" />
@@ -65,7 +64,6 @@ export default function EditorHeader({
                     </div>
                 </div>
 
-                {/* Center: Page selector */}
                 <div className="flex-1 flex justify-center">
                     <PageSelector
                         currentRoute={currentRoute}

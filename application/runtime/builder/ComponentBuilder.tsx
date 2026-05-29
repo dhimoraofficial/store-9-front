@@ -38,19 +38,4 @@ export default async function ComponentBuilder({ schema }: { schema: ComponentSc
             // render the single schema
             <ComponentBuilderContent schema={schema as ComponentSchema} />
     )
-
-    // return (
-    //     // <Suspense fallback={<div>Loading...</div>}>
-    //     {/* checks whether the schema is type of array or single dict */ }
-    //         {
-    //     (schema as ComponentSchema[])?.length ?
-
-    //         // map the schema
-    //         (schema as ComponentSchema[]).map((_schema, index) => <ComponentBuilderContent key={index} schema={_schema} />) :
-
-    //         // render the single schema
-    //         <ComponentBuilderContent schema={schema as ComponentSchema} />
-    // }
-    //     // </Suspense>
-    // );
 }

@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { APP_API } from "@/application/providers/api";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { RootState } from "@/application/runtime/store";
 
 interface RouteInfo {
     route: string;
@@ -86,6 +88,10 @@ function getCategoryIcon(catName: string) {
 export default function PageSelector({ currentRoute, routes, onRouteLoaded }: PageSelectorProps) {
     const router = useRouter();
     const [search, setSearch] = useState("");
+
+    const { tenantInfo } = useSelector((state: RootState) => state.editor);
+    const tenantId = tenantInfo?.tenant;
+    const storeId = tenantInfo?.store;
 
     // Modal state
     const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -237,7 +243,10 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                 type: pendingCreateRoute.type,
                 name: pendingCreateRoute.name,
                 layout: defaultLayoutId
-            } as any, false, {}, undefined, true);
+            } as any, false, {
+                "x-tenant-id": tenantId || "",
+                "x-store-id": storeId || ""
+            }, undefined, true);
 
             if (res?.success) {
                 toast.success(`Created ${pendingCreateRoute.name} successfully!`, { id: tid });
@@ -279,7 +288,10 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                 route: finalPath, 
                 type: resolvedType,
                 name: newName
-            } as any, false, {}, undefined, true);
+            } as any, false, {
+                "x-tenant-id": tenantId || "",
+                "x-store-id": storeId || ""
+            }, undefined, true);
 
             if (res?.success) {
                 toast.success("Created Template successfully!", { id: tid });

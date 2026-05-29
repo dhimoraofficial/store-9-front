@@ -42,8 +42,16 @@ export default function AText({
 
     const resolvedChildren = children ?? content ?? label;
 
+    const computedStyle = { ...style };
+    if ((computedStyle as any).lineClamp) {
+        (computedStyle as any).display = "-webkit-box";
+        (computedStyle as any).WebkitBoxOrient = "vertical";
+        (computedStyle as any).WebkitLineClamp = Number((computedStyle as any).lineClamp);
+        delete (computedStyle as any).lineClamp;
+    }
+
     return (
-        <Tag id={id} className={computedClassName} style={style}>
+        <Tag id={id} className={computedClassName} style={computedStyle}>
             {resolvedChildren}
         </Tag>
     );

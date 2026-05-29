@@ -104,3 +104,5 @@ export const AppComponents: Record<BaseTypes, any> = {
     product_variant_selector: AProductVariantSelector,
     product_image_gallery: AProductImageGallery
 };
+
+

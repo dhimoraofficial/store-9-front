@@ -18,7 +18,7 @@ export const ComponentTextSchemaSettingsMap = {
     "text-weight": {
         as: "fontWeight",
         tp: "style",
-        opt: ["300", "400", "500", "600", "700", "bold", "normal"]
+        opt: ["300", "400", "500", "600", "700", "800", "900", "bold", "normal"]
     },
     "text-color": {
         as: "color",
@@ -50,9 +50,34 @@ export const ComponentTextSchemaSettingsMap = {
         tp: "prop",
         opt: ["clip", "ellipsis", "truncate-2-lines"]
     },
+    "text-line-clamp": {
+        as: "lineClamp",
+        tp: "style",
+        rgx: "^\\d+$"
+    },
+    "text-font-style": {
+        as: "fontStyle",
+        tp: "style",
+        opt: ["normal", "italic", "oblique"]
+    },
     "text-hover": {
         as: "hoverEffect",
         tp: "prop",
         opt: ["none", "underline", "color-change"]
+    },
+    "text-font-family": {
+        as: "fontFamily",
+        tp: "style",
+        rgx: ".+"
+    },
+    "text-transform-custom": {
+        as: "transform",
+        tp: "style",
+        rgx: ".+"
+    },
+    "text-display": {
+        as: "display",
+        tp: "style",
+        opt: ["block", "inline", "inline-block", "flex", "none"]
     }
 };

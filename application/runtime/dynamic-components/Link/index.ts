@@ -50,5 +50,10 @@ export const ComponentLinkSchemaSettingsMap = {
         as: "analyticsId",
         tp: "prop",
         rgx: "^[a-zA-Z0-9_-]+$"
+    },
+    "link-flex-shrink": {
+        as: "flexShrink",
+        tp: "style",
+        rgx: "^[01]$"
     }
 };

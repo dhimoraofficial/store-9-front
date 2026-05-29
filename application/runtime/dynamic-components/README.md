@@ -14,12 +14,12 @@ Every dynamic component automatically inherits the **Common Styling Schema** (fr
 | `pT` / `pB` | `padding-top` / `padding-bottom` | style | `^\d*\\.?\d+(rem)$` | Top / bottom padding. |
 | `pL` / `pR` | `padding-left` / `padding-right` | style | `^\d*\\.?\d+(rem)$` | Left / right padding. |
 | `pX` / `pY` | `padding` (axis-specific) | style | `^\d*\\.?\d+(rem)$` | Axis-grouped padding values. |
-| `m` | `margin` | style | `^\d*\\.?\d+(rem)$` | Complete uniform margin. |
-| `mT` / `mB` | `margin-top` / `margin-bottom` | style | `^\d*\\.?\d+(rem)$` | Top / bottom margin. |
-| `mL` / `mR` | `margin-left` / `margin-right` | style | `^\d*\\.?\d+(rem)$` | Left / right margin. |
-| `mX` / `mY` | `margin` (axis-specific) | style | `^\d*\\.?\d+(rem)$` | Axis-grouped margin values. |
-| `w` / `h` | `width` / `height` | style | `^\d*\\.?\d+(rem)$` \| `100%`, `fit` | Width / height constraints. |
-| `mw` / `mh` | `max-width` / `max-height` | style | `^\d*\\.?\d+(rem)$` \| `100%`, `fit` | Maximum width / height caps. |
+| `m` | `margin` | style | `^\d*\\.?\d+(rem\|px\|%)?$` \| `auto` | Complete uniform margin. |
+| `mT` / `mB` | `margin-top` / `margin-bottom` | style | `^\d*\\.?\d+(rem\|px\|%)?$` \| `auto` | Top / bottom margin. |
+| `mL` / `mR` | `margin-left` / `margin-right` | style | `^\d*\\.?\d+(rem\|px\|%)?$` \| `auto` | Left / right margin. |
+| `mX` / `mY` | `margin` (axis-specific) | style | `^\d*\\.?\d+(rem\|px\|%)?$` \| `auto` | Axis-grouped margin values. |
+| `w` / `h` | `width` / `height` | style | `^\d*\\.?\d+(rem\|px\|%)?$` \| `100%`, `fit`, `fit-content`, `auto` | Width / height constraints. |
+| `mw` / `mh` | `max-width` / `max-height` | style | `^\d*\\.?\d+(rem\|px\|%)?$` \| `100%`, `fit`, `fit-content`, `none` | Maximum width / height caps. |
 
 ---
 
@@ -35,10 +35,28 @@ Containers dictate flow, nested tracks, overlays, and responsive breakpoints. Th
   - `box-justify`: `justifyContent` (style, flex alignments)
   - `box-align`: `alignItems` (style, flex cross-axis alignments)
   - `box-gap`: `gap` (style, e.g. `12px` or `1.5rem`)
+  - `box-padding`: `padding` (style, e.g. `12px` or `1.5rem`)
   - `box-bg`: `background` (style, hex/rgba/gradient)
   - `box-radius`: `borderRadius` (style, border-radius token)
   - `box-border`: `border` (style, e.g. `1px solid #e4e4e7`)
+  - `box-border-top` / `box-border-bottom`: top/bottom edges specific borders (style)
   - `box-visibility`: `visibility` (prop: `all`, `desktop-only`, `mobile-only`)
+  - `box-position`: `position` (style: `relative`, `absolute`, `fixed`, `sticky`)
+  - `box-top` / `box-bottom` / `box-left` / `box-right`: offset coordinates (style)
+  - `box-transform`: coordinate shifts / scaling (style)
+  - `box-overflow-x` / `box-overflow-y`: overflow behavior (style: `hidden`, `visible`, `auto`, `scroll`)
+  - `box-scroll-behavior`: smooth scroll configurations (style: `smooth`, `auto`)
+  - `box-flex-wrap`: wrap children (style: `wrap`, `nowrap`, `wrap-reverse`)
+  - `box-grid-cols`: template columns for grid layout (style)
+  - `box-col-span` / `box-row-span`: individual columns/rows spans (style)
+  - `box-col-start` / `box-row-start`: individual starting grid track (style)
+  - `box-shadow`: shadow intensity effects (style)
+  - `box-z-index`: vertical layer hierarchy value (style)
+  - `box-cursor`: interactive pointer style (style)
+  - `box-flex`: container size allocation shorthand (style)
+  - `box-bg-image`: container visual background image (style)
+  - `box-bg-size` / `box-bg-position`: background sizing and offset alignments (style)
+  - `box-min-height`: explicit minimum height boundary (style)
 
 ### `grid_box` (Grid Container)
 - **Role:** Grid alignments with row and column tracks.
@@ -115,13 +133,18 @@ Content atoms handle layout visuals, copy, media display, spacers, and decoratio
   - `content`: `content` (prop, text value)
   - `text-element`: `element` (prop: `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `p`, `span`, `strong`)
   - `text-size`: `fontSize` (style, font sizing)
-  - `text-weight`: `fontWeight` (style: font weights)
+  - `text-weight`: `fontWeight` (style: font weights, now supports `800` & `900`)
   - `text-color`: `color` (style, text hex/var color)
   - `text-align`: `textAlign` (style: alignments)
   - `text-transform`: `textTransform` (style: uppercase/capitalize/lowercase)
   - `text-line-height`: `lineHeight` (style, line height scaling multiplier)
   - `text-spacing`: `letterSpacing` (style, letter-spacing value)
   - `text-overflow`: `overflow` (prop: `clip`, `ellipsis`, `truncate-2-lines`)
+  - `text-line-clamp`: `lineClamp` (style, clamps text block to specific number of lines)
+  - `text-font-style`: `fontStyle` (style: `normal`, `italic`, `oblique`)
+  - `text-font-family`: `fontFamily` (style, custom typeface family)
+  - `text-transform-custom`: `transform` (style, skew/rotation coordinates)
+  - `text-display`: `display` (style, layout inline displays)
   - `text-hover`: `hoverEffect` (prop: `none`, `underline`, `color-change`)
 
 ### `link_block` (Hyperlink tag)
@@ -137,6 +160,7 @@ Content atoms handle layout visuals, copy, media display, spacers, and decoratio
   - `link-decoration`: `textDecoration` (style: underline controls)
   - `link-smooth-transition`: `smoothTransition` (prop: `true`, `false`)
   - `link-analytics-id`: `analyticsId` (prop, analytics click hook tracking)
+  - `link-flex-shrink`: `flexShrink` (style, prevents link container compression, e.g. `0`)
 
 ### `image_block` (Graphic Frame)
 - **Role:** Standard graphic component with aspect ratios, cover scaling, and fallback modes.
@@ -145,9 +169,9 @@ Content atoms handle layout visuals, copy, media display, spacers, and decoratio
   - `img-alt`: `alt` (prop, alt text description)
   - `img-loading`: `loading` (prop: `lazy`, `eager`)
   - `img-object-fit`: `objectFit` (style: fit modes)
-  - `img-aspect-ratio`: `aspectRatio` (style, aspect ratios, e.g., `16/9`)
-  - `img-width` / `img-height`: `width` / `height` (style constraints)
-  - `img-radius`: `borderRadius` (style, border clipping radius)
+  - `img-aspect-ratio`: `aspectRatio` (style, supports standard aspect ratios and auto)
+  - `img-width` / `img-height`: `width` / `height` (style constraints, now supports rem, px, and %)
+  - `img-radius`: `borderRadius` (style, border clipping radius, supports rem, px, and %)
   - `img-fallback`: `fallbackSrc` (prop, fallback image URL path)
   - `img-priority`: `priority` (prop: `true`, `false`, next/image eager priorities)
 

@@ -72,6 +72,8 @@ async function request(
         // - DNS failure
         // - CORS rejection
         // - Browser blocked request
+        console.log(URL);
+        
         res = await fetch(URL, {
             method,
             headers,
@@ -79,14 +81,14 @@ async function request(
             cache: "default"
         })
     } catch (e: any) {
+        throw e
         // If execution reaches here, fetch itself failed.
         // No HTTP status exists because request never completed.
-
         return {
             error: true,
             type: "FETCH_ERROR",
             message: e?.message ?? "Network error",
-        }
+        };
     }
 
     try {

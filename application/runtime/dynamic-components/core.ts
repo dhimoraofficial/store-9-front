@@ -96,87 +96,104 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
     m: {
         tp: "style",
         as: "margin",
-        rgx: "^\\d*\\.?\\d+(rem)$"
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+        opt: ["auto"]
     },
     mL: {
         tp: "style",
         as: "marginLeft",
-        rgx: "^\\d*\\.?\\d+(rem)$"
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+        opt: ["auto"]
     },
     mT: {
         tp: "style",
         as: "marginTop",
-        rgx: "^\\d*\\.?\\d+(rem)$"
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+        opt: ["auto"]
     },
     mR: {
         tp: "style",
         as: "marginRight",
-        rgx: "^\\d*\\.?\\d+(rem)$"
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+        opt: ["auto"]
     },
     mB: {
         tp: "style",
         as: "marginBottom",
-        rgx: "^\\d*\\.?\\d+(rem)$"
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+        opt: ["auto"]
     },
     mX: [
         {
             tp: "style",
             as: "marginLeft",
-            rgx: "^\\d*\\.?\\d+(rem)$"
+            rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+            opt: ["auto"]
         },
         {
             tp: "style",
             as: "marginRight",
-            rgx: "^\\d*\\.?\\d+(rem)$"
+            rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+            opt: ["auto"]
         }
     ],
     mY: [
         {
             tp: "style",
             as: "marginTop",
-            rgx: "^\\d*\\.?\\d+(rem)$"
+            rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+            opt: ["auto"]
         },
         {
             tp: "style",
             as: "marginBottom",
-            rgx: "^\\d*\\.?\\d+(rem)$"
+            rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
+            opt: ["auto"]
         }
     ],
 
     w: {
         tp: "style",
         as: "width",
-        rgx: "^\\d*\\.?\\d+(rem)$",
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
         opt: [
             "100%",
-            "fit"
+            "fit",
+            "fit-content",
+            "auto"
         ]
     },
     h: {
         tp: "style",
         as: "height",
-        rgx: "^\\d*\\.?\\d+(rem)$",
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
         opt: [
             "100%",
-            "fit"
+            "fit",
+            "fit-content",
+            "auto"
         ]
     },
     mw: {
         tp: "style",
         as: "maxWidth",
-        rgx: "^\\d*\\.?\\d+(rem)$",
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
         opt: [
             "100%",
-            "fit"
+            "fit",
+            "fit-content",
+            "none"
         ]
     },
     mh: {
         tp: "style",
         as: "maxHeight",
-        rgx: "^\\d*\\.?\\d+(rem)$",
+        rgx: "^\\d*\\.?\\d+(rem|px|%)?$",
         opt: [
             "100%",
-            "fit"
+            "fit",
+            "fit-content",
+            "none"
         ]
     },
 }

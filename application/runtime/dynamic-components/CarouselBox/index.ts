@@ -1,4 +1,4 @@
-export { default } from './ClientComponent';
+export * from './ClientComponent';
 
 export const ComponentCarouselBoxSchemaSettingsMap = {
     // Carousel specific settings

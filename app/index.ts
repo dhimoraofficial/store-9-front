@@ -1,7 +1,7 @@
-export const servingProduction = !(process.env.NODE_ENV === "production")
+export const servingProduction = (process.env.NODE_ENV === "production")
 
-export const apiSlug = (servingProduction ? "https://apis.dhimora.com" : "http://localhost:2000")
-// export const apiSlug = "https://apis.dhimora.com"
+// export const apiSlug = (servingProduction ? "https://apis.dhimora.com" : "http://localhost:2000")
+export const apiSlug = "https://apis.dhimora.com"
 
 
 export const signinURL = `/auth/signin`
@@ -24,13 +24,13 @@ const LOCAL_STORE = "069bacc9-c656-7350-a1da-b120c0a2f42a"
 
 // don't touch this, changing this can cause silent application failure, 
 // if you want change then change the variable above
+
 export const APP = {
     tenant: (servingProduction ? "06999c2f-d339-70e6-b712-66ffd12247f4" : LOCAL_TENANT),
     store: (servingProduction ? "06999c34-59e4-76dd-9847-344f8723498a" : LOCAL_STORE),
 }
 
 export const appConfigCookieName = "__drk__app_config"
-export const applicationHost = 'computerdurbar.com'
 
 export const AppSlugs = {
     product: "/product",

@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
         const routesCollection = db.collection("routes");
         const configsCollection = db.collection("configs");
 
-        const tenantId = APP.tenant;
-        const storeId = APP.store;
+        const tenantId = req.headers.get("x-tenant-id") || APP.tenant;
+        const storeId = req.headers.get("x-store-id") || APP.store;
 
         // Scenario 1: Compatibility key parameter lookup
         if (keyParam) {
@@ -162,8 +162,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing key in payload" }, { status: 400 });
         }
 
-        const tenantId = APP.tenant;
-        const storeId = APP.store;
+        const tenantId = req.headers.get("x-tenant-id") || APP.tenant;
+        const storeId = req.headers.get("x-store-id") || APP.store;
 
         const { db } = await connectToDatabase();
 
