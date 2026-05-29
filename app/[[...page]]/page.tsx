@@ -58,9 +58,6 @@ export async function getTenantMetaData() {
         slug: string
     }
 
-    console.log(response, lookup_type, tenant);
-
-
     response["host"] = host
 
     if (response?.type === "FETCH_ERROR") {
@@ -97,6 +94,7 @@ async function ApplicationBuildPage({ layout, route, tenant, store }: {
         })
     ]);
 
+    
 
     return <>
         <Application>

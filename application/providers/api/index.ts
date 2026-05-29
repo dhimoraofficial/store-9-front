@@ -72,8 +72,6 @@ async function request(
         // - DNS failure
         // - CORS rejection
         // - Browser blocked request
-        console.log(URL);
-        
         res = await fetch(URL, {
             method,
             headers,
