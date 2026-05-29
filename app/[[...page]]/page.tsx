@@ -55,6 +55,7 @@ export async function getTenantMetaData() {
         domain: string,
         tenant: string,
         store: string
+        slug: string
     }
 
     console.log(response, lookup_type, tenant);

@@ -2,16 +2,19 @@ import "@/app/globals.css";
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { NoSuchStore, ServiceUnavailable } from "../Errors";
 import { getApplicationPageRender } from "../[[...page]]/engine";
-import { ApplicationIndexParams } from "../[[...page]]/types";
-import { getTenantMetaData } from "../[[...page]]/page";
 import { EditorStoreProvider } from "@/application/runtime/store/Provider";
+import { getTenantMetaData } from "../[[...page]]/page";
 import Script from "next/script";
 
-export default async function ApplicationIndexPage({ params, searchParams, children }: ApplicationIndexParams) {
+export default async function ApplicationIndexPage({ params, children }: {
+    params: Promise<{
+        route?: string[]
+    }>
+    children: React.ReactNode
+}) {
     // as the next uses await to get whats inside the params
     // waiting for all the params
     const APPLICATION_PARAMS = await params
-    const APPLICATION_CURRENT_SEARCH_PARAMS = await searchParams
 
     let response = await getTenantMetaData()
 
@@ -24,9 +27,9 @@ export default async function ApplicationIndexPage({ params, searchParams, child
     }
 
     // extract the current page via above params, as this page is complete dynamic,
-    // the pages are not hard coded, they ren|| pageLayout?.id === "not_found"der based on schemas
+    // the pages are not hard coded, they render based on schemas
     // eg:- /about-us, /contact, /product/x
-    const APPLICATION_CURRENT_PAGE: string = `/${(APPLICATION_PARAMS?.page || [])?.join("/")}`
+    const APPLICATION_CURRENT_PAGE: string = `/${(APPLICATION_PARAMS?.route || [])?.join("/")}`
 
     const { pageLayout, pageRoute } = await getApplicationPageRender({
         route: APPLICATION_CURRENT_PAGE,

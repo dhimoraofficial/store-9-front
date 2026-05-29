@@ -48,6 +48,14 @@ const DEFAULT_THEME: ThemeConfigs = {
     lineHeightBase: '1.5',
 };
 
+function matchRoutePattern(pattern: string, path: string): boolean {
+    if (!pattern || !path) return false;
+    // Escape regex characters except <...> wildcards
+    const escaped = pattern.replace(/[.+*?^${}()|[\]\\]/g, "\\$&");
+    const regexStr = "^" + escaped.replace(/<[^>]+>/g, "[^/]+") + "$";
+    return new RegExp(regexStr).test(path);
+}
+
 export async function getApplicationPageRender({ route, tenant, store, isEditor = false }: {
     route: string
     tenant: string,
@@ -62,7 +70,13 @@ export async function getApplicationPageRender({ route, tenant, store, isEditor 
     const routesCollection = db.collection("routes");
 
     // Retrieve all routes for this tenant/store to do pattern matching
-    let routeDoc = await routesCollection.findOne({ tenantId: tenant, storeId: store, route: route })
+    let routeDoc: any = await routesCollection.findOne({ tenantId: tenant, storeId: store, route: route })
+
+    if (!routeDoc) {
+        // Fetch all routes for this tenant/store and find a matching pattern
+        const allRoutes = await routesCollection.find({ tenantId: tenant, storeId: store }).toArray();
+        routeDoc = allRoutes.find(r => matchRoutePattern(r.route, route)) || null;
+    }
 
     if (!routeDoc) {
         if (isEditor) {
