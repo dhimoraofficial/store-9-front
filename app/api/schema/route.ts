@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getLayoutCollection, connectToDatabase } from "@/application/runtime/db/mongo";
 import { APP } from "@/app";
+import { connectToDatabase, getLayoutCollection } from "@/application/runtime/db/mongo";
 import { ApplicationLayoutFor, ApplicationLayoutType } from "@/application/runtime/pages/type";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     try {
@@ -210,11 +210,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true, route: newRouteDoc });
         }
 
-        // 2. Theme saves to configs collection
         if (key === "theme") {
             if (schema === undefined) {
                 return NextResponse.json({ error: "Missing schema for theme" }, { status: 400 });
             }
+            
             const configsCollection = db.collection("configs");
             await configsCollection.updateOne(
                 { tenantId, storeId },

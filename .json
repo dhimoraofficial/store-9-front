@@ -1,0 +1,246 @@
+[
+    {
+        "id": "navbar-container",
+        "type": "flex_box",
+        "settings": {
+            "box-shadow": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+            "box-bg": "#FFFFFF",
+            "box-padding": "16px 48px",
+            "w": "100%",
+            "box-position": "sticky",
+            "box-top": "0px",
+            "box-z-index": "50",
+            "box-border-bottom": "1px solid #F1F5F9"
+        },
+        "children": [
+            {
+                "id": "navbarconta",
+                "type": "flex_box",
+                "settings": {
+                    "box-display": "flex",
+                    "box-direction": "row",
+                    "box-justify": "space-between",
+                    "box-align": "center",
+                    "mw": "1200px",
+                    "m": "auto"
+                },
+                "children": [
+                    {
+                        "id": "navbar-logo-link",
+                        "type": "link_block",
+                        "settings": {
+                            "link-href": "/",
+                            "link-decoration": "none",
+                            "w": "10rem"
+                        },
+                        "children": [
+                            {
+                                "id": "image_kbyqvt",
+                                "type": "image",
+                                "settings": {
+                                    "img-src": "https://store9nepal.com/assets/img/logo.png"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "id": "navbar-links",
+                        "type": "flex_box",
+                        "settings": {
+                            "box-display": "flex",
+                            "box-direction": "row",
+                            "box-align": "center",
+                            "box-gap": "32px"
+                        },
+                        "children": [
+                            {
+                                "id": "nav-link-laptops",
+                                "type": "link_block",
+                                "settings": {
+                                    "link-href": "/laptops",
+                                    "link-decoration": "none"
+                                },
+                                "children": [
+                                    {
+                                        "id": "nav-text-laptops",
+                                        "type": "text_block",
+                                        "settings": {
+                                            "text-element": "span",
+                                            "content": "Laptops",
+                                            "text-size": "14px",
+                                            "text-weight": "700",
+                                            "text-color": "#1E293B"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "nav-link-accessories",
+                                "type": "link_block",
+                                "settings": {
+                                    "link-href": "/accessories",
+                                    "link-decoration": "none"
+                                },
+                                "children": [
+                                    {
+                                        "id": "nav-text-accessories",
+                                        "type": "text_block",
+                                        "settings": {
+                                            "text-element": "span",
+                                            "content": "Accessories",
+                                            "text-size": "14px",
+                                            "text-weight": "700",
+                                            "text-color": "#1E293B"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "nav-link-desktops",
+                                "type": "link_block",
+                                "settings": {
+                                    "link-href": "/desktops",
+                                    "link-decoration": "none"
+                                },
+                                "children": [
+                                    {
+                                        "id": "nav-text-desktops",
+                                        "type": "text_block",
+                                        "settings": {
+                                            "text-element": "span",
+                                            "content": "Desktops",
+                                            "text-size": "14px",
+                                            "text-weight": "700",
+                                            "text-color": "#1E293B"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "nav-link-home-office",
+                                "type": "link_block",
+                                "settings": {
+                                    "link-href": "/home-office",
+                                    "link-decoration": "none"
+                                },
+                                "children": [
+                                    {
+                                        "id": "nav-text-home-office",
+                                        "type": "text_block",
+                                        "settings": {
+                                            "text-element": "span",
+                                            "content": "Home & Offic",
+                                            "text-size": "14px",
+                                            "text-weight": "700",
+                                            "text-color": "#1E293B"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "navbar-actions",
+                        "type": "flex_box",
+                        "settings": {
+                            "box-display": "flex",
+                            "box-direction": "row",
+                            "box-align": "center",
+                            "box-gap": "20px"
+                        },
+                        "children": [
+                            {
+                                "id": "search-input-wrapper",
+                                "type": "flex_box",
+                                "settings": {
+                                    "box-position": "relative",
+                                    "box-display": "flex",
+                                    "box-align": "center"
+                                },
+                                "children": [
+                                    {
+                                        "id": "navbar-search",
+                                        "type": "search_query",
+                                        "settings": {
+                                            "input-type": "search",
+                                            "input-placeholder": "Search tech...",
+                                            "w": "220px",
+                                            "h": "38px",
+                                            "input-radius": "9999px",
+                                            "input-border-color": "#E2E8F0",
+                                            "input-padding": "10px 40px 10px 16px",
+                                            "input-font-size": "14px",
+                                            "input-focus-border": "none"
+                                        }
+                                    },
+                                    {
+                                        "id": "navbar-search-icon-positioner",
+                                        "type": "flex_box",
+                                        "settings": {
+                                            "box-position": "absolute",
+                                            "box-right": "14px",
+                                            "box-display": "flex",
+                                            "box-align": "center"
+                                        },
+                                        "children": [
+                                            {
+                                                "id": "navbar-search-icon",
+                                                "type": "svg_icon",
+                                                "settings": {
+                                                    "icon-name": "search",
+                                                    "icon-size": "16px",
+                                                    "icon-color": "#64748B"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "navbar-cart-link",
+                                "type": "link_block",
+                                "settings": {
+                                    "link-href": "/cart",
+                                    "link-display": "flex-row",
+                                    "link-decoration": "none"
+                                },
+                                "children": [
+                                    {
+                                        "id": "navbar-cart-icon",
+                                        "type": "svg_icon",
+                                        "settings": {
+                                            "icon-name": "shopping-cart",
+                                            "icon-size": "20px",
+                                            "icon-color": "#1E293B"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "navbar-user-link",
+                                "type": "link_block",
+                                "settings": {
+                                    "link-href": "/account",
+                                    "link-display": "flex-row",
+                                    "link-decoration": "none"
+                                },
+                                "children": [
+                                    {
+                                        "id": "navbar-user-icon",
+                                        "type": "svg_icon",
+                                        "settings": {
+                                            "icon-name": "user",
+                                            "icon-size": "20px",
+                                            "icon-color": "#1E293B"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

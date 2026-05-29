@@ -4,44 +4,37 @@ import { ApplicationLayout, ApplicationRoutes, ApplicationLayoutType } from "@/a
 import { getLayoutCollection, connectToDatabase } from "@/application/runtime/db/mongo"
 import { APP } from "@/app"
 
-const DEFAULT_THEME: ThemeConfigs = {
-    // 1. Core Brand Identity
-    primary: '#0F172A',      // Deep Navy
-    secondary: '#3B82F6',    // Bright Blue
-    accent: '#8B5CF6',       // Violet
+export const DEFAULT_THEME: ThemeConfigs = {
+    primary: '#0F172A',
+    secondary: '#3B82F6',
+    accent: '#8B5CF6',
 
-    // 2. Semantic Colors
-    colorSuccess: '#10B981',      // Emerald Green
-    colorError: '#EF4444',        // High-Visibility Red
-    colorWarning: '#F59E0B',      // Amber
-    colorInfo: '#3B82F6',         // Information Blue
+    colorSuccess: '#10B981',
+    colorError: '#EF4444',
+    colorWarning: '#F59E0B',
+    colorInfo: '#3B82F6',
 
-    // 3. Neutral Palette & Surfaces
-    bgApp: '#F8FAFC',             // Light Grey/Blue
-    bgSurface: '#FFFFFF',         // Pure White
-    bgNavigation: '#0F172A',      // Dark Nav
-    textMain: '#1E293B',          // Slate 800
-    textMuted: '#64748B',         // Slate 500
-    textInverted: '#FFFFFF',      // White text
+    bgApp: '#F8FAFC',
+    bgSurface: '#FFFFFF',
+    bgNavigation: '#0F172A',
+    textMain: '#1E293B',
+    textMuted: '#64748B',
+    textInverted: '#FFFFFF',
 
-    // 4. Buttons & Interactive Elements
-    btnRadius: '6px',             // Rounded
+    btnRadius: '6px',
     btnPaddingBase: '10px 20px',
     btnHoverOpacity: '0.9',
 
-    // 5. Layout & Spatial Scale
-    spacingUnit: '4px',           // 4px base
+    spacingUnit: '4px',
     containerMaxWidth: '1280px',
     gridGutter: '24px',
 
-    // 6. Borders & Elevation
-    borderPrimary: '#E2E8F0',     // Slate border
+    borderPrimary: '#E2E8F0',
     borderRadiusBase: '8px',
     borderRadiusLarge: '12px',
     shadowSoft: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
     shadowHard: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
 
-    // 7. Typography
     fontFamilySans: 'Roboto',
     fontFamilyMono: 'Roboto',
     fontSizeRoot: '16px',
@@ -191,7 +184,7 @@ export async function getAppGlobalComponent(componentID: string, tenant: string,
 
 export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID: string, storeID: string }): Promise<ThemeConfigs> {
     const { db } = await connectToDatabase();
-    
+
     // First try the configs collection (where the editor saves theme changes)
     let doc = await db.collection("configs").findOne({
         tenantId: tenantID,

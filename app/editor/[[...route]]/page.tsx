@@ -243,7 +243,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
                 <div className="border border-zinc-200 rounded-lg bg-white p-3 flex flex-col gap-2">
                     <div className="h-2.5 bg-zinc-100 rounded w-2/3" />
                     <div className="grid grid-cols-3 gap-1.5">
-                        {[1,2,3].map(i => <div key={i} className="h-12 bg-zinc-50 border border-zinc-100 rounded" />)}
+                        {[1, 2, 3].map(i => <div key={i} className="h-12 bg-zinc-50 border border-zinc-100 rounded" />)}
                     </div>
                 </div>
                 <div className="h-2 bg-zinc-100 rounded w-1/2 mx-auto" />
@@ -261,7 +261,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
                 </div>
                 <div className="flex justify-center gap-1">
                     <div className="w-3 h-1 bg-zinc-700 rounded-full" />
-                    {[1,2].map(i => <div key={i} className="w-1 h-1 bg-zinc-200 rounded-full" />)}
+                    {[1, 2].map(i => <div key={i} className="w-1 h-1 bg-zinc-200 rounded-full" />)}
                 </div>
             </div>
         );
@@ -270,7 +270,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
     if (["accordion_box"].includes(type)) {
         return (
             <div className="w-[200px] flex flex-col gap-1">
-                {[1,2,3].map(i => (
+                {[1, 2, 3].map(i => (
                     <div key={i} className={`border rounded-md px-3 py-2.5 flex items-center justify-between ${i === 1 ? "border-zinc-300 bg-white" : "border-zinc-100 bg-zinc-50"}`}>
                         <div className={`h-2 rounded ${i === 1 ? "bg-zinc-700 w-1/2" : "bg-zinc-200 w-2/5"}`} />
                         <div className={`w-3 h-3 border rounded ${i === 1 ? "border-zinc-400 rotate-180" : "border-zinc-200"}`} />
@@ -284,7 +284,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
         return (
             <div className="w-[200px] flex flex-col gap-0">
                 <div className="flex border-b border-zinc-200">
-                    {["Tab 1","Tab 2","Tab 3"].map((t,i) => (
+                    {["Tab 1", "Tab 2", "Tab 3"].map((t, i) => (
                         <div key={i} className={`px-3 py-2 text-[10px] font-medium border-b-2 -mb-px ${i === 0 ? "border-zinc-800 text-zinc-800" : "border-transparent text-zinc-400"}`}>{t}</div>
                     ))}
                 </div>
@@ -399,7 +399,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
         return (
             <div className="flex flex-col items-center gap-3">
                 {type === "badge_block" && <div className="px-3 py-1 bg-zinc-900 text-white text-[10px] font-bold rounded-full uppercase tracking-wider">SALE</div>}
-                {type === "rating_block" && <div className="flex gap-0.5">{[1,2,3,4,5].map(i => <div key={i} className={`w-4 h-4 rounded-sm ${i <= 4 ? "bg-amber-400" : "bg-zinc-200"}`} />)}</div>}
+                {type === "rating_block" && <div className="flex gap-0.5">{[1, 2, 3, 4, 5].map(i => <div key={i} className={`w-4 h-4 rounded-sm ${i <= 4 ? "bg-amber-400" : "bg-zinc-200"}`} />)}</div>}
                 {type === "price_block" && (
                     <div className="flex items-baseline gap-2">
                         <span className="text-[18px] font-bold text-zinc-900">$49.00</span>
@@ -413,7 +413,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
     if (["countdown_block"].includes(type)) {
         return (
             <div className="flex gap-2">
-                {["12","H", "34","M", "56","S"].map((v, i) => (
+                {["12", "H", "34", "M", "56", "S"].map((v, i) => (
                     i % 2 === 0
                         ? <div key={i} className="w-10 h-10 bg-white border border-zinc-200 rounded-lg flex items-center justify-center text-[14px] font-bold text-zinc-800">{v}</div>
                         : <div key={i} className="flex items-center text-zinc-300 font-bold text-lg">{v}</div>
@@ -489,7 +489,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
         return (
             <div className="w-[200px] flex flex-col gap-2">
                 <div className="grid grid-cols-2 gap-1.5">
-                    {[1,2,3,4].map(i => (
+                    {[1, 2, 3, 4].map(i => (
                         <div key={i} className="bg-white border border-zinc-100 rounded-lg p-2 flex flex-col gap-1.5">
                             <div className="h-12 bg-zinc-50 rounded" />
                             <div className="h-1.5 bg-zinc-100 rounded w-3/4" />
@@ -504,7 +504,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
     if (["cart_items_context"].includes(type)) {
         return (
             <div className="w-[200px] flex flex-col gap-1.5">
-                {[1,2].map(i => (
+                {[1, 2].map(i => (
                     <div key={i} className="bg-white border border-zinc-100 rounded-lg p-2.5 flex gap-2.5 items-center">
                         <div className="w-10 h-10 bg-zinc-50 rounded shrink-0" />
                         <div className="flex-1 flex flex-col gap-1.5">
@@ -522,7 +522,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
             <div className="flex flex-col gap-2">
                 <div className="h-1.5 bg-zinc-200 rounded w-16" />
                 <div className="flex gap-1.5">
-                    {["S","M","L","XL"].map((s,i) => (
+                    {["S", "M", "L", "XL"].map((s, i) => (
                         <div key={i} className={`w-9 h-9 rounded-md border text-[11px] font-medium flex items-center justify-center ${i === 1 ? "border-zinc-900 bg-zinc-900 text-white" : "border-zinc-200 text-zinc-500 bg-white"}`}>{s}</div>
                     ))}
                 </div>
@@ -534,7 +534,7 @@ function ComponentMockupPreview({ type, componentSettingsMap }: { type: string; 
         return (
             <div className="flex gap-2">
                 <div className="flex flex-col gap-1.5">
-                    {[1,2,3].map(i => (
+                    {[1, 2, 3].map(i => (
                         <div key={i} className={`w-10 h-10 rounded border ${i === 0 ? "border-zinc-400 bg-zinc-100" : "border-zinc-100 bg-zinc-50"}`} />
                     ))}
                 </div>
@@ -600,7 +600,7 @@ function ThemeEditorWorkspace() {
     const [addingToParentId, setAddingToParentId] = useState<string | null>(null);
     const [addingToSection, setAddingToSection] = useState<"header" | "main" | "footer" | "global" | null>(null);
     const [showAddPopup, setShowAddPopup] = useState(false);
- 
+
     // States for schema import
     const [importSection, setImportSection] = useState<"announcement" | "navbar" | "footer" | "main" | null>(null);
     const [showImportPopup, setShowImportPopup] = useState(false);
@@ -635,11 +635,11 @@ function ThemeEditorWorkspace() {
                 }
             }
             dispatch(setSchemas({ [importSection]: parsed } as any));
-            const sectionDisplayName = importSection === "navbar" 
-                ? "header/navbar" 
-                : importSection === "main" 
-                ? "template layout" 
-                : importSection.replace("_", " ");
+            const sectionDisplayName = importSection === "navbar"
+                ? "header/navbar"
+                : importSection === "main"
+                    ? "template layout"
+                    : importSection.replace("_", " ");
             toast.success(`Successfully imported schema for ${sectionDisplayName}!`);
             setShowImportPopup(false);
         } catch (e: any) {
@@ -823,7 +823,8 @@ function ThemeEditorWorkspace() {
         if (!selectedNode) return;
         let isValid = true;
         if (settingConfig) {
-            const { rgx, opt } = settingConfig;
+            const activeConfig = Array.isArray(settingConfig) ? settingConfig[0] : settingConfig;
+            const { rgx, opt } = activeConfig || {};
             if (rgx) {
                 isValid = new RegExp(rgx).test(val) || (opt?.includes(val)) || val === "";
             } else if (opt) {
@@ -845,9 +846,9 @@ function ThemeEditorWorkspace() {
     const getCategoryCount = (catValue: string) => {
         return AVAILABLE_COMPONENTS.filter((comp) => {
             const matchesSearch = comp.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                  comp.type.toLowerCase().includes(searchQuery.toLowerCase());
+                comp.type.toLowerCase().includes(searchQuery.toLowerCase());
             if (!matchesSearch) return false;
-            
+
             if (catValue === "all") return true;
             const registryEntry = componentSettingsMap?.[comp.type];
             const category = registryEntry?.category || "legacy";
@@ -858,9 +859,9 @@ function ThemeEditorWorkspace() {
     // Filter component options
     const filteredComponents = AVAILABLE_COMPONENTS.filter((comp) => {
         const matchesSearch = comp.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                              comp.type.toLowerCase().includes(searchQuery.toLowerCase());
+            comp.type.toLowerCase().includes(searchQuery.toLowerCase());
         if (!matchesSearch) return false;
-        
+
         if (activeCategory === "all") return true;
         const registryEntry = componentSettingsMap?.[comp.type];
         const category = registryEntry?.category || "legacy";
@@ -918,14 +919,8 @@ function ThemeEditorWorkspace() {
                             {schemas.announcement && <EditorPreviewBuilder schema={schemas.announcement} />}
                             {schemas.navbar && <EditorPreviewBuilder schema={schemas.navbar} />}
 
-                            {schemas.main && schemas.main.length > 0 ? (
+                            {schemas.main && (schemas.main.length > 0) && (
                                 <EditorPreviewBuilder schema={schemas.main} />
-                            ) : (
-                                <div className="flex flex-col items-center justify-center py-32 text-zinc-300">
-                                    <Layout className="w-10 h-10 mb-3" />
-                                    <p className="text-[13px] text-zinc-400">Main body is empty.</p>
-                                    <p className="text-[12px] text-zinc-400">Add elements in hierarchy.</p>
-                                </div>
                             )}
 
                             {schemas.footer && <EditorPreviewBuilder schema={schemas.footer} />}
@@ -958,7 +953,7 @@ function ThemeEditorWorkspace() {
                 />
             </main>
 
-               {/* Add Component Dialog */}
+            {/* Add Component Dialog */}
             <Dialog.Root open={showAddPopup} onOpenChange={setShowAddPopup}>
                 <Dialog.Portal>
                     <Dialog.Overlay className="fixed inset-0 bg-black/25 backdrop-blur-[2px] z-50" />
@@ -995,11 +990,10 @@ function ThemeEditorWorkspace() {
                                             <Tabs.Trigger
                                                 key={cat.value}
                                                 value={cat.value}
-                                                className={`relative px-2 py-2 text-[11px] font-medium transition-colors cursor-pointer outline-none shrink-0 flex items-center gap-1 border-b-2 -mb-px ${
-                                                    isActive
-                                                        ? "text-zinc-900 border-zinc-800"
-                                                        : "text-zinc-400 border-transparent hover:text-zinc-600"
-                                                }`}
+                                                className={`relative px-2 py-2 text-[11px] font-medium transition-colors cursor-pointer outline-none shrink-0 flex items-center gap-1 border-b-2 -mb-px ${isActive
+                                                    ? "text-zinc-900 border-zinc-800"
+                                                    : "text-zinc-400 border-transparent hover:text-zinc-600"
+                                                    }`}
                                             >
                                                 {cat.label}
                                                 {count > 0 && (
@@ -1025,13 +1019,11 @@ function ThemeEditorWorkspace() {
                                                 key={comp.type}
                                                 onMouseEnter={() => setHoveredComp(comp.type)}
                                                 onClick={() => handleAddComponent(comp.type)}
-                                                className={`w-full flex items-center text-left px-4 py-2 transition-colors cursor-pointer group ${
-                                                    isSelected ? "bg-zinc-50" : "hover:bg-zinc-50"
-                                                }`}
+                                                className={`w-full flex items-center text-left px-4 py-2 transition-colors cursor-pointer group ${isSelected ? "bg-zinc-50" : "hover:bg-zinc-50"
+                                                    }`}
                                             >
-                                                <div className={`w-7 h-7 rounded-md flex items-center justify-center mr-3 shrink-0 transition-colors ${
-                                                    isSelected ? "bg-zinc-900 text-white" : "bg-zinc-100 text-zinc-500 group-hover:bg-zinc-200"
-                                                }`}>
+                                                <div className={`w-7 h-7 rounded-md flex items-center justify-center mr-3 shrink-0 transition-colors ${isSelected ? "bg-zinc-900 text-white" : "bg-zinc-100 text-zinc-500 group-hover:bg-zinc-200"
+                                                    }`}>
                                                     <IconComponent className="w-3.5 h-3.5" />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
@@ -1092,7 +1084,7 @@ function ThemeEditorWorkspace() {
                 <Dialog.Portal>
                     <Dialog.Overlay className="fixed inset-0 bg-zinc-950/20 backdrop-blur-md z-50 transition-all duration-300" />
                     <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-[760px] h-[580px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] flex flex-col border border-zinc-100 overflow-hidden z-50 outline-none transition-all duration-300">
-                        
+
                         {/* Header */}
                         <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between shrink-0 bg-white">
                             <div>
@@ -1102,11 +1094,11 @@ function ThemeEditorWorkspace() {
                                     </span>
                                 </div>
                                 <Dialog.Title className="text-[16px] font-extrabold text-zinc-900 tracking-tight flex items-center gap-2">
-                                    {importSection === "navbar" 
-                                        ? "Header & Navbar" 
-                                        : importSection === "main" 
-                                        ? "Template Layout" 
-                                        : importSection?.replace("_", " ")} Schema Manager
+                                    {importSection === "navbar"
+                                        ? "Header & Navbar"
+                                        : importSection === "main"
+                                            ? "Template Layout"
+                                            : importSection?.replace("_", " ")} Schema Manager
                                 </Dialog.Title>
                             </div>
                             <Dialog.Close asChild>
@@ -1118,26 +1110,24 @@ function ThemeEditorWorkspace() {
 
                         {/* Tabs Container */}
                         <Tabs.Root value={activeImportTab} onValueChange={setActiveImportTab} className="flex-1 flex flex-col min-h-0 bg-white px-6 pb-6">
-                            
+
                             {/* Sliding apple-like pill tabs */}
                             <Tabs.List className="flex bg-zinc-100 p-1 rounded-2xl gap-1 shrink-0 max-w-[280px] mb-4 mt-2">
                                 <Tabs.Trigger
                                     value="import"
-                                    className={`px-4 py-1.5 text-[12px] font-bold rounded-xl transition-all cursor-pointer outline-none ${
-                                        activeImportTab === "import"
-                                            ? "bg-white text-zinc-900 shadow-sm"
-                                            : "text-zinc-450 hover:text-zinc-650"
-                                    }`}
+                                    className={`px-4 py-1.5 text-[12px] font-bold rounded-xl transition-all cursor-pointer outline-none ${activeImportTab === "import"
+                                        ? "bg-white text-zinc-900 shadow-sm"
+                                        : "text-zinc-450 hover:text-zinc-650"
+                                        }`}
                                 >
                                     Import JSON
                                 </Tabs.Trigger>
                                 <Tabs.Trigger
                                     value="export"
-                                    className={`px-4 py-1.5 text-[12px] font-bold rounded-xl transition-all cursor-pointer outline-none ${
-                                        activeImportTab === "export"
-                                            ? "bg-white text-zinc-900 shadow-sm"
-                                            : "text-zinc-450 hover:text-zinc-650"
-                                    }`}
+                                    className={`px-4 py-1.5 text-[12px] font-bold rounded-xl transition-all cursor-pointer outline-none ${activeImportTab === "export"
+                                        ? "bg-white text-zinc-900 shadow-sm"
+                                        : "text-zinc-450 hover:text-zinc-650"
+                                        }`}
                                 >
                                     Export JSON
                                 </Tabs.Trigger>

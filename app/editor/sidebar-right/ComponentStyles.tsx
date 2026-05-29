@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import * as Collapsible from "@radix-ui/react-collapsible";
+import React from "react";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { ComponentSchema } from "@/application/runtime/builder/type";
 
@@ -18,57 +18,6 @@ export default function ComponentStyles({
     validationErrors,
     onUpdateSetting,
 }: ComponentStylesProps) {
-    const [cssOpen, setCssOpen] = useState(false);
-
-    // Helpers to manage numeric rem values for sliders
-    const getRemValue = (val: string): number => {
-        if (!val) return 0;
-        const num = parseFloat(val);
-        return isNaN(num) ? 0 : num;
-    };
-
-    const renderSliderInput = (
-        label: string,
-        settingKey: string,
-        currentVal: string | number,
-        config: any
-    ) => {
-        const strVal = typeof currentVal === "number" ? `${currentVal}rem` : String(currentVal || "");
-        const numericVal = getRemValue(strVal);
-
-        return (
-            <div key={settingKey} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                    <span className="text-[10.5px] font-medium text-zinc-500">{label}</span>
-                    <div className="flex items-center gap-0.5 bg-zinc-50 border border-zinc-200 rounded px-1.5 py-0.5">
-                        <input
-                            type="text"
-                            value={strVal.replace("rem", "") || "0"}
-                            onChange={(e) => {
-                                const clean = e.target.value.replace(/[^0-9.]/g, "");
-                                onUpdateSetting(settingKey, clean ? `${clean}rem` : "", config);
-                            }}
-                            className="w-7 bg-transparent text-[11px] font-mono text-zinc-700 outline-none text-right"
-                        />
-                        <span className="text-[9px] text-zinc-400 font-mono">rem</span>
-                    </div>
-                </div>
-                <input
-                    type="range"
-                    min="0"
-                    max="8"
-                    step="0.25"
-                    value={numericVal}
-                    onChange={(e) => {
-                        const val = parseFloat(e.target.value);
-                        onUpdateSetting(settingKey, val === 0 ? "" : `${val}rem`, config);
-                    }}
-                    className="w-full h-1 bg-zinc-200 rounded-full appearance-none cursor-pointer accent-zinc-800"
-                />
-            </div>
-        );
-    };
-
     const entry = componentSettingsMap?.[selectedNode.type];
     const settings = entry ? (entry.settings || (entry.name ? null : entry)) : null;
 
@@ -77,139 +26,136 @@ export default function ComponentStyles({
         ? Object.entries(settings).filter(([_, config]: [string, any]) => config.tp === "style")
         : [];
 
+    const renderPlainInput = (label: string, settingKey: string, config: any) => {
+        if (!config) return null;
+        const activeConfig = Array.isArray(config) ? config[0] : config;
+        const currentVal = selectedNode.settings?.[settingKey] ?? "";
+
+        return (
+            <div key={settingKey} className="space-y-1">
+                <label className="text-[11px] font-medium text-zinc-600 capitalize">
+                    {label}
+                </label>
+                <div className={`relative flex items-center bg-white border rounded focus-within:ring-1 focus-within:ring-zinc-950/10 focus-within:border-zinc-400 ${
+                    validationErrors[settingKey] ? "border-red-300 bg-red-50/50" : "border-zinc-200"
+                }`}>
+                    <input
+                        type="text"
+                        value={String(currentVal)}
+                        onChange={(e) => onUpdateSetting(settingKey, e.target.value, config)}
+                        className="w-full bg-transparent text-[11px] font-mono text-zinc-700 outline-none pl-2 pr-7 py-1"
+                        placeholder={activeConfig?.rgx ? "e.g. 100%, auto" : "Enter value..."}
+                    />
+                    
+                    {activeConfig?.opt && activeConfig.opt.length > 0 && (
+                        <div className="absolute right-1 top-1/2 -translate-y-1/2">
+                            <DropdownMenu.Root>
+                                <DropdownMenu.Trigger asChild>
+                                    <button className="p-0.5 rounded hover:bg-zinc-150 text-zinc-400 hover:text-zinc-650 transition-colors cursor-pointer outline-none flex items-center justify-center">
+                                        <ChevronDown className="w-3.5 h-3.5" />
+                                    </button>
+                                </DropdownMenu.Trigger>
+                                <DropdownMenu.Portal>
+                                    <DropdownMenu.Content
+                                        align="end"
+                                        sideOffset={4}
+                                        className="z-[100] min-w-[100px] bg-white border border-zinc-200 rounded shadow-md p-1 outline-none font-sans text-[11px]"
+                                    >
+                                        {activeConfig.opt.map((optVal: string) => (
+                                            <DropdownMenu.Item
+                                                key={optVal}
+                                                onSelect={() => onUpdateSetting(settingKey, optVal, config)}
+                                                className="px-2 py-1 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 rounded cursor-pointer outline-none transition-colors"
+                                            >
+                                                {optVal}
+                                            </DropdownMenu.Item>
+                                        ))}
+                                    </DropdownMenu.Content>
+                                </DropdownMenu.Portal>
+                            </DropdownMenu.Root>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
     return (
-        <div className="p-4 space-y-5">
+        <div className="p-4 space-y-4">
             {/* Padding spacing block */}
-            <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">Padding</p>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-                    {renderSliderInput("Top", "pT", selectedNode.settings?.pT || "", componentSettingsMap.common?.pT)}
-                    {renderSliderInput("Bottom", "pB", selectedNode.settings?.pB || "", componentSettingsMap.common?.pB)}
-                    {renderSliderInput("Left", "pL", selectedNode.settings?.pL || "", componentSettingsMap.common?.pL)}
-                    {renderSliderInput("Right", "pR", selectedNode.settings?.pR || "", componentSettingsMap.common?.pR)}
+            <div className="space-y-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Padding</p>
+                <div className="grid grid-cols-2 gap-2">
+                    {renderPlainInput("All Padding", "p", componentSettingsMap.common?.p)}
+                    <div className="col-span-2 grid grid-cols-2 gap-2">
+                        {renderPlainInput("Horizontal (X)", "pX", componentSettingsMap.common?.pX)}
+                        {renderPlainInput("Vertical (Y)", "pY", componentSettingsMap.common?.pY)}
+                    </div>
+                    {renderPlainInput("Top", "pT", componentSettingsMap.common?.pT)}
+                    {renderPlainInput("Bottom", "pB", componentSettingsMap.common?.pB)}
+                    {renderPlainInput("Left", "pL", componentSettingsMap.common?.pL)}
+                    {renderPlainInput("Right", "pR", componentSettingsMap.common?.pR)}
                 </div>
             </div>
 
-            <div className="h-px bg-zinc-100" />
+            <div className="h-px bg-zinc-150" />
 
             {/* Margin spacing block */}
-            <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">Margin</p>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-                    {renderSliderInput("Top", "mT", selectedNode.settings?.mT || "", componentSettingsMap.common?.mT)}
-                    {renderSliderInput("Bottom", "mB", selectedNode.settings?.mB || "", componentSettingsMap.common?.mB)}
-                    {renderSliderInput("Left", "mL", selectedNode.settings?.mL || "", componentSettingsMap.common?.mL)}
-                    {renderSliderInput("Right", "mR", selectedNode.settings?.mR || "", componentSettingsMap.common?.mR)}
+            <div className="space-y-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Margin</p>
+                <div className="grid grid-cols-2 gap-2">
+                    {renderPlainInput("All Margin", "m", componentSettingsMap.common?.m)}
+                    <div className="col-span-2 grid grid-cols-2 gap-2">
+                        {renderPlainInput("Horizontal (X)", "mX", componentSettingsMap.common?.mX)}
+                        {renderPlainInput("Vertical (Y)", "mY", componentSettingsMap.common?.mY)}
+                    </div>
+                    {renderPlainInput("Top", "mT", componentSettingsMap.common?.mT)}
+                    {renderPlainInput("Bottom", "mB", componentSettingsMap.common?.mB)}
+                    {renderPlainInput("Left", "mL", componentSettingsMap.common?.mL)}
+                    {renderPlainInput("Right", "mR", componentSettingsMap.common?.mR)}
                 </div>
             </div>
 
-            {/* Element Style properties section */}
+            <div className="h-px bg-zinc-150" />
+
+            {/* Sizing block */}
+            <div className="space-y-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Sizing</p>
+                <div className="grid grid-cols-2 gap-2">
+                    {renderPlainInput("Width", "w", componentSettingsMap.common?.w)}
+                    {renderPlainInput("Height", "h", componentSettingsMap.common?.h)}
+                    {renderPlainInput("Max Width", "mw", componentSettingsMap.common?.mw)}
+                    {renderPlainInput("Max Height", "mh", componentSettingsMap.common?.mh)}
+                </div>
+            </div>
+
+            {/* Element Specific Styles */}
             {styleSettings.length > 0 && (
                 <>
-                    <div className="h-px bg-zinc-100" />
-                    <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">Element Styling</p>
-                        <div className="space-y-4">
-                            {styleSettings.map(([key, config]: [string, any]) => {
-                                const currentVal = selectedNode.settings?.[key] ?? "";
-                                const isColor =
-                                    key.toLowerCase().includes("color") ||
-                                    key.toLowerCase().includes("bg") ||
-                                    (config.rgx && (config.rgx.includes("#") || config.rgx.includes("rgba")));
-
-                                if (isColor) {
-                                    return (
-                                        <div key={key} className="flex items-center justify-between gap-4 py-1">
-                                            <div className="flex flex-col min-w-0">
-                                                <span className="text-[12px] font-semibold text-zinc-700 truncate capitalize">
-                                                    {key.replace(/-/g, " ")}
-                                                </span>
-                                                <span className="text-[9px] font-mono text-zinc-400 mt-0.5">{config.tp}</span>
-                                            </div>
-                                            <div className="shrink-0 w-36">
-                                                <div className="flex items-center gap-2 bg-zinc-50 border border-zinc-200 rounded-lg px-2 py-1 hover:border-zinc-300 transition-all shadow-inner">
-                                                    <div className="w-5 h-5 rounded-xl border border-zinc-300 shrink-0 overflow-hidden relative shadow-sm cursor-pointer">
-                                                        <input
-                                                            type="color"
-                                                            value={typeof currentVal === "string" && currentVal.startsWith("#") ? currentVal : "#000000"}
-                                                            onChange={(e) => onUpdateSetting(key, e.target.value, config)}
-                                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer scale-150"
-                                                        />
-                                                        <div className="w-full h-full" style={{ backgroundColor: typeof currentVal === "string" ? currentVal : "#000" }} />
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        value={currentVal}
-                                                        onChange={(e) => onUpdateSetting(key, e.target.value, config)}
-                                                        className="w-full bg-transparent text-[11px] font-mono text-zinc-700 outline-none border-none p-0 tracking-wider text-right font-semibold"
-                                                        placeholder="#000000"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                }
-
-                                return (
-                                    <div key={key} className="space-y-1.5">
-                                        <div className="flex justify-between items-center">
-                                            <label className="text-[12px] font-semibold text-zinc-700 capitalize">
-                                                {key.replace(/-/g, " ")}
-                                            </label>
-                                            <span className="text-[9px] text-zinc-400 font-mono">{config.tp}</span>
-                                        </div>
-                                        {config.opt ? (
-                                            <select
-                                                value={currentVal}
-                                                onChange={(e) => onUpdateSetting(key, e.target.value, config)}
-                                                className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-[12px] font-semibold text-zinc-750 outline-none focus:border-zinc-400 bg-white cursor-pointer"
-                                            >
-                                                <option value="">(None)</option>
-                                                {config.opt.map((v: string) => (
-                                                    <option key={v} value={v}>{v}</option>
-                                                ))}
-                                            </select>
-                                        ) : (
-                                            <input
-                                                type="text"
-                                                value={currentVal}
-                                                onChange={(e) => onUpdateSetting(key, e.target.value, config)}
-                                                className={`w-full border rounded-lg px-3 py-2 text-[12px] font-semibold outline-none focus:ring-1 ${
-                                                    validationErrors[key]
-                                                        ? "border-red-300 focus:border-red-450 focus:ring-red-100 bg-red-50/50 text-red-900"
-                                                        : "border-zinc-200 focus:border-zinc-450 focus:ring-zinc-950/10 bg-white text-zinc-800"
-                                                }`}
-                                                placeholder="Enter style value…"
-                                            />
-                                        )}
-                                    </div>
-                                );
-                            })}
+                    <div className="h-px bg-zinc-150" />
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Element Styling</p>
+                        <div className="space-y-2">
+                            {styleSettings.map(([key, config]: [string, any]) =>
+                                renderPlainInput(key.replace(/-/g, " "), key, config)
+                            )}
                         </div>
                     </div>
                 </>
             )}
 
-            <div className="h-px bg-zinc-100" />
-
-            {/* Custom CSS text area */}
-            <Collapsible.Root open={cssOpen} onOpenChange={setCssOpen}>
-                <Collapsible.Trigger asChild>
-                    <button className="w-full flex items-center justify-between py-0.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-400 cursor-pointer outline-none">
-                        <span>Custom CSS</span>
-                        <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 transition-transform ${cssOpen ? "rotate-180" : ""}`} />
-                    </button>
-                </Collapsible.Trigger>
-                <Collapsible.Content className="pt-2">
-                    <textarea
-                        rows={4}
-                        placeholder="font-weight: 700;"
-                        value={selectedNode.settings?.customCss || ""}
-                        onChange={(e) => onUpdateSetting("customCss", e.target.value, { tp: "style", as: "customCss" })}
-                        className="w-full border border-zinc-200 rounded-lg p-2.5 text-[11px] font-mono outline-none focus:border-zinc-400 bg-zinc-50 resize-none font-semibold text-zinc-700"
-                    />
-                </Collapsible.Content>
-            </Collapsible.Root>
+            {/* Custom CSS */}
+            <div className="h-px bg-zinc-150" />
+            <div className="space-y-1">
+                <label className="text-[11px] font-medium text-zinc-600">Custom CSS</label>
+                <textarea
+                    rows={4}
+                    placeholder="font-weight: 700;"
+                    value={selectedNode.settings?.customCss || ""}
+                    onChange={(e) => onUpdateSetting("customCss", e.target.value, { tp: "style", as: "customCss" })}
+                    className="w-full border border-zinc-200 rounded p-2 text-[11px] font-mono outline-none focus:border-zinc-400 bg-white resize-none text-zinc-800"
+                />
+            </div>
         </div>
     );
 }

@@ -4,7 +4,7 @@ import ComponentBuilder from "@/application/runtime/builder/ComponentBuilder";
 import ThemeBuilder from "@/application/runtime/builder/ThemeBuilder";
 import { ApplicationLayout, ApplicationRoutes } from "@/application/runtime/pages/type";
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
-import { getAppGlobalComponent, getApplicationPageRender, getTenantThemeConfig } from './engine';
+import { DEFAULT_THEME, getAppGlobalComponent, getApplicationPageRender, getTenantThemeConfig } from './engine';
 import { ApplicationIndexParams } from './types';
 import { headers } from "next/headers";
 import { servingProduction } from "..";
@@ -100,7 +100,7 @@ async function ApplicationBuildPage({ layout, route, tenant, store }: {
 
     return <>
         <Application>
-            <ThemeBuilder themeConfigs={tenantThemeConfig}>
+            <ThemeBuilder themeConfigs={tenantThemeConfig || DEFAULT_THEME}>
                 {/* display announcement bar */}
                 <ComponentBuilder schema={announcementBar} />
 
