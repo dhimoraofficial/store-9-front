@@ -72,8 +72,6 @@ export async function getTenantMetaData() {
         response["error"] = "DOMAIN_NOT_REGISTERED"
     }
 
-    console.log(response);
-
     return response
 }
 
@@ -95,8 +93,6 @@ async function ApplicationBuildPage({ layout, route, tenant, store }: {
             tenantID: tenant
         })
     ]);
-
-
 
     return <>
         <Application>

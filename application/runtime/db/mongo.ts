@@ -27,6 +27,8 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     await client.connect();
     const db = client.db("DHIMORA_SUPER_DATABASE");
 
+    console.log("MONGO", MONGODB_URI);
+
     cached.client = client;
     cached.db = db;
 
