@@ -685,8 +685,20 @@ function ThemeEditorWorkspace() {
             );
 
             if (res?.success) {
-                // If route doesn't exist in DB and is not root, redirect to editor home
-                if (routePath !== "/" && res.pageRoute && !res.pageRoute.exists) {
+                // If route doesn't exist in DB, and is not a default route or root, redirect to editor home
+                const isDefaultRoute = 
+                    routePath === "/" || 
+                    routePath.startsWith("/product/") || 
+                    routePath.startsWith("/products/") || 
+                    routePath.startsWith("/category/") || 
+                    routePath.startsWith("/categories/") || 
+                    routePath.startsWith("/collection/") || 
+                    routePath.startsWith("/collections/") || 
+                    routePath === "/cart" || 
+                    routePath === "/checkout" || 
+                    routePath === "/search";
+
+                if (!isDefaultRoute && res.pageRoute && !res.pageRoute.exists) {
                     toast.error(`Page ${routePath} does not exist. Redirecting…`);
                     router.push("/editor");
                     return;

@@ -3,6 +3,72 @@ import { ComponentSchema } from "@/application/runtime/builder/type"
 import { ApplicationLayout, ApplicationRoutes, ApplicationLayoutType } from "@/application/runtime/pages/type"
 import { getLayoutCollection, connectToDatabase } from "@/application/runtime/db/mongo"
 import { APP } from "@/app"
+import {
+    defaultThemeConfig,
+    defaultAnnouncementBar,
+    defaultNavbarSchema,
+    defaultFooterSchema,
+    defaultHomepageSchema,
+    defaultProductSchema,
+    defaultCategorySchema,
+    defaultCartSchema,
+    defaultCheckoutSchema,
+    defaultSearchSchema
+} from "./defaults"
+
+function getDefaultRouteInfo(route: string): { type: string, layout: string } {
+    if (route === "/") {
+        return { type: "SP", layout: "homepage" };
+    }
+    if (route.startsWith("/product/") || route.startsWith("/products/")) {
+        return { type: "DP", layout: "product" };
+    }
+    if (route.startsWith("/category/") || route.startsWith("/categories/")) {
+        return { type: "DB", layout: "category" };
+    }
+    if (route.startsWith("/collection/") || route.startsWith("/collections/")) {
+        return { type: "DB", layout: "collection" };
+    }
+    if (route === "/cart") {
+        return { type: "SP", layout: "cart" };
+    }
+    if (route === "/checkout") {
+        return { type: "SP", layout: "checkout" };
+    }
+    if (route === "/search") {
+        return { type: "DB", layout: "search" };
+    }
+    
+    // Generic fallback for custom pages
+    const slug = route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
+    return { type: "SP", layout: slug };
+}
+
+function getDefaultLayoutSchema(layoutKey: string, route: string): ComponentSchema[] {
+    if (layoutKey === "homepage" || route === "/") {
+        return defaultHomepageSchema;
+    }
+    if (layoutKey === "product" || route.startsWith("/product/") || route.startsWith("/products/")) {
+        return defaultProductSchema;
+    }
+    if (layoutKey === "category" || route.startsWith("/category/") || route.startsWith("/categories/")) {
+        return defaultCategorySchema;
+    }
+    if (layoutKey === "collection" || route.startsWith("/collection/") || route.startsWith("/collections/")) {
+        return defaultCategorySchema;
+    }
+    if (layoutKey === "cart" || route === "/cart") {
+        return defaultCartSchema;
+    }
+    if (layoutKey === "checkout" || route === "/checkout") {
+        return defaultCheckoutSchema;
+    }
+    if (layoutKey === "search" || route === "/search") {
+        return defaultSearchSchema;
+    }
+    return [];
+}
+
 
 export const DEFAULT_THEME: ThemeConfigs = {
     primary: '#0F172A',
@@ -72,23 +138,48 @@ export async function getApplicationPageRender({ route, tenant, store, isEditor 
     }
 
     if (!routeDoc) {
+        // Retrieve default route info matching the path template
+        const defaultRouteInfo = getDefaultRouteInfo(route);
+        
         if (isEditor) {
             // If route does not exist in DB, defaultly mock/generate representation for view (do not seed yet)
-            const defaultLayoutId = route === "/" ? "homepage" : route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
             routeDoc = {
                 tenantId: tenant,
                 storeId: store,
                 route: route,
-                type: "SP",
-                layout: defaultLayoutId
+                type: defaultRouteInfo.type,
+                layout: defaultRouteInfo.layout
             };
         } else {
-            return {
-                pageLayout: null,
-                pageRoute: {
-                    type: "not_found"
-                } as ApplicationRoutes
-            };
+            // Storefront fallback: for a brand new tenant, mock layout representations for default e-commerce routes
+            const isValidDefaultRoute = 
+                route === "/" || 
+                route.startsWith("/product/") || 
+                route.startsWith("/products/") || 
+                route.startsWith("/category/") || 
+                route.startsWith("/categories/") || 
+                route.startsWith("/collection/") || 
+                route.startsWith("/collections/") || 
+                route === "/cart" || 
+                route === "/checkout" || 
+                route === "/search";
+
+            if (isValidDefaultRoute) {
+                routeDoc = {
+                    tenantId: tenant,
+                    storeId: store,
+                    route: route,
+                    type: defaultRouteInfo.type,
+                    layout: defaultRouteInfo.layout
+                };
+            } else {
+                return {
+                    pageLayout: null,
+                    pageRoute: {
+                        type: "not_found"
+                    } as ApplicationRoutes
+                };
+            }
         }
     }
 
@@ -124,25 +215,40 @@ export async function getApplicationPageRender({ route, tenant, store, isEditor 
         layoutDoc = await collection.findOne({
             tenantId: tenant,
             storeId: store,
-            _id: layoutKey as any,
-        });
+            _id: `${store}_${layoutKey}`,
+        } as any);
+
+        if (!layoutDoc) {
+            layoutDoc = await collection.findOne({
+                tenantId: tenant,
+                storeId: store,
+                _id: layoutKey as any,
+            });
+        }
     }
 
     if (!layoutDoc) {
-        // Mock an empty custom layout if not found in DB
+        // Mock default layout components from curated templates if not found in DB
+        const targetId = typeof layoutKey === "string" ? layoutKey : getDefaultRouteInfo(route).layout;
         layoutDoc = {
-            _id: typeof layoutKey === "string" ? layoutKey : (route === "/" ? "homepage" : route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-")),
+            _id: targetId,
             for: "main",
             type: "custom",
-            _c: []
+            _c: getDefaultLayoutSchema(targetId, route)
         };
     }
 
     const { layout: _unused, ...routeWithoutLayout } = routeDoc;
 
+    let cleanLayoutId = layoutDoc?._id ? String(layoutDoc._id) : "";
+    const prefix = `${store}_`;
+    if (cleanLayoutId.startsWith(prefix)) {
+        cleanLayoutId = cleanLayoutId.substring(prefix.length);
+    }
+
     return {
         pageLayout: {
-            _id: String(layoutDoc._id),
+            _id: cleanLayoutId,
             for: "main",
             type: (layoutDoc.type || "custom") as ApplicationLayoutType,
             _c: (layoutDoc._c || []) as ComponentSchema[]
@@ -155,17 +261,36 @@ export async function getAppGlobalComponent(componentID: string, tenant: string,
     const collection = await getLayoutCollection();
 
     if (componentID !== "ALL_OTHERS") {
-        const doc = await collection.findOne({
+        let doc = await collection.findOne({
             tenantId: tenant,
             storeId: store,
-            _id: componentID as any
-        });
+            _id: `${store}_${componentID}`
+        } as any);
+
+        if (!doc) {
+            doc = await collection.findOne({
+                tenantId: tenant,
+                storeId: store,
+                _id: componentID as any
+            });
+        }
 
         if (doc) {
             return (doc._c || []) as ComponentSchema[];
         }
 
-        return []
+        // Newly registered tenant fallback: return default schemas if layouts do not exist in DB yet
+        if (componentID === "navbar") {
+            return defaultNavbarSchema;
+        }
+        if (componentID === "footer") {
+            return defaultFooterSchema;
+        }
+        if (componentID === "announcement") {
+            return defaultAnnouncementBar;
+        }
+
+        return [];
     }
 
     const docs = await collection.find({
@@ -203,5 +328,6 @@ export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID: st
         return doc.config as ThemeConfigs;
     }
 
-    return DEFAULT_THEME;
+    // Newly registered tenant fallback: return the curated default theme
+    return defaultThemeConfig;
 }

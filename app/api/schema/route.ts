@@ -2,6 +2,71 @@ import { APP } from "@/app";
 import { connectToDatabase, getLayoutCollection } from "@/application/runtime/db/mongo";
 import { ApplicationLayoutFor, ApplicationLayoutType } from "@/application/runtime/pages/type";
 import { NextRequest, NextResponse } from "next/server";
+import {
+    defaultThemeConfig,
+    defaultAnnouncementBar,
+    defaultNavbarSchema,
+    defaultFooterSchema,
+    defaultHomepageSchema,
+    defaultProductSchema,
+    defaultCategorySchema,
+    defaultCartSchema,
+    defaultCheckoutSchema,
+    defaultSearchSchema
+} from "../../[[...page]]/defaults";
+
+function getDefaultRouteInfo(route: string): { type: string, layout: string } {
+    if (route === "/") {
+        return { type: "SP", layout: "homepage" };
+    }
+    if (route.startsWith("/product/") || route.startsWith("/products/")) {
+        return { type: "DP", layout: "product" };
+    }
+    if (route.startsWith("/category/") || route.startsWith("/categories/")) {
+        return { type: "DB", layout: "category" };
+    }
+    if (route.startsWith("/collection/") || route.startsWith("/collections/")) {
+        return { type: "DB", layout: "collection" };
+    }
+    if (route === "/cart") {
+        return { type: "SP", layout: "cart" };
+    }
+    if (route === "/checkout") {
+        return { type: "SP", layout: "checkout" };
+    }
+    if (route === "/search") {
+        return { type: "DB", layout: "search" };
+    }
+
+    // Generic fallback for custom pages
+    const slug = route.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
+    return { type: "SP", layout: slug };
+}
+
+function getDefaultLayoutSchema(layoutKey: string, route: string): any[] {
+    if (layoutKey === "homepage" || route === "/") {
+        return defaultHomepageSchema;
+    }
+    if (layoutKey === "product" || route.startsWith("/product/") || route.startsWith("/products/")) {
+        return defaultProductSchema;
+    }
+    if (layoutKey === "category" || route.startsWith("/category/") || route.startsWith("/categories/")) {
+        return defaultCategorySchema;
+    }
+    if (layoutKey === "collection" || route.startsWith("/collection/") || route.startsWith("/collections/")) {
+        return defaultCategorySchema;
+    }
+    if (layoutKey === "cart" || route === "/cart") {
+        return defaultCartSchema;
+    }
+    if (layoutKey === "checkout" || route === "/checkout") {
+        return defaultCheckoutSchema;
+    }
+    if (layoutKey === "search" || route === "/search") {
+        return defaultSearchSchema;
+    }
+    return [];
+}
 
 export async function GET(req: NextRequest) {
     try {
@@ -23,17 +88,54 @@ export async function GET(req: NextRequest) {
                 const themeDoc = await configsCollection.findOne({ tenantId, storeId });
                 return NextResponse.json({
                     success: true,
-                    schema: themeDoc?.config
+                    schema: themeDoc?.config || defaultThemeConfig
                 });
             }
 
-            const doc = await layoutsCollection.findOne({
+            let doc = await layoutsCollection.findOne({
                 tenantId,
                 storeId,
-                _id: keyParam as any
-            });
+                _id: `${storeId}_${keyParam}`
+            } as any);
 
             if (!doc) {
+                doc = await layoutsCollection.findOne({
+                    tenantId,
+                    storeId,
+                    _id: keyParam as any
+                });
+            }
+
+            if (!doc) {
+                // If it is a global element and does not exist in DB yet, return the default template
+                if (keyParam === "navbar") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultNavbarSchema,
+                        type: "global"
+                    });
+                }
+                if (keyParam === "footer") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultFooterSchema,
+                        type: "global"
+                    });
+                }
+                if (keyParam === "announcement") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultAnnouncementBar,
+                        type: "global"
+                    });
+                }
+                if (keyParam === "homepage") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultHomepageSchema,
+                        type: "custom"
+                    });
+                }
                 return NextResponse.json({ error: `Layout not found: ${keyParam}` }, { status: 404 });
             }
 
@@ -58,16 +160,61 @@ export async function GET(req: NextRequest) {
                 ]
             }).toArray();
 
-            const cleanGlobals = dbGlobals.map(dg => ({
-                _id: dg._id,
-                for: dg.for,
-                type: dg.type,
-                _c: dg._c || []
-            }));
+            const cleanGlobals: any[] = dbGlobals.map(dg => {
+                let cleanId: string = dg._id as unknown as string;
+                const prefix = `${storeId}_`;
+                if (typeof cleanId === "string" && (cleanId as string).startsWith(prefix)) {
+                    cleanId = (cleanId as string)?.substring(prefix.length);
+                }
+                return {
+                    _id: cleanId,
+                    for: dg.for,
+                    type: dg.type,
+                    _c: dg._c || []
+                };
+            });
+
+            // Check which global components were found in DB and insert defaults for missing ones
+            const foundFors = new Set(cleanGlobals.map(g => g.for));
+            if (!foundFors.has("announcement")) {
+                cleanGlobals.push({
+                    _id: "announcement",
+                    for: "announcement",
+                    type: "global",
+                    _c: defaultAnnouncementBar
+                });
+            }
+            if (!foundFors.has("navbar")) {
+                cleanGlobals.push({
+                    _id: "navbar",
+                    for: "navbar",
+                    type: "global",
+                    _c: defaultNavbarSchema
+                });
+            }
+            if (!foundFors.has("footer")) {
+                cleanGlobals.push({
+                    _id: "footer",
+                    for: "footer",
+                    type: "global",
+                    _c: defaultFooterSchema
+                });
+            }
+
+            // Ensure whatsAppButton has a dummy document in workspace if missing
+            const foundIds = new Set(cleanGlobals.map(g => g._id));
+            if (!foundIds.has("whatsAppButton")) {
+                cleanGlobals.push({
+                    _id: "whatsAppButton",
+                    for: "main",
+                    type: "global",
+                    _c: []
+                });
+            }
 
             // Fetch theme without seeding from configs collection
             const themeDoc = await configsCollection.findOne({ tenantId, storeId });
-            const themeConfig = themeDoc?.config
+            const themeConfig = themeDoc?.config || defaultThemeConfig;
 
             // Find route mapping
             let routeDoc: any = await routesCollection.findOne({ tenantId, storeId, route: editorRoute });
@@ -85,14 +232,14 @@ export async function GET(req: NextRequest) {
             const exists = !!routeDoc;
 
             if (!routeDoc) {
-                // Mock in-memory route layout representation instead of seeding in DB
-                const defaultLayoutId = editorRoute === "/" ? "homepage" : editorRoute.substring(1).replace(/[^a-zA-Z0-9_-]/g, "-");
+                // Mock in-memory route layout representation matching path template
+                const defaultRouteInfo = getDefaultRouteInfo(editorRoute);
                 routeDoc = {
                     tenantId,
                     storeId,
                     route: editorRoute,
-                    type: "SP",
-                    layout: defaultLayoutId
+                    type: defaultRouteInfo.type,
+                    layout: defaultRouteInfo.layout
                 };
             }
 
@@ -102,24 +249,40 @@ export async function GET(req: NextRequest) {
                 pageLayoutDoc = await layoutsCollection.findOne({
                     tenantId,
                     storeId,
-                    _id: routeDoc.layout,
+                    _id: `${storeId}_${routeDoc.layout}`,
                     for: "main"
-                });
+                } as any);
+
+                if (!pageLayoutDoc) {
+                    pageLayoutDoc = await layoutsCollection.findOne({
+                        tenantId,
+                        storeId,
+                        _id: routeDoc.layout,
+                        for: "main"
+                    });
+                }
 
                 if (!pageLayoutDoc) {
                     pageLayoutDoc = {
                         _id: routeDoc.layout,
                         for: "main" as const,
                         type: "custom" as const,
-                        _c: []
+                        _c: getDefaultLayoutSchema(routeDoc.layout, editorRoute)
                     };
                 }
             }
 
             const allRoutes = await routesCollection.find({ tenantId, storeId }).toArray();
 
+            let cleanPageLayoutId = pageLayoutDoc?._id;
+            if (cleanPageLayoutId) {
+                const prefix = `${storeId}_`;
+                if (typeof cleanPageLayoutId === "string" && cleanPageLayoutId.startsWith(prefix)) {
+                    cleanPageLayoutId = cleanPageLayoutId.substring(prefix.length);
+                }
+            }
             const cleanPageLayout = pageLayoutDoc ? {
-                _id: pageLayoutDoc._id,
+                _id: cleanPageLayoutId,
                 for: pageLayoutDoc.for,
                 type: pageLayoutDoc.type,
                 _c: pageLayoutDoc._c || []
@@ -192,11 +355,12 @@ export async function POST(req: NextRequest) {
 
             // Automatically create corresponding layout document in layouts collection
             const layoutsCollection = db.collection("layouts");
+            const compositeLayoutId = `${storeId}_${slugId}`;
             await layoutsCollection.updateOne(
-                { tenantId, storeId, _id: slugId },
+                { tenantId, storeId, _id: compositeLayoutId } as any,
                 {
                     $setOnInsert: {
-                        _id: slugId,
+                        _id: compositeLayoutId,
                         for: "main",
                         type: "custom",
                         _c: Array.isArray(layout) ? layout : [],
@@ -214,7 +378,7 @@ export async function POST(req: NextRequest) {
             if (schema === undefined) {
                 return NextResponse.json({ error: "Missing schema for theme" }, { status: 400 });
             }
-            
+
             const configsCollection = db.collection("configs");
             await configsCollection.updateOne(
                 { tenantId, storeId },
@@ -241,8 +405,9 @@ export async function POST(req: NextRequest) {
             typeVal = "global";
         }
 
+        const compositeKey = `${storeId}_${key}`;
         const cleanLayoutDoc = {
-            _id: key,
+            _id: compositeKey,
             for: forVal,
             type: typeVal,
             _c: Array.isArray(schema) ? schema : [schema],
@@ -251,7 +416,7 @@ export async function POST(req: NextRequest) {
         };
 
         await layoutsCollection.updateOne(
-            { tenantId, storeId, _id: key },
+            { tenantId, storeId, _id: compositeKey } as any,
             { $set: cleanLayoutDoc },
             { upsert: true }
         );

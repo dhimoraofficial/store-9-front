@@ -63,7 +63,9 @@ function returnComponentAction(actions: ComponentAction | ComponentAction[], run
 }
 
 
-function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
+import { interpolateSchema } from "./evaluator";
+
+function ComponentBuilderContent({ schema, context }: { schema: ComponentSchema; context?: any }) {
     if (!schema) return null;
 
     const Component = AppComponents?.[schema.type]
@@ -75,31 +77,35 @@ function ComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
         // passing whats the action to check
         (schema?.action as ComponentAction | ComponentAction[]),
 
-        // here pass the exact data, 
-        { product_id: "its-drk-here" }
+        // here pass the exact context data
+        context || { product_id: "its-drk-here" }
     ) || {}
 
-    // this mapper fucntion automatically sets the required action like onClick={() => handleAddToCart(x, y)}
-    schema.settings = {
-        ...(schema?.settings || {}),
+    const resolvedSettings = context
+        ? interpolateSchema(schema.settings, context)
+        : schema.settings;
 
-        // this mapper fucntion automatically sets the required action like onClick={() => handleAddToCart(x, y)}
+    // this mapper function automatically sets the required action like onClick={() => handleAddToCart(x, y)}
+    const finalSettings = {
+        ...(resolvedSettings || {}),
+
+        // this mapper function automatically sets the required action like onClick={() => handleAddToCart(x, y)}
         ...compoennetActions
     } as ComponentSchemaSettings
 
     return <Component
-        // set the settings directly yto the comopennts, 
-        // this will pass all the config values into the style, settings formate 
-        {...getParsedSettings(schema.type, schema.settings as ComponentSchemaSettings)}
+        // set the settings directly to the components, 
+        // this will pass all the config values into the style, settings format 
+        {...getParsedSettings(schema.type, finalSettings)}
     >
         {schema?.children?.map((child, index) => (
-            <ComponentBuilderContent key={child.id || index} schema={child} />
+            <ComponentBuilderContent key={child.id || index} schema={child} context={context} />
         ))}
     </Component>
 }
 
-export default function ClientComponentBuilderContent({ schema }: { schema: ComponentSchema }) {
+export default function ClientComponentBuilderContent({ schema, context }: { schema: ComponentSchema; context?: any }) {
     return <Suspense fallback={<SplashScreen />}>
-        <ComponentBuilderContent schema={schema} />
+        <ComponentBuilderContent schema={schema} context={context} />
     </Suspense>
 }

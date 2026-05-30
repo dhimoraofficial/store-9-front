@@ -11,6 +11,8 @@ import { servingProduction } from "..";
 import { APP_API } from "@/application/providers/api";
 import { NoSuchStore, ServiceUnavailable } from "../Errors";
 import Script from "next/script";
+import ProductPageController from "@/app/run-product/controller";
+import CategoryPageController from "@/app/run-category/controller";
 
 const testHere = 'store9nepal.dhimora.com';
 
@@ -76,6 +78,34 @@ export async function getTenantMetaData() {
 }
 
 
+function MainPageRouter({
+    layout,
+    route,
+    tenant,
+    store
+}: {
+    layout: ApplicationLayout;
+    route: ApplicationRoutes;
+    tenant: string;
+    store: string;
+}) {
+    const path = route.route || "";
+    if (route.type === "product" || path.startsWith("/product/") || path.startsWith("/products/")) {
+        return <ProductPageController layout={layout} route={route} tenant={tenant} store={store} />;
+    }
+    if (
+        route.type === "category" ||
+        route.type === "collection" ||
+        path.startsWith("/category/") ||
+        path.startsWith("/categories/") ||
+        path.startsWith("/collection/") ||
+        path.startsWith("/collections/")
+    ) {
+        return <CategoryPageController layout={layout} route={route} tenant={tenant} store={store} />;
+    }
+    return <ComponentBuilder schema={layout?._c} />;
+}
+
 async function ApplicationBuildPage({ layout, route, tenant, store }: {
     layout: ApplicationLayout
     route: ApplicationRoutes
@@ -106,7 +136,7 @@ async function ApplicationBuildPage({ layout, route, tenant, store }: {
                 {/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */}
                 {/* Main application page render here */}
                 {/* Main application page render here */}
-                <ComponentBuilder schema={layout?._c} />
+                <MainPageRouter layout={layout} route={route} tenant={tenant} store={store} />
                 {/* Main application page render here */}
                 {/* Main application page render here */}
                 {/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */}
