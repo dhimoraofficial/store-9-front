@@ -183,52 +183,54 @@ function TreeNode({
 
     return (
         <div className="overflow-x-hidden">
-            {/* Row — full width, overflow clipped so actions stay inside */}
             <div
                 onClick={(e) => { e.stopPropagation(); onSelect(node.id); }}
-                className={`group relative flex items-center py-[5px] pr-1 cursor-pointer transition-all duration-150 overflow-hidden ${isSelected
-                        ? "bg-zinc-100 text-zinc-950 font-semibold"
-                        : "hover:bg-zinc-50 text-zinc-600"
+                className={`group relative flex items-center py-1.5 pr-1 cursor-pointer transition-all duration-150 overflow-hidden ${isSelected
+                        ? "bg-zinc-100 text-zinc-950 font-semibold border-l-2 border-zinc-900"
+                        : "hover:bg-zinc-50 text-zinc-600 border-l-2 border-transparent"
                     }`}
-                style={{ paddingLeft: isRoot ? "14px" : "8px" }}
+                style={{ paddingLeft: isRoot ? "12px" : "6px" }}
             >
-                {/* Expand chevron */}
                 {hasChildren ? (
                     <button
                         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
-                        className="p-0.5 rounded shrink-0 mr-1 hover:bg-zinc-200/50 transition-colors"
+                        className="p-0.5 rounded shrink-0 mr-1 hover:bg-zinc-200/60 transition-colors"
                     >
-                        <ChevronRight className={`w-3 h-3 text-zinc-400 transition-transform duration-150 ${open ? "rotate-90" : ""}`} />
+                        {open
+                            ? <ChevronDown className="w-3 h-3 text-zinc-400" />
+                            : <ChevronRight className="w-3 h-3 text-zinc-400" />
+                        }
                     </button>
                 ) : (
                     <span className="w-4 shrink-0 mr-1" />
                 )}
 
-                {/* Icon */}
-                <span className="shrink-0 mr-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                <span className="shrink-0 mr-1.5 opacity-70 group-hover:opacity-100 transition-opacity">
                     {getDynamicComponentIcon(node.type, node.id, componentSettingsMap)}
                 </span>
 
-                {/* Label — takes remaining space, truncates, leaving space for actions */}
-                <span className="text-[11.5px] truncate select-none leading-none flex-1 min-w-0 font-medium tracking-wide pr-12">
-                    {node.label || componentSettingsMap?.[node.type]?.name || node.type}
-                </span>
+                <div className="flex-1 min-w-0 pr-12">
+                    <div className="text-[11.5px] truncate select-none leading-snug font-medium">
+                        {node.label || componentSettingsMap?.[node.type]?.name || node.type}
+                    </div>
+                </div>
 
-                {/* Actions — appear on hover, absolutely positioned to right edge */}
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-150 bg-inherit pl-2 pr-0.5 h-full">
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onAdd(node.id, section); }}
-                        className="p-1 rounded hover:bg-zinc-200 text-zinc-400 hover:text-zinc-700 transition-colors"
-                        title="Add child"
-                    >
-                        <Plus className="w-3.5 h-3.5" />
-                    </button>
+                <span className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-150">
+                    {(componentSettingsMap?.[node.type]?.acceptsChildren !== false) && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onAdd(node.id, section); }}
+                            className="p-1 rounded-md border border-transparent hover:border-zinc-300 text-zinc-400 hover:text-zinc-700 transition-all"
+                            title="Add child"
+                        >
+                            <Plus className="w-3 h-3" />
+                        </button>
+                    )}
                     <button
                         onClick={(e) => { e.stopPropagation(); onDelete(node.id); }}
-                        className="p-1 rounded hover:bg-red-50 text-zinc-400 hover:text-red-500 transition-colors"
+                        className="p-1 rounded-md border border-transparent hover:border-red-200  text-zinc-400 hover:text-red-500 transition-all"
                         title="Delete"
                     >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3 h-3" />
                     </button>
                 </span>
             </div>
@@ -288,7 +290,10 @@ export default function SidebarLeft({
                     <div className="flex flex-col">
                         <div className="border-b border-zinc-100 pb-2">
                             <div className="flex items-center justify-between px-3.5 pt-3 pb-1">
-                                <span className="text-[12px] font-bold text-zinc-950 uppercase tracking-wider text-zinc-400">Header</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1 h-3.5 bg-zinc-800 rounded-full" />
+                                    <span className="text-[10.5px] font-extrabold text-zinc-700 uppercase tracking-widest">Header</span>
+                                </div>
                                 <button
                                     onClick={() => onAddBlockTrigger("navbar", "header")}
                                     className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
@@ -373,7 +378,10 @@ export default function SidebarLeft({
 
                         <div className="border-b border-zinc-100 pb-2">
                             <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1">
-                                <span className="text-[12px] font-bold text-zinc-950 uppercase tracking-wider text-zinc-400">Template</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1 h-3.5 bg-zinc-800 rounded-full" />
+                                    <span className="text-[10.5px] font-extrabold text-zinc-700 uppercase tracking-widest">Template</span>
+                                </div>
                                 <div className="flex items-center gap-1.5">
                                     <button
                                         onClick={() => onImportSchemaTrigger("main")}
@@ -393,15 +401,30 @@ export default function SidebarLeft({
                             </div>
 
                             <div className="space-y-1 overflow-x-hidden">
-                                {schemas.main.map((node) => (
-                                    <TreeNode key={node.id} node={node} section="main" isRoot={true} {...treeProps} />
-                                ))}
+                                {schemas.main.length === 0 ? (
+                                    <button
+                                        onClick={() => onAddBlockTrigger(null, "main")}
+                                        className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50 transition-colors cursor-pointer group"
+                                    >
+                                        <div className="w-5 h-5 rounded border border-dashed border-zinc-300 group-hover:border-zinc-400 flex items-center justify-center transition-colors shrink-0">
+                                            <Plus className="w-3 h-3" />
+                                        </div>
+                                        <span className="text-[11.5px] font-medium">Add your first block</span>
+                                    </button>
+                                ) : (
+                                    schemas.main.map((node) => (
+                                        <TreeNode key={node.id} node={node} section="main" isRoot={true} {...treeProps} />
+                                    ))
+                                )}
                             </div>
                         </div>
 
                         <div className="pb-4">
                             <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1">
-                                <span className="text-[12px] font-bold text-zinc-950 uppercase tracking-wider text-zinc-400">Footer</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1 h-3.5 bg-zinc-800 rounded-full" />
+                                    <span className="text-[10.5px] font-extrabold text-zinc-700 uppercase tracking-widest">Footer</span>
+                                </div>
                                 <div className="flex items-center gap-1.5">
                                     <button
                                         onClick={() => onImportSchemaTrigger("footer")}
@@ -421,16 +444,28 @@ export default function SidebarLeft({
                             </div>
 
                             <div className="space-y-1 overflow-x-hidden">
-                                {schemas.footer.map((node) => (
-                                    <TreeNode key={node.id} node={node} section="footer" isRoot={true} {...treeProps} />
-                                ))}
+                                {schemas.footer.length === 0 ? (
+                                    <button
+                                        onClick={() => onAddBlockTrigger("footer", "footer")}
+                                        className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50 transition-colors cursor-pointer group"
+                                    >
+                                        <div className="w-5 h-5 rounded border border-dashed border-zinc-300 group-hover:border-zinc-400 flex items-center justify-center transition-colors shrink-0">
+                                            <Plus className="w-3 h-3" />
+                                        </div>
+                                        <span className="text-[11.5px] font-medium">Add footer block</span>
+                                    </button>
+                                ) : (
+                                    schemas.footer.map((node) => (
+                                        <TreeNode key={node.id} node={node} section="footer" isRoot={true} {...treeProps} />
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>
 
                 </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar orientation="vertical" className="w-1.5 p-0.5">
-                    <ScrollArea.Thumb className="bg-zinc-200 rounded-xl hover:bg-zinc-300" />
+                    <ScrollArea.Thumb className="bg-zinc-200 rounded-lg hover:bg-zinc-300" />
                 </ScrollArea.Scrollbar>
             </ScrollArea.Root>
         </aside>

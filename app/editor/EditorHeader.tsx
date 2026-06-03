@@ -1,12 +1,14 @@
 "use client";
 
 import React from "react";
-import { Save, Undo2, Redo2, Monitor, Smartphone, Tablet, Eye, Palette } from "lucide-react";
+import {
+    Save, Undo2, Redo2, Monitor, Smartphone, Tablet,
+    Palette, Loader2, AlertCircle, Eye
+} from "lucide-react";
 import * as Separator from "@radix-ui/react-separator";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import PageSelector from "./PageSelector";
-import Button from "@/application/widgets/button";
 
 export type ViewportMode = "desktop" | "tablet" | "mobile";
 
@@ -30,10 +32,10 @@ function Tip({ children, label }: { children: React.ReactNode; label: string }) 
                 <Tooltip.Content
                     side="bottom"
                     sideOffset={8}
-                    className="bg-zinc-800 text-white text-[10px] font-medium px-2 py-1 rounded-md shadow-lg z-[200]"
+                    className="bg-zinc-900 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-md shadow-xl z-[200] font-sans"
                 >
                     {label}
-                    <Tooltip.Arrow className="fill-zinc-800" />
+                    <Tooltip.Arrow className="fill-zinc-900" />
                 </Tooltip.Content>
             </Tooltip.Portal>
         </Tooltip.Root>
@@ -51,19 +53,25 @@ export default function EditorHeader({
     isThemeOpen,
     onToggleTheme,
 }: EditorHeaderProps) {
+    const isBusy = status === "saving" || status === "loading";
+    const isFailed = status === "failed";
+
     return (
-        <Tooltip.Provider delayDuration={200}>
-            <header className="h-14 bg-white flex items-center justify-between px-5 shrink-0 select-none border-b border-zinc-200">
-                <div className="flex items-center gap-3 shrink-0">
-                    <div className="w-8 h-8 rounded-md bg-zinc-900 flex items-center justify-center">
-                        <img src="https://www.dhimora.com/icon.png" />
+        <Tooltip.Provider delayDuration={300}>
+            <header className="h-12 bg-white flex items-center justify-between px-4 shrink-0 select-none border-b border-zinc-200/80 font-sans">
+
+                {/* ── Left: Brand ─────────────────────────── */}
+                <div className="flex items-center gap-2.5 shrink-0 w-[180px]">
+                    <div className="w-7 h-7 rounded-md bg-zinc-900 flex items-center justify-center overflow-hidden shrink-0">
+                        <img src="https://www.dhimora.com/icon.png" className="w-5 h-5 object-contain" alt="Logo" />
                     </div>
                     <div>
-                        <p className="text-sm font-semibold text-zinc-900">Theme Editor</p>
-                        <p className="text-[10px] text-zinc-400 font-medium">Efficiency that scales</p>
+                        <p className="text-[12px] font-bold text-zinc-900 leading-tight">Theme Editor</p>
+                        <p className="text-[9.5px] text-zinc-400 font-medium leading-tight">Efficiency that scales</p>
                     </div>
                 </div>
 
+                {/* ── Center: Page selector ────────────────── */}
                 <div className="flex-1 flex justify-center">
                     <PageSelector
                         currentRoute={currentRoute}
@@ -72,61 +80,93 @@ export default function EditorHeader({
                     />
                 </div>
 
-                {/* Right: Actions */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                    <Tip label="Undo">
-                        <button disabled className="p-2 rounded-lg text-zinc-300 hover:text-zinc-600 hover:bg-zinc-50 disabled:opacity-70 disabled:pointer-events-none transition-colors">
-                            <Undo2 className="w-[18px] h-[18px]" />
+                {/* ── Right: Actions ───────────────────────── */}
+                <div className="flex items-center gap-1 shrink-0 w-[180px] justify-end">
+
+                    {/* Undo / Redo */}
+                    <Tip label="Undo (coming soon)">
+                        <button disabled className="p-1.5 rounded-md text-zinc-300 border border-transparent cursor-not-allowed">
+                            <Undo2 className="w-3.5 h-3.5" />
                         </button>
                     </Tip>
-                    <Tip label="Redo">
-                        <button disabled className="p-2 rounded-lg text-zinc-300 hover:text-zinc-600 hover:bg-zinc-50 disabled:opacity-70 disabled:pointer-events-none transition-colors">
-                            <Redo2 className="w-[18px] h-[18px]" />
+                    <Tip label="Redo (coming soon)">
+                        <button disabled className="p-1.5 rounded-md text-zinc-300 border border-transparent cursor-not-allowed">
+                            <Redo2 className="w-3.5 h-3.5" />
                         </button>
                     </Tip>
 
+                    {/* Theme palette */}
                     <Tip label="Global Theme">
                         <button
                             onClick={onToggleTheme}
-                            className={`p-2 rounded-lg transition-colors cursor-pointer outline-none border ${
+                            className={`p-1.5 rounded-md transition-all cursor-pointer outline-none border ${
                                 isThemeOpen
-                                    ? "bg-zinc-100 text-zinc-900 border-zinc-200/60 shadow-inner"
-                                    : "text-zinc-400 hover:text-zinc-650 hover:bg-zinc-50 border-transparent"
+                                    ? "bg-zinc-900 text-white border-zinc-900 shadow-sm"
+                                    : "text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50 border-zinc-200 hover:border-zinc-300"
                             }`}
                         >
-                            <Palette className="w-[18px] h-[18px]" />
+                            <Palette className="w-3.5 h-3.5" />
                         </button>
                     </Tip>
 
-                    <Separator.Root orientation="vertical" className="h-8 w-px bg-zinc-300 mx-1" />
+                    <Separator.Root orientation="vertical" className="h-5 w-px bg-zinc-200 mx-1" />
 
-                    <ToggleGroup.Root
-                        type="single"
-                        value={viewport}
-                        onValueChange={(v) => { if (v) onViewportChange(v as ViewportMode); }}
-                        className="flex items-center border border-zinc-100 rounded-lg overflow-hidden"
-                    >
-                        <ToggleGroup.Item value="desktop" className="p-2 text-zinc-400 data-[state=on]:bg-zinc-100 data-[state=on]:text-zinc-900 hover:bg-zinc-50 transition-colors cursor-pointer border-r border-zinc-200">
-                            <Monitor className="w-[18px] h-[18px]" />
-                        </ToggleGroup.Item>
-                        <ToggleGroup.Item value="tablet" className="p-2 text-zinc-400 data-[state=on]:bg-zinc-100 data-[state=on]:text-zinc-900 hover:bg-zinc-50 transition-colors cursor-pointer border-r border-zinc-200">
-                            <Tablet className="w-[18px] h-[18px]" />
-                        </ToggleGroup.Item>
-                        <ToggleGroup.Item value="mobile" className="p-2 text-zinc-400 data-[state=on]:bg-zinc-100 data-[state=on]:text-zinc-900 hover:bg-zinc-50 transition-colors cursor-pointer">
-                            <Smartphone className="w-[18px] h-[18px]" />
-                        </ToggleGroup.Item>
-                    </ToggleGroup.Root>
+                    {/* Viewport toggle — pill group with clear selected state */}
+                    <div className="flex items-center border border-zinc-200 rounded-md overflow-hidden">
+                        {[
+                            { value: "desktop", icon: Monitor, label: "Desktop" },
+                            { value: "tablet", icon: Tablet, label: "Tablet" },
+                            { value: "mobile", icon: Smartphone, label: "Mobile" },
+                        ].map(({ value, icon: Icon, label }, i, arr) => (
+                            <Tip key={value} label={label}>
+                                <button
+                                    onClick={() => onViewportChange(value as ViewportMode)}
+                                    className={`p-1.5 transition-all cursor-pointer outline-none border-r last:border-r-0 border-zinc-200 ${
+                                        viewport === value
+                                            ? "bg-zinc-900 text-white"
+                                            : "text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50 bg-white"
+                                    }`}
+                                >
+                                    <Icon className="w-3.5 h-3.5" />
+                                </button>
+                            </Tip>
+                        ))}
+                    </div>
 
-                    <Separator.Root orientation="vertical" className="h-8 w-px bg-zinc-300 mx-1" />
+                    <Separator.Root orientation="vertical" className="h-5 w-px bg-zinc-200 mx-1" />
 
-                    <Button
+                    {/* Preview */}
+                    <Tip label="Preview page">
+                        <button
+                            onClick={() => window.open(`/${currentRoute}`, "_blank")}
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-[11.5px] font-semibold text-zinc-600 hover:text-zinc-900 bg-white border border-zinc-200 hover:border-zinc-300 rounded-md transition-all cursor-pointer outline-none hover:bg-zinc-50 active:scale-[0.97]"
+                        >
+                            <Eye className="w-3.5 h-3.5" />
+                            Preview
+                        </button>
+                    </Tip>
+
+                    {/* Save */}
+                    <button
                         onClick={onSave}
-                        disabled={status === "saving" || status === "loading"}
-                        className="flex items-center bg-zinc-800 gap-2 text-white bg-bg disabled:opacity-40 text-[13px] font-semibold px-5 py-2 rounded-xl active:scale-[0.97] transition-all cursor-pointer shadow-sm"
+                        disabled={isBusy}
+                        className={`flex items-center gap-1.5 text-[11.5px] font-bold px-3.5 py-1.5 rounded-md border active:scale-[0.97] transition-all cursor-pointer select-none outline-none ${
+                            isFailed
+                                ? "bg-red-50 text-red-700 border-red-300 hover:bg-red-100"
+                                : isBusy
+                                ? "bg-zinc-100 text-zinc-400 border-zinc-200 cursor-not-allowed"
+                                : "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900 shadow-sm"
+                        }`}
                     >
-                        <Save className="w-4 h-4" />
-                        Save
-                    </Button>
+                        {isBusy ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : isFailed ? (
+                            <AlertCircle className="w-3.5 h-3.5" />
+                        ) : (
+                            <Save className="w-3.5 h-3.5" />
+                        )}
+                        {isBusy ? "Saving…" : isFailed ? "Retry" : "Save"}
+                    </button>
                 </div>
             </header>
         </Tooltip.Provider>

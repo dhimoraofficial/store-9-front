@@ -56,7 +56,6 @@ export default async function ApplicationIndexPage({ params, children }: {
     // return the main content, break downed all the pages into x
     return <html lang='en'>
         <head>
-            <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" />
         </head>
         <body>
             <EditorStoreProvider tenantInfo={tenantInfo}>

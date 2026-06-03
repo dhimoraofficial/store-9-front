@@ -29,7 +29,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                 "id": "hero-slide-capsule",
                 "type": "stack_box",
                 "settings": {
-                    "overlayColor": "rgba(26, 26, 26, 0.45)",
+                    "overlayColor": "color-mix(in srgb, var(--primary) 45%, transparent)",
                     "style": {
                         "minHeight": "500px",
                         "width": "100%",
@@ -74,8 +74,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                 "settings": {
                                     "badge-text": "Spring / Summer Capsule",
                                     "style": {
-                                        "backgroundColor": "#C5A880",
-                                        "color": "#FFFFFF",
+                                        "backgroundColor": "var(--secondary)",
+                                        "color": "var(--text-inverted)",
                                         "padding": "4px 12px",
                                         "fontSize": "11px",
                                         "letterSpacing": "2px",
@@ -91,7 +91,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                     "text-element": "h2",
                                     "text-size": "42px",
                                     "text-weight": "bold",
-                                    "text-color": "#ffffff",
+                                    "text-color": "var(--text-inverted)",
                                     "style": {
                                         "fontFamily": "Playfair Display, Georgia, serif",
                                         "letterSpacing": "1px"
@@ -105,7 +105,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                     "content": "Engineered for maximum versatility. Curated everyday foundations made of pure organic linen and silk.",
                                     "text-element": "p",
                                     "text-size": "15px",
-                                    "text-color": "#f3f4f6",
+                                    "text-color": "var(--text-muted)",
                                     "style": {
                                         "maxWidth": "580px",
                                         "lineHeight": "1.6"
@@ -121,8 +121,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                     "btn-variant": "primary",
                                     "btn-action": "/collection/new-arrivals",
                                     "style": {
-                                        "backgroundColor": "#FFFFFF",
-                                        "color": "#1A1A1A",
+                                        "backgroundColor": "var(--text-inverted)",
+                                        "color": "var(--primary)",
                                         "borderRadius": "0px",
                                         "fontSize": "12px",
                                         "fontWeight": "600",
@@ -141,7 +141,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                 "id": "hero-slide-knitwear",
                 "type": "stack_box",
                 "settings": {
-                    "overlayColor": "rgba(26, 26, 26, 0.4)",
+                    "overlayColor": "color-mix(in srgb, var(--primary) 40%, transparent)",
                     "style": {
                         "minHeight": "500px",
                         "width": "100%",
@@ -186,8 +186,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                 "settings": {
                                     "badge-text": "Eco-Conscious Fabric",
                                     "style": {
-                                        "backgroundColor": "#E07A5F",
-                                        "color": "#FFFFFF",
+                                        "backgroundColor": "var(--accent)",
+                                        "color": "var(--text-inverted)",
                                         "padding": "4px 12px",
                                         "fontSize": "11px",
                                         "letterSpacing": "2px",
@@ -203,7 +203,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                     "text-element": "h2",
                                     "text-size": "42px",
                                     "text-weight": "bold",
-                                    "text-color": "#ffffff",
+                                    "text-color": "var(--text-inverted)",
                                     "style": {
                                         "fontFamily": "Playfair Display, Georgia, serif"
                                     }
@@ -216,7 +216,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                     "content": "Discover premium wool knits designed to stand the test of time, made with ethical pasture-to-garment traceability.",
                                     "text-element": "p",
                                     "text-size": "15px",
-                                    "text-color": "#f3f4f6",
+                                    "text-color": "var(--text-muted)",
                                     "style": {
                                         "maxWidth": "580px",
                                         "lineHeight": "1.6"
@@ -232,8 +232,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                     "btn-variant": "primary",
                                     "btn-action": "/category/knitwear",
                                     "style": {
-                                        "backgroundColor": "#FFFFFF",
-                                        "color": "#1A1A1A",
+                                        "backgroundColor": "var(--text-inverted)",
+                                        "color": "var(--primary)",
                                         "borderRadius": "0px",
                                         "fontSize": "12px",
                                         "fontWeight": "600",
@@ -278,8 +278,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                 "settings": {
                     "box-padding": "24px",
                     "box-radius": "4px",
-                    "box-bg": "#ffffff",
-                    "box-border": "1px solid #EBEBEB"
+                    "box-bg": "var(--bg-surface)",
+                    "box-border": "1px solid var(--border-primary)"
                 },
                 "children": [
                     {
@@ -297,7 +297,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                 "type": "svg_icon",
                                 "settings": {
                                     "icon-name": "menu",
-                                    "icon-color": "#C5A880",
+                                    "icon-color": "var(--secondary)",
                                     "icon-size": "22px"
                                 }
                             },
@@ -316,7 +316,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                             "content": "100% Traceable Fibres",
                                             "text-size": "14px",
                                             "text-weight": "bold",
-                                            "text-color": "#1A1A1A"
+                                            "text-color": "var(--text-main)"
                                         }
                                     },
                                     {
@@ -325,7 +325,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                         "settings": {
                                             "content": "Organic linen & certified merino wool",
                                             "text-size": "11px",
-                                            "text-color": "#7A7A7A"
+                                            "text-color": "var(--text-muted)"
                                         }
                                     }
                                 ]
@@ -340,8 +340,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                 "settings": {
                     "box-padding": "24px",
                     "box-radius": "4px",
-                    "box-bg": "#ffffff",
-                    "box-border": "1px solid #EBEBEB"
+                    "box-bg": "var(--bg-surface)",
+                    "box-border": "1px solid var(--border-primary)"
                 },
                 "children": [
                     {
@@ -359,7 +359,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                 "type": "svg_icon",
                                 "settings": {
                                     "icon-name": "map-pin",
-                                    "icon-color": "#C5A880",
+                                    "icon-color": "var(--secondary)",
                                     "icon-size": "22px"
                                 }
                             },
@@ -378,7 +378,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                             "content": "Complimentary Shipping",
                                             "text-size": "14px",
                                             "text-weight": "bold",
-                                            "text-color": "#1A1A1A"
+                                            "text-color": "var(--text-main)"
                                         }
                                     },
                                     {
@@ -387,7 +387,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                         "settings": {
                                             "content": "Free global carbon-neutral shipping",
                                             "text-size": "11px",
-                                            "text-color": "#7A7A7A"
+                                            "text-color": "var(--text-muted)"
                                         }
                                     }
                                 ]
@@ -402,8 +402,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                 "settings": {
                     "box-padding": "24px",
                     "box-radius": "4px",
-                    "box-bg": "#ffffff",
-                    "box-border": "1px solid #EBEBEB"
+                    "box-bg": "var(--bg-surface)",
+                    "box-border": "1px solid var(--border-primary)"
                 },
                 "children": [
                     {
@@ -421,7 +421,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                 "type": "svg_icon",
                                 "settings": {
                                     "icon-name": "phone",
-                                    "icon-color": "#C5A880",
+                                    "icon-color": "var(--secondary)",
                                     "icon-size": "22px"
                                 }
                             },
@@ -440,7 +440,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                             "content": "Hassle-Free Exchange",
                                             "text-size": "14px",
                                             "text-weight": "bold",
-                                            "text-color": "#1A1A1A"
+                                            "text-color": "var(--text-main)"
                                         }
                                     },
                                     {
@@ -449,7 +449,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                                         "settings": {
                                             "content": "30-day extended returns policy",
                                             "text-size": "11px",
-                                            "text-color": "#7A7A7A"
+                                            "text-color": "var(--text-muted)"
                                         }
                                     }
                                 ]
@@ -489,7 +489,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                     "text-element": "h3",
                     "text-size": "20px",
                     "text-weight": "bold",
-                    "text-color": "#1A1A1A",
+                    "text-color": "var(--text-main)",
                     "style": {
                         "letterSpacing": "2.5px"
                     }
@@ -502,7 +502,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                     "content": "Premium apparel foundations to construct your core capsule wardrobe.",
                     "text-element": "span",
                     "text-size": "13px",
-                    "text-color": "#7A7A7A"
+                    "text-color": "var(--text-muted)"
                 }
             }
         ]
@@ -526,8 +526,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
         "settings": {
             "splitRatio": "50-50",
             "style": {
-                "backgroundColor": "#FFFFFF",
-                "border": "1px solid #EBEBEB",
+                "backgroundColor": "var(--bg-surface)",
+                "border": "1px solid var(--border-primary)",
                 "borderRadius": "4px",
                 "overflow": "hidden",
                 "padding": "3rem",
@@ -554,8 +554,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                         "settings": {
                             "badge-text": "Sartorial Quality",
                             "style": {
-                                "backgroundColor": "#C5A880",
-                                "color": "#FFFFFF",
+                                "backgroundColor": "var(--secondary)",
+                                "color": "var(--text-inverted)",
                                 "width": "fit-content"
                             }
                         }
@@ -568,7 +568,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "text-element": "h3",
                             "text-size": "28px",
                             "text-weight": "bold",
-                            "text-color": "#1A1A1A",
+                            "text-color": "var(--text-main)",
                             "style": {
                                 "fontFamily": "Playfair Display, Georgia, serif"
                             }
@@ -581,7 +581,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "content": "Every seam is stitched with longevity in mind. By partnering with historic weaver mills in Italy and organic cotton cooperatives, we guarantee pieces that look elegant and retain their shape, season after season.",
                             "text-element": "p",
                             "text-size": "14px",
-                            "text-color": "#4A4A4A",
+                            "text-color": "var(--text-main)",
                             "style": {
                                 "lineHeight": "1.6"
                             }
@@ -596,7 +596,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "btn-variant": "secondary",
                             "btn-action": "/story",
                             "style": {
-                                "border": "1px solid #1A1A1A",
+                                "border": "1px solid var(--text-main)",
                                 "padding": "12px 24px",
                                 "textTransform": "uppercase",
                                 "fontSize": "11px",
@@ -645,7 +645,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                     "text-element": "h4",
                     "text-size": "11px",
                     "text-weight": "600",
-                    "text-color": "#7A7A7A",
+                    "text-color": "var(--text-muted)",
                     "style": {
                         "letterSpacing": "2.5px"
                     }
@@ -663,8 +663,8 @@ export const defaultHomepageSchema: ComponentSchema[] = [
             "show-dots": "false",
             "overflow-behavior": "free-scroll",
             "style": {
-                "borderTop": "1px solid #EBEBEB",
-                "borderBottom": "1px solid #EBEBEB",
+                "borderTop": "1px solid var(--border-primary)",
+                "borderBottom": "1px solid var(--border-primary)",
                 "padding": "1.5rem 0"
             }
         },
@@ -690,7 +690,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "content": "VOGUE",
                             "text-size": "16px",
                             "text-weight": "800",
-                            "text-color": "#A3A3A3",
+                            "text-color": "var(--text-muted)",
                             "style": {
                                 "letterSpacing": "3px"
                             }
@@ -703,7 +703,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "content": "ELLE",
                             "text-size": "16px",
                             "text-weight": "800",
-                            "text-color": "#A3A3A3",
+                            "text-color": "var(--text-muted)",
                             "style": {
                                 "letterSpacing": "3px"
                             }
@@ -716,7 +716,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "content": "BAZAAR",
                             "text-size": "16px",
                             "text-weight": "800",
-                            "text-color": "#A3A3A3",
+                            "text-color": "var(--text-muted)",
                             "style": {
                                 "letterSpacing": "3px"
                             }
@@ -729,7 +729,7 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                             "content": "GQ",
                             "text-size": "16px",
                             "text-weight": "800",
-                            "text-color": "#A3A3A3",
+                            "text-color": "var(--text-muted)",
                             "style": {
                                 "letterSpacing": "3px"
                             }

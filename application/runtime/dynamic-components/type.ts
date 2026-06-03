@@ -52,7 +52,8 @@ export type BaseTypes =
     | "category_loop_context"
     | "cart_items_context"
     | "product_variant_selector"
-    | "product_image_gallery";
+    | "product_image_gallery"
+    | (string & {});
 
 export interface BaseProps {
     id?: string;

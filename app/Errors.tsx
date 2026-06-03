@@ -50,7 +50,7 @@ export function NoSuchStore({ type, host }: {
                                 </div>
 
                                 <div className="space-y-4 pt-2">
-                                    <div className="bg border-l-4 border-gray-900 p-4 rounded-lg-r">
+                                    <div className="bg border-l-4 border-gray-900 p-4 rounded-md-r">
                                         <div className="text-xs text-gray-900 font-semibold flex item-centregap-2.5">
                                             <p>{content.cause}</p>
                                             <code className="text-xs">({host})</code>
@@ -90,7 +90,7 @@ export function ServiceUnavailable() {
                                 </div>
 
                                 <div className="space-y-4 pt-2">
-                                    <div className="bg border-l-4 border-gray-900 p-4 rounded-lg-r">
+                                    <div className="bg border-l-4 border-gray-900 p-4 rounded-md-r">
                                         <div className="text-xs text-gray-900 font-semibold flex item-centregap-2.5">
                                             <p>Unable to establish user session</p>
                                         </div>

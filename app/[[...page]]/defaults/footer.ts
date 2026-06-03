@@ -13,10 +13,10 @@ export const defaultFooterSchema: ComponentSchema[] = [
             "box-direction": "col",
             "w": "100%",
             style: {
-                backgroundColor: "#1A1A1A",
-                color: "#FFFFFF",
+                backgroundColor: "var(--bg-navigation)",
+                color: "var(--text-inverted)",
                 padding: "64px 40px 32px 40px",
-                borderTop: "1px solid #2D2D2D"
+                borderTop: "1px solid var(--border-primary)"
             }
         },
         children: [
@@ -52,7 +52,7 @@ export const defaultFooterSchema: ComponentSchema[] = [
                                     "text-element": "h4",
                                     "text-size": "18px",
                                     "text-weight": "800",
-                                    "text-color": "#FFFFFF",
+                                    "text-color": "var(--text-inverted)",
                                     style: { letterSpacing: "3px" }
                                 }
                             },
@@ -63,7 +63,7 @@ export const defaultFooterSchema: ComponentSchema[] = [
                                     "content": "Sustainably crafted clothing for modern lifestyles. Minimalist silhouettes designed to endure seasons.",
                                     "text-element": "p",
                                     "text-size": "13px",
-                                    "text-color": "#A3A3A3",
+                                    "text-color": "var(--text-muted)",
                                     style: { lineHeight: "1.6" }
                                 }
                             }
@@ -83,30 +83,30 @@ export const defaultFooterSchema: ComponentSchema[] = [
                             {
                                 id: "footer-col-shop-title",
                                 type: "text_block",
-                                settings: { "content": "COLLECTIONS", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "#C5A880", style: { letterSpacing: "1px" } }
+                                settings: { "content": "COLLECTIONS", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "var(--secondary)", style: { letterSpacing: "1px" } }
                             },
                             {
                                 id: "footer-shop-l1",
                                 type: "link_block",
-                                settings: { "link-url": "/collection/new-arrivals", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/collection/new-arrivals", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-shop-t1", type: "text_block", settings: { "content": "New Arrivals" } }]
                             },
                             {
                                 id: "footer-shop-l2",
                                 type: "link_block",
-                                settings: { "link-url": "/category/women", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/category/women", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-shop-t2", type: "text_block", settings: { "content": "Women's Wear" } }]
                             },
                             {
                                 id: "footer-shop-l3",
                                 type: "link_block",
-                                settings: { "link-url": "/category/men", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/category/men", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-shop-t3", type: "text_block", settings: { "content": "Men's Wear" } }]
                             },
                             {
                                 id: "footer-shop-l4",
                                 type: "link_block",
-                                settings: { "link-url": "/category/accessories", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/category/accessories", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-shop-t4", type: "text_block", settings: { "content": "Accessories" } }]
                             }
                         ]
@@ -125,30 +125,30 @@ export const defaultFooterSchema: ComponentSchema[] = [
                             {
                                 id: "footer-col-support-title",
                                 type: "text_block",
-                                settings: { "content": "CUSTOMER CARE", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "#C5A880", style: { letterSpacing: "1px" } }
+                                settings: { "content": "CUSTOMER CARE", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "var(--secondary)", style: { letterSpacing: "1px" } }
                             },
                             {
                                 id: "footer-support-l1",
                                 type: "link_block",
-                                settings: { "link-url": "/faq", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/faq", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-supp-t1", type: "text_block", settings: { "content": "FAQ & Shipping" } }]
                             },
                             {
                                 id: "footer-support-l2",
                                 type: "link_block",
-                                settings: { "link-url": "/returns", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/returns", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-supp-t2", type: "text_block", settings: { "content": "Returns & Exchanges" } }]
                             },
                             {
                                 id: "footer-support-l3",
                                 type: "link_block",
-                                settings: { "link-url": "/size-guide", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/size-guide", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-supp-t3", type: "text_block", settings: { "content": "Sizing Directory" } }]
                             },
                             {
                                 id: "footer-support-l4",
                                 type: "link_block",
-                                settings: { "link-url": "/contact", style: { textDecoration: "none", color: "#A3A3A3", fontSize: "13px" } },
+                                settings: { "link-url": "/contact", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
                                 children: [{ id: "f-supp-t4", type: "text_block", settings: { "content": "Get In Touch" } }]
                             }
                         ]
@@ -167,7 +167,7 @@ export const defaultFooterSchema: ComponentSchema[] = [
                             {
                                 id: "footer-col-news-title",
                                 type: "text_block",
-                                settings: { "content": "STAY CONNECTED", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "#C5A880", style: { letterSpacing: "1px" } }
+                                settings: { "content": "STAY CONNECTED", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "var(--secondary)", style: { letterSpacing: "1px" } }
                             },
                             {
                                 id: "footer-news-desc",
@@ -176,7 +176,7 @@ export const defaultFooterSchema: ComponentSchema[] = [
                                     "content": "Sign up to receive announcements, product drops, and exclusive lookbook previews.",
                                     "text-element": "p",
                                     "text-size": "12px",
-                                    "text-color": "#A3A3A3"
+                                    "text-color": "var(--text-muted)"
                                 }
                             },
                             {
@@ -188,10 +188,10 @@ export const defaultFooterSchema: ComponentSchema[] = [
                                     style: {
                                         width: "100%",
                                         padding: "10px",
-                                        backgroundColor: "#2D2D2D",
-                                        border: "1px solid #404040",
+                                        backgroundColor: "var(--bg-app)",
+                                        border: "1px solid var(--border-primary)",
                                         borderRadius: "4px",
-                                        color: "#FFFFFF",
+                                        color: "var(--text-inverted)",
                                         fontSize: "13px"
                                     }
                                 }
@@ -211,10 +211,10 @@ export const defaultFooterSchema: ComponentSchema[] = [
                     "box-align": "center",
                     "box-justify": "space-between",
                     style: {
-                        borderTop: "1px solid #2D2D2D",
+                        borderTop: "1px solid var(--border-primary)",
                         paddingTop: "24px",
                         fontSize: "12px",
-                        color: "#737373"
+                        color: "var(--text-muted)"
                     }
                 },
                 children: [

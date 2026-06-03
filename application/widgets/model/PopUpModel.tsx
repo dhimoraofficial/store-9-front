@@ -56,7 +56,7 @@ export function PopUpModel({ id, onClose, type = "centre", closer_corner = 3, cl
     }, [closing, onClose, type])
 
     const MODEL_CLASS = (type === "centre" ? `fcc` : type === "right" ? `fc justify-end` : "fc justify-start")
-    const HOB_CLASS = (type === "centre" ? `max-h-[55vh] rounded-lg` : "max-h-full h-full")
+    const HOB_CLASS = (type === "centre" ? `max-h-[55vh] rounded-md` : "max-h-full h-full")
     const SHOW_MODEL = (["centre"].includes(type))
 
     const OPEN_CLASS = type === "right" ? "animate-slide-in-right" : type === "left" ? "animate-slide-in-left" : "animate-popup-centre"

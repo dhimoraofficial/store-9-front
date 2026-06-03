@@ -183,7 +183,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
             </div>
 
             {/* Floating Figma-Style Controls */}
-            <div className="absolute bottom-5 right-5 flex items-center bg-white border border-zinc-200/80 rounded-lg shadow-lg px-2.5 py-1.5 gap-2.5 z-40 select-none">
+            <div className="absolute bottom-5 right-5 flex items-center bg-white border border-zinc-200/80 rounded-md shadow-lg px-2.5 py-1.5 gap-2.5 z-40 select-none">
                 <span className="text-[11px] font-bold text-zinc-500 w-10 text-center font-mono">
                     {Math.round(scale * 100)}%
                 </span>

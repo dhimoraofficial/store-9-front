@@ -10,11 +10,11 @@ export const defaultCategorySchema: ComponentSchema[] = [
         type: "box",
         settings: {
             style: {
-                backgroundColor: "#F7F7F7",
+                backgroundColor: "var(--bg-app)",
                 padding: "64px 40px",
                 textAlign: "center",
                 marginBottom: "40px",
-                borderBottom: "1px solid #EBEBEB"
+                borderBottom: "1px solid var(--border-primary)"
             }
         },
         children: [
@@ -26,7 +26,7 @@ export const defaultCategorySchema: ComponentSchema[] = [
                     "text-element": "h1",
                     "text-size": "36px",
                     "text-weight": "bold",
-                    "text-color": "#1A1A1A",
+                    "text-color": "var(--text-main)",
                     style: {
                         fontFamily: "Playfair Display, Georgia, serif",
                         letterSpacing: "3px"
@@ -40,7 +40,7 @@ export const defaultCategorySchema: ComponentSchema[] = [
                     "content": "${context.category.description}",
                     "text-element": "p",
                     "text-size": "13px",
-                    "text-color": "#7A7A7A",
+                    "text-color": "var(--text-muted)",
                     style: {
                         marginTop: "8px",
                         maxWidth: "500px",
@@ -73,7 +73,7 @@ export const defaultCategorySchema: ComponentSchema[] = [
                     "box-direction": "col",
                     "box-gap": "2rem",
                     style: {
-                        borderRight: "1px solid #EBEBEB",
+                        borderRight: "1px solid var(--border-primary)",
                         paddingRight: "24px"
                     }
                 },
@@ -84,11 +84,11 @@ export const defaultCategorySchema: ComponentSchema[] = [
                         type: "flex_box",
                         settings: { "box-display": "flex", "box-direction": "col", "box-gap": "0.5rem" },
                         children: [
-                            { id: "filter-cat-title", type: "text_block", settings: { "content": "COLLECTION CATEGORY", "text-size": "11px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
-                            { id: "f-cat-1", type: "text_block", settings: { "content": "Shirts & Tops (24)", "text-size": "13px", "text-color": "#4A4A4A", style: { cursor: "pointer" } } },
-                            { id: "f-cat-2", type: "text_block", settings: { "content": "Knitwear & Sweaters (18)", "text-size": "13px", "text-color": "#1A1A1A", style: { cursor: "pointer", fontWeight: "bold" } } },
-                            { id: "f-cat-3", type: "text_block", settings: { "content": "Outerwear & Coats (12)", "text-size": "13px", "text-color": "#4A4A4A", style: { cursor: "pointer" } } },
-                            { id: "f-cat-4", type: "text_block", settings: { "content": "Trousers & Denim (15)", "text-size": "13px", "text-color": "#4A4A4A", style: { cursor: "pointer" } } }
+                            { id: "filter-cat-title", type: "text_block", settings: { "content": "COLLECTION CATEGORY", "text-size": "11px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
+                            { id: "f-cat-1", type: "text_block", settings: { "content": "Shirts & Tops (24)", "text-size": "13px", "text-color": "var(--text-main)", style: { cursor: "pointer" } } },
+                            { id: "f-cat-2", type: "text_block", settings: { "content": "Knitwear & Sweaters (18)", "text-size": "13px", "text-color": "var(--text-main)", style: { cursor: "pointer", fontWeight: "bold" } } },
+                            { id: "f-cat-3", type: "text_block", settings: { "content": "Outerwear & Coats (12)", "text-size": "13px", "text-color": "var(--text-main)", style: { cursor: "pointer" } } },
+                            { id: "f-cat-4", type: "text_block", settings: { "content": "Trousers & Denim (15)", "text-size": "13px", "text-color": "var(--text-main)", style: { cursor: "pointer" } } }
                         ]
                     },
                     /* 2. Color Filter */
@@ -97,11 +97,11 @@ export const defaultCategorySchema: ComponentSchema[] = [
                         type: "flex_box",
                         settings: { "box-display": "flex", "box-direction": "col", "box-gap": "0.5rem" },
                         children: [
-                            { id: "filter-color-title", type: "text_block", settings: { "content": "FILTER BY COLOR", "text-size": "11px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
-                            { id: "f-col-1", type: "text_block", settings: { "content": "• Black", "text-size": "13px", "text-color": "#4A4A4A" } },
-                            { id: "f-col-2", type: "text_block", settings: { "content": "• Oatmeal Beige", "text-size": "13px", "text-color": "#4A4A4A" } },
-                            { id: "f-col-3", type: "text_block", settings: { "content": "• Off-White", "text-size": "13px", "text-color": "#4A4A4A" } },
-                            { id: "f-col-4", type: "text_block", settings: { "content": "• Terracotta", "text-size": "13px", "text-color": "#4A4A4A" } }
+                            { id: "filter-color-title", type: "text_block", settings: { "content": "FILTER BY COLOR", "text-size": "11px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
+                            { id: "f-col-1", type: "text_block", settings: { "content": "• Black", "text-size": "13px", "text-color": "var(--text-main)" } },
+                            { id: "f-col-2", type: "text_block", settings: { "content": "• Oatmeal Beige", "text-size": "13px", "text-color": "var(--text-main)" } },
+                            { id: "f-col-3", type: "text_block", settings: { "content": "• Off-White", "text-size": "13px", "text-color": "var(--text-main)" } },
+                            { id: "f-col-4", type: "text_block", settings: { "content": "• Terracotta", "text-size": "13px", "text-color": "var(--text-main)" } }
                         ]
                     }
                 ]
@@ -129,12 +129,12 @@ export const defaultCategorySchema: ComponentSchema[] = [
                             style: {
                                 marginBottom: "24px",
                                 paddingBottom: "12px",
-                                borderBottom: "1px solid #EBEBEB"
+                                borderBottom: "1px solid var(--border-primary)"
                             }
                         },
                         children: [
-                            { id: "cat-product-count-label", type: "text_block", settings: { "content": "Showing 18 items", "text-size": "13px", "text-color": "#7A7A7A" } },
-                            { id: "cat-sort-mock-select", type: "text_block", settings: { "content": "Sort By: Featured ▾", "text-size": "13px", "text-color": "#1A1A1A", style: { cursor: "pointer", fontWeight: "600" } } }
+                            { id: "cat-product-count-label", type: "text_block", settings: { "content": "Showing 18 items", "text-size": "13px", "text-color": "var(--text-muted)" } },
+                            { id: "cat-sort-mock-select", type: "text_block", settings: { "content": "Sort By: Featured ▾", "text-size": "13px", "text-color": "var(--text-main)", style: { cursor: "pointer", fontWeight: "600" } } }
                         ]
                     },
 

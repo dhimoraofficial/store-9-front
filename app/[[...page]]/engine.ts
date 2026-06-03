@@ -71,40 +71,40 @@ function getDefaultLayoutSchema(layoutKey: string, route: string): ComponentSche
 
 
 export const DEFAULT_THEME: ThemeConfigs = {
-    primary: '#0F172A',
-    secondary: '#3B82F6',
-    accent: '#8B5CF6',
+    primary: 'rgb(26, 26, 26)',
+    secondary: 'rgb(197, 168, 128)',
+    accent: 'rgb(224, 122, 95)',
 
-    colorSuccess: '#10B981',
-    colorError: '#EF4444',
-    colorWarning: '#F59E0B',
-    colorInfo: '#3B82F6',
+    colorSuccess: 'rgb(16, 185, 129)',
+    colorError: 'rgb(239, 68, 68)',
+    colorWarning: 'rgb(245, 158, 11)',
+    colorInfo: 'rgb(59, 130, 246)',
 
-    bgApp: '#F8FAFC',
-    bgSurface: '#FFFFFF',
-    bgNavigation: '#0F172A',
-    textMain: '#1E293B',
-    textMuted: '#64748B',
-    textInverted: '#FFFFFF',
+    bgApp: 'rgb(250, 250, 250)',
+    bgSurface: 'rgb(255, 255, 255)',
+    bgNavigation: 'rgb(26, 26, 26)',
+    textMain: 'rgb(45, 45, 45)',
+    textMuted: 'rgb(122, 122, 122)',
+    textInverted: 'rgb(255, 255, 255)',
 
-    btnRadius: '6px',
-    btnPaddingBase: '10px 20px',
+    btnRadius: '4px',
+    btnPaddingBase: '12px 24px',
     btnHoverOpacity: '0.9',
 
     spacingUnit: '4px',
-    containerMaxWidth: '1280px',
-    gridGutter: '24px',
+    containerMaxWidth: '1200px',
+    gridGutter: '32px',
 
-    borderPrimary: '#E2E8F0',
-    borderRadiusBase: '8px',
-    borderRadiusLarge: '12px',
-    shadowSoft: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-    shadowHard: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+    borderPrimary: 'rgb(235, 235, 235)',
+    borderRadiusBase: '4px',
+    borderRadiusLarge: '8px',
+    shadowSoft: '0 2px 8px rgba(0, 0, 0, 0.05)',
+    shadowHard: '0 8px 24px rgba(0, 0, 0, 0.08)',
 
-    fontFamilySans: 'Roboto',
-    fontFamilyMono: 'Roboto',
+    fontFamilySans: 'Outfit',
+    fontFamilyMono: 'Outfit',
     fontSizeRoot: '16px',
-    lineHeightBase: '1.5',
+    lineHeightBase: '1.6',
 };
 
 function matchRoutePattern(pattern: string, path: string): boolean {

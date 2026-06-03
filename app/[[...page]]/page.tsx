@@ -93,6 +93,7 @@ function MainPageRouter({
     if (route.type === "product" || path.startsWith("/product/") || path.startsWith("/products/")) {
         return <ProductPageController layout={layout} route={route} tenant={tenant} store={store} />;
     }
+
     if (
         route.type === "category" ||
         route.type === "collection" ||
@@ -103,6 +104,7 @@ function MainPageRouter({
     ) {
         return <CategoryPageController layout={layout} route={route} tenant={tenant} store={store} />;
     }
+
     return <ComponentBuilder schema={layout?._c} />;
 }
 
@@ -136,7 +138,16 @@ async function ApplicationBuildPage({ layout, route, tenant, store }: {
                 {/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */}
                 {/* Main application page render here */}
                 {/* Main application page render here */}
-                <MainPageRouter layout={layout} route={route} tenant={tenant} store={store} />
+                <MainPageRouter
+                    ////////////////////////
+                    layout={layout}
+                    ////////////////////////
+                    route={route}
+                    ////////////////////////
+                    tenant={tenant}
+                    ////////////////////////
+                    store={store}
+                />
                 {/* Main application page render here */}
                 {/* Main application page render here */}
                 {/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */}
@@ -190,7 +201,7 @@ export default async function ApplicationIndexPage({ params, searchParams }: App
     // return the main content, break downed all the pages into x
     return <html lang='en'>
         <head>
-            <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" />
+            {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
         </head>
         <body className="bg">
             <ApplicationBuildPage

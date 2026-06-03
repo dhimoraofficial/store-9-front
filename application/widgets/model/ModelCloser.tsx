@@ -5,7 +5,7 @@ export function ModelCloser({ onClose, className, corner = 2 }: {
     className?: string,
     corner?: number,
 }) {
-    return <div className={`bg w-fit rounded-lg cursor-pointer absolute ${className || ""}`} style={{
+    return <div className={`bg w-fit rounded-md cursor-pointer absolute ${className || ""}`} style={{
         top: corner * 4,
         right: corner * 4,
     }}>

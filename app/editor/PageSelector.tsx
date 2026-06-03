@@ -336,8 +336,8 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
         <>
             <DropdownMenu.Root onOpenChange={(open) => { if (!open) { setSearch(""); } }}>
                 <DropdownMenu.Trigger asChild>
-                    <button className="flex items-center gap-2 text-[12.5px] font-semibold text-zinc-700 hover:text-zinc-955 border border-zinc-200 bg-white hover:bg-zinc-50/50 px-4 py-1.5 rounded-xl transition-all cursor-pointer outline-none shadow-[0_1px_1.5px_rgba(0,0,0,0.015)] active:scale-[0.98] select-none">
-                        <CurrentIcon className="w-3.5 h-3.5 text-zinc-455 shrink-0" />
+                    <button className="flex items-center gap-2 text-[12.5px] font-semibold text-zinc-700 hover:text-zinc-900 border border-zinc-200 bg-white hover:bg-zinc-50/50 px-4 py-1.5 rounded-lg transition-all cursor-pointer outline-none shadow-[0_1px_1.5px_rgba(0,0,0,0.015)] active:scale-[0.98] select-none">
+                        <CurrentIcon className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
                         <span>{currentName}</span>
                         <ChevronDown className="w-3.5 h-3.5 text-zinc-400 ml-0.5" />
                     </button>
@@ -347,7 +347,7 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                     <DropdownMenu.Content
                         align="center"
                         sideOffset={6}
-                        className="z-[100] w-[260px] bg-white rounded-xl border border-zinc-200/80 shadow-[0_3px_12px_rgba(0,0,0,0.04)] overflow-hidden transition-all outline-none font-sans"
+                        className="z-[100] w-[260px] bg-white rounded-lg border border-zinc-200/80 shadow-[0_3px_12px_rgba(0,0,0,0.04)] overflow-hidden transition-all outline-none font-sans"
                     >
                         {/* Search Input Section */}
                         <div className="p-2 border-b border-zinc-100 bg-zinc-50/30">
@@ -359,7 +359,7 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     onClick={(e) => e.stopPropagation()}
-                                    className="w-full bg-white text-zinc-800 text-[12px] rounded-lg pl-8 pr-3 py-1.5 outline-none border border-zinc-200 focus:border-zinc-300 placeholder:text-zinc-400 font-semibold transition-all"
+                                    className="w-full bg-white text-zinc-800 text-[12px] rounded-md pl-8 pr-3 py-1.5 outline-none border border-zinc-200 focus:border-zinc-300 placeholder:text-zinc-400 font-semibold transition-all"
                                 />
                             </div>
                         </div>
@@ -373,9 +373,9 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                         <DropdownMenu.Item
                                             key={r.route}
                                             onSelect={() => handleSelectRoute(r.route, r.name, r.type)}
-                                            className="flex items-center gap-2.5 px-2.5 py-1.5 text-[11.5px] text-zinc-700 hover:text-zinc-955 hover:bg-zinc-50 cursor-pointer outline-none rounded-lg font-semibold transition-colors"
+                                            className="flex items-center gap-2.5 px-2.5 py-1.5 text-[11.5px] text-zinc-700 hover:text-zinc-900 hover:bg-zinc-50 cursor-pointer outline-none rounded-md font-semibold transition-colors"
                                         >
-                                            <r.icon className="w-3.5 h-3.5 text-zinc-450 shrink-0" />
+                                            <r.icon className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
                                             <div className="flex flex-col min-w-0 flex-1">
                                                 <span className="truncate">{r.name}</span>
                                                 <span className="text-[9.5px] text-zinc-400 truncate font-mono">{r.route}</span>
@@ -396,8 +396,8 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                             <DropdownMenu.Item
                                                 key={r.route}
                                                 onSelect={() => handleSelectRoute(r.route, r.name, r.type)}
-                                                className={`flex items-center justify-between px-2.5 py-1.5 text-[11.5px] cursor-pointer outline-none rounded-lg font-semibold transition-colors ${
-                                                    isSelected ? "bg-zinc-55 text-zinc-950" : "text-zinc-650 hover:text-zinc-950 hover:bg-zinc-50"
+                                                className={`flex items-center justify-between px-2.5 py-1.5 text-[11.5px] cursor-pointer outline-none rounded-md font-semibold transition-colors ${
+                                                    isSelected ? "bg-zinc-100 text-zinc-900" : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
                                                 }`}
                                             >
                                                 <span className="flex items-center gap-2 min-w-0 truncate">
@@ -418,8 +418,8 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                             <DropdownMenu.Item
                                                 key={r.route}
                                                 onSelect={() => handleSelectRoute(r.route, r.name, r.type)}
-                                                className={`flex items-center justify-between px-2.5 py-1.5 text-[11.5px] cursor-pointer outline-none rounded-lg font-semibold transition-colors ${
-                                                    isSelected ? "bg-zinc-55 text-zinc-950" : "text-zinc-650 hover:text-zinc-950 hover:bg-zinc-50"
+                                                className={`flex items-center justify-between px-2.5 py-1.5 text-[11.5px] cursor-pointer outline-none rounded-md font-semibold transition-colors ${
+                                                    isSelected ? "bg-zinc-100 text-zinc-900" : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
                                                 }`}
                                             >
                                                 <span className="flex items-center gap-2 min-w-0 truncate">
@@ -447,8 +447,8 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                             <DropdownMenu.Item
                                                 key={r.route}
                                                 onSelect={() => handleSelectRoute(r.route, r.name, r.type)}
-                                                className={`flex items-center justify-between px-2.5 py-1.5 text-[11.5px] cursor-pointer outline-none rounded-lg font-semibold transition-colors ${
-                                                    isSelected ? "bg-zinc-55 text-zinc-955" : "text-zinc-650 hover:text-zinc-950 hover:bg-zinc-50"
+                                                className={`flex items-center justify-between px-2.5 py-1.5 text-[11.5px] cursor-pointer outline-none rounded-md font-semibold transition-colors ${
+                                                    isSelected ? "bg-zinc-100 text-zinc-900" : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
                                                 }`}
                                             >
                                                 <span className="flex items-center gap-2 min-w-0 truncate">
@@ -469,7 +469,7 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                         <div className="p-1 bg-zinc-50/40">
                             <button
                                 onClick={() => setIsCreateOpen(true)}
-                                className="w-full flex items-center justify-center gap-1 text-[11px] font-bold text-zinc-600 hover:text-zinc-955 hover:bg-white border border-transparent hover:border-zinc-200/50 py-1.5 rounded-lg transition-all cursor-pointer"
+                                className="w-full flex items-center justify-center gap-1 text-[11px] font-bold text-zinc-600 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200/50 py-1.5 rounded-md transition-all cursor-pointer"
                             >
                                 <Plus className="w-3.5 h-3.5 text-zinc-400" />
                                 Create template
@@ -491,7 +491,7 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                 Create Page Template
                             </Dialog.Title>
                             <Dialog.Close asChild>
-                                <button className="text-zinc-400 hover:text-zinc-600 p-1.5 rounded-lg hover:bg-zinc-50 transition-colors">
+                                <button className="text-zinc-400 hover:text-zinc-600 p-1.5 rounded-md hover:bg-zinc-50 transition-colors">
                                     <X className="w-4 h-4" />
                                 </button>
                             </Dialog.Close>
@@ -501,14 +501,14 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                         <form onSubmit={handleCreate} className="p-5.5 space-y-4.5">
                             {/* Segment Toggle */}
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold text-zinc-450 uppercase tracking-wider select-none">Template Type</label>
-                                <div className="flex gap-1 p-1 bg-zinc-100 rounded-xl">
+                                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider select-none">Template Type</label>
+                                <div className="flex gap-1 p-1 bg-zinc-100 rounded-lg">
                                     <button
                                         type="button"
                                         onClick={() => handleModeToggle("SP")}
-                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[12px] font-bold rounded-lg transition-all cursor-pointer ${
+                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[12px] font-bold rounded-md transition-all cursor-pointer ${
                                             newMode === "SP" 
-                                                ? "bg-white text-zinc-955 shadow-sm border border-zinc-200/20" 
+                                                ? "bg-white text-zinc-900 shadow-sm border border-zinc-200/20" 
                                                 : "text-zinc-500 hover:text-zinc-800"
                                         }`}
                                     >
@@ -518,9 +518,9 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                     <button
                                         type="button"
                                         onClick={() => handleModeToggle("DP")}
-                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[12px] font-bold rounded-lg transition-all cursor-pointer ${
+                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[12px] font-bold rounded-md transition-all cursor-pointer ${
                                             newMode === "DP" 
-                                                ? "bg-white text-zinc-955 shadow-sm border border-zinc-200/20" 
+                                                ? "bg-white text-zinc-900 shadow-sm border border-zinc-200/20" 
                                                 : "text-zinc-500 hover:text-zinc-800"
                                         }`}
                                     >
@@ -532,23 +532,23 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
 
                             {/* Template Name */}
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold text-zinc-450 uppercase tracking-wider select-none">Template Name</label>
+                                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider select-none">Template Name</label>
                                 <input
                                     type="text"
                                     required
                                     placeholder={newMode === "SP" ? "e.g. Winter Sale" : "e.g. Products detail template"}
                                     value={newName}
                                     onChange={(e) => setNewName(e.target.value)}
-                                    className="w-full border border-zinc-200 rounded-xl px-3.5 py-2.5 text-[12.5px] font-semibold outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 bg-white placeholder:text-zinc-400 transition-all"
+                                    className="w-full border border-zinc-200 rounded-lg px-3.5 py-2.5 text-[12.5px] font-semibold outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 bg-white placeholder:text-zinc-400 transition-all"
                                 />
                             </div>
 
                             {/* Route Path (Restricted for DP) */}
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold text-zinc-455 uppercase tracking-wider select-none">Route Path Prefix</label>
+                                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider select-none">Route Path Prefix</label>
                                 {newMode === "DP" ? (
                                     // For DP: edit /<thispart> and /<handle> is fixed
-                                    <div className="flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 focus-within:bg-white focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all font-mono text-[12.5px]">
+                                    <div className="flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 focus-within:bg-white focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all font-mono text-[12.5px]">
                                         <span className="text-zinc-400 select-none">/</span>
                                         <input
                                             type="text"
@@ -556,13 +556,13 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                             placeholder="products"
                                             value={newPathPrefix}
                                             onChange={(e) => setNewPathPrefix(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))}
-                                            className="flex-1 min-w-0 bg-transparent text-zinc-850 placeholder:text-zinc-400 outline-none font-semibold"
+                                            className="flex-1 min-w-0 bg-transparent text-zinc-800 placeholder:text-zinc-400 outline-none font-semibold"
                                         />
-                                        <span className="text-zinc-400 select-none text-[11px] bg-zinc-150 px-2 py-0.5 rounded font-bold shrink-0">/<span className="text-zinc-500 font-semibold">handle</span></span>
+                                        <span className="text-zinc-400 select-none text-[11px] bg-zinc-100 px-2 py-0.5 rounded font-bold shrink-0">/<span className="text-zinc-500 font-semibold">handle</span></span>
                                     </div>
                                 ) : (
                                     // For SP: edit /<thispart>
-                                    <div className="flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 focus-within:bg-white focus-within:border-zinc-955 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all font-mono text-[12.5px]">
+                                    <div className="flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 focus-within:bg-white focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all font-mono text-[12.5px]">
                                         <span className="text-zinc-400 select-none">/</span>
                                         <input
                                             type="text"
@@ -570,30 +570,30 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                                             placeholder="about-us"
                                             value={newPathPrefix}
                                             onChange={(e) => setNewPathPrefix(e.target.value.replace(/^\//, ""))}
-                                            className="flex-1 min-w-0 bg-transparent text-zinc-850 placeholder:text-zinc-400 outline-none font-semibold"
+                                            className="flex-1 min-w-0 bg-transparent text-zinc-800 placeholder:text-zinc-400 outline-none font-semibold"
                                         />
                                     </div>
                                 )}
                                 
                                 {/* URL Preview */}
-                                <div className="flex items-center gap-1.5 px-0.5 pt-0.5 text-[11px] text-zinc-450 font-medium">
-                                    <Globe className="w-3.5 h-3.5 text-zinc-450 shrink-0" />
+                                <div className="flex items-center gap-1.5 px-0.5 pt-0.5 text-[11px] text-zinc-400 font-medium">
+                                    <Globe className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
                                     <span>Path:</span>
-                                    <span className="font-mono text-zinc-650 bg-zinc-50 px-1.5 py-0.5 rounded border border-zinc-100 font-semibold truncate select-all">{fullCreatedPath}</span>
+                                    <span className="font-mono text-zinc-600 bg-zinc-50 px-1.5 py-0.5 rounded border border-zinc-100 font-semibold truncate select-all">{fullCreatedPath}</span>
                                 </div>
                             </div>
 
                             {/* Footer Buttons */}
                             <div className="flex gap-2.5 justify-end pt-3.5 border-t border-zinc-100">
                                 <Dialog.Close asChild>
-                                    <button type="button" className="text-[12px] font-bold text-zinc-500 hover:text-zinc-800 px-4 py-2.5 rounded-xl hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition-colors cursor-pointer active:scale-[0.98]">
+                                    <button type="button" className="text-[12px] font-bold text-zinc-500 hover:text-zinc-800 px-4 py-2.5 rounded-lg hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition-colors cursor-pointer active:scale-[0.98]">
                                         Cancel
                                     </button>
                                 </Dialog.Close>
                                 <button
                                     type="submit"
                                     disabled={submitting}
-                                    className="bg-zinc-950 text-white hover:bg-zinc-900 text-[12px] font-bold px-5 py-2.5 rounded-xl border border-zinc-950 transition-all cursor-pointer shadow-[0_2px_4px_rgba(0,0,0,0.05)] active:scale-[0.98]"
+                                    className="bg-zinc-950 text-white hover:bg-zinc-900 text-[12px] font-bold px-5 py-2.5 rounded-lg border border-zinc-950 transition-all cursor-pointer shadow-[0_2px_4px_rgba(0,0,0,0.05)] active:scale-[0.98]"
                                 >
                                     {submitting ? "Creating…" : "Create template"}
                                 </button>
@@ -613,18 +613,18 @@ export default function PageSelector({ currentRoute, routes, onRouteLoaded }: Pa
                             Initialize Page Route?
                         </Dialog.Title>
                         <p className="text-[12.5px] text-zinc-500 leading-relaxed font-medium">
-                            The page <span className="font-bold text-zinc-850">"{pendingCreateRoute?.name}"</span> has not been registered in your store! Would you like to create?
+                            The page <span className="font-bold text-zinc-800">"{pendingCreateRoute?.name}"</span> has not been registered in your store! Would you like to create?
                         </p>
                         <div className="flex gap-2.5 justify-end pt-3 border-t border-zinc-100">
                             <Dialog.Close asChild>
-                                <button type="button" className="text-[12px] font-bold text-zinc-500 hover:text-zinc-850 px-4 py-2.5 rounded-xl hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition-colors cursor-pointer active:scale-[0.98]">
+                                <button type="button" className="text-[12px] font-bold text-zinc-500 hover:text-zinc-800 px-4 py-2.5 rounded-lg hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition-colors cursor-pointer active:scale-[0.98]">
                                     Cancel
                                 </button>
                             </Dialog.Close>
                             <button
                                 onClick={handleConfirmCreate}
                                 disabled={submitting}
-                                className="bg-zinc-950 text-white hover:bg-zinc-900 text-[12px] font-bold px-5 py-2.5 rounded-xl border border-zinc-955 transition-all cursor-pointer shadow-[0_2px_4px_rgba(0,0,0,0.05)] active:scale-[0.98]"
+                                className="bg-zinc-950 text-white hover:bg-zinc-900 text-[12px] font-bold px-5 py-2.5 rounded-lg border border-zinc-950 transition-all cursor-pointer shadow-[0_2px_4px_rgba(0,0,0,0.05)] active:scale-[0.98]"
                             >
                                 {submitting ? "Initializing…" : "Initialize Page"}
                             </button>

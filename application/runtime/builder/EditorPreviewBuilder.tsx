@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo } from "react";
 import { ComponentSchema } from "./type";
-import { AppComponents } from "../dynamic-components";
+import { ComponentAllSchemaSettingsMap } from "../dynamic-components";
+import { COMPONENT_KEY_ALIASES } from "../dynamic-components/aliases";
 import { getParsedSettings } from "../dynamic-components/base";
 import { ComponentSchemaSettings } from "../dynamic-components/core";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,22 +18,24 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
 
     const isSelected = selectedNodeId === schema?.id;
 
+    const resolvedType = COMPONENT_KEY_ALIASES[schema?.type] || schema?.type;
+
     const parsed = useMemo(() => {
-        if (!schema?.type) return {};
+        if (!resolvedType) return {};
         try {
             return getParsedSettings(
-                schema.type,
+                resolvedType as any,
                 JSON.parse(JSON.stringify(schema.settings || {})) as ComponentSchemaSettings
             );
         } catch {
             return {};
         }
-    }, [schema?.type, schema?.settings]);
+    }, [resolvedType, schema?.settings]);
 
     // Conditional returns AFTER all hooks
     if (!schema) return null;
 
-    const Component = AppComponents?.[schema.type];
+    const Component = (ComponentAllSchemaSettingsMap?.[resolvedType] as any)?.component;
     if (!Component) return null;
 
     const handleClick = (e: React.MouseEvent) => {
@@ -70,6 +73,12 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
         content: parsed.content !== undefined ? parsed.content : schema.label,
         value: parsed.value !== undefined ? parsed.value : schema.label,
     };
+
+    const acceptsChildren = (ComponentAllSchemaSettingsMap?.[resolvedType] as any)?.acceptsChildren !== false;
+
+    if (!acceptsChildren) {
+        return <Component {...componentProps} />;
+    }
 
     return (
         <Component {...componentProps}>

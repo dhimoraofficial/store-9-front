@@ -26,7 +26,7 @@ export const defaultCartSchema: ComponentSchema[] = [
                     "text-element": "h1",
                     "text-size": "28px",
                     "text-weight": "bold",
-                    "text-color": "#1A1A1A",
+                    "text-color": "var(--text-main)",
                     style: { fontFamily: "Playfair Display, Georgia, serif", letterSpacing: "2px" }
                 }
             }
@@ -62,8 +62,8 @@ export const defaultCartSchema: ComponentSchema[] = [
                         settings: {
                             "box-padding": "16px",
                             "box-radius": "4px",
-                            "box-bg": "#ffffff",
-                            "box-border": "1px solid #EBEBEB"
+                            "box-bg": "var(--bg-surface)",
+                            "box-border": "1px solid var(--border-primary)"
                         },
                         children: [
                             {
@@ -86,9 +86,9 @@ export const defaultCartSchema: ComponentSchema[] = [
                                                 type: "flex_box",
                                                 settings: { "box-display": "flex", "box-direction": "col", "box-gap": "4px" },
                                                 children: [
-                                                    { id: "cart-item-name-1", type: "text_block", settings: { "content": "Classic Double-Breasted Trenchcoat", "text-size": "14px", "text-weight": "bold", "text-color": "#1A1A1A" } },
-                                                    { id: "cart-item-meta-1", type: "text_block", settings: { "content": "Size: S • Color: Oatmeal Beige", "text-size": "12px", "text-color": "#7A7A7A" } },
-                                                    { id: "cart-item-qty-lbl-1", type: "text_block", settings: { "content": "Qty: 1", "text-size": "12px", "text-color": "#7A7A7A" } }
+                                                    { id: "cart-item-name-1", type: "text_block", settings: { "content": "Classic Double-Breasted Trenchcoat", "text-size": "14px", "text-weight": "bold", "text-color": "var(--text-main)" } },
+                                                    { id: "cart-item-meta-1", type: "text_block", settings: { "content": "Size: S • Color: Oatmeal Beige", "text-size": "12px", "text-color": "var(--text-muted)" } },
+                                                    { id: "cart-item-qty-lbl-1", type: "text_block", settings: { "content": "Qty: 1", "text-size": "12px", "text-color": "var(--text-muted)" } }
                                                 ]
                                             }
                                         ]
@@ -98,8 +98,8 @@ export const defaultCartSchema: ComponentSchema[] = [
                                         type: "flex_box",
                                         settings: { "box-display": "flex", "box-direction": "col", "box-align": "end", "box-gap": "8px" },
                                         children: [
-                                            { id: "cart-item-prc-1", type: "text_block", settings: { "content": "$249.00", "text-size": "15px", "text-weight": "bold", "text-color": "#1A1A1A" } },
-                                            { id: "cart-item-rem-1", type: "text_block", settings: { "content": "Remove", "text-size": "12px", "text-color": "#EF4444", style: { cursor: "pointer", textDecoration: "underline" } } }
+                                            { id: "cart-item-prc-1", type: "text_block", settings: { "content": "$249.00", "text-size": "15px", "text-weight": "bold", "text-color": "var(--text-main)" } },
+                                            { id: "cart-item-rem-1", type: "text_block", settings: { "content": "Remove", "text-size": "12px", "text-color": "var(--color-error)", style: { cursor: "pointer", textDecoration: "underline" } } }
                                         ]
                                     }
                                 ]
@@ -125,8 +125,8 @@ export const defaultCartSchema: ComponentSchema[] = [
                         settings: {
                             "box-padding": "24px",
                             "box-radius": "4px",
-                            "box-bg": "#FAFAFA",
-                            "box-border": "1px solid #EBEBEB"
+                            "box-bg": "var(--bg-app)",
+                            "box-border": "1px solid var(--border-primary)"
                         },
                         children: [
                             {
@@ -134,13 +134,13 @@ export const defaultCartSchema: ComponentSchema[] = [
                                 type: "flex_box",
                                 settings: { "box-display": "flex", "box-direction": "col", "box-gap": "1.25rem" },
                                 children: [
-                                    { id: "sum-title", type: "text_block", settings: { "content": "ORDER SUMMARY", "text-size": "12px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
+                                    { id: "sum-title", type: "text_block", settings: { "content": "ORDER SUMMARY", "text-size": "12px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
                                     {
                                         id: "sum-subtotal-row",
                                         type: "flex_box",
                                         settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between" },
                                         children: [
-                                            { id: "sub-lbl", type: "text_block", settings: { "content": "Subtotal", "text-size": "13px", "text-color": "#4A4A4A" } },
+                                            { id: "sub-lbl", type: "text_block", settings: { "content": "Subtotal", "text-size": "13px", "text-color": "var(--text-main)" } },
                                             { id: "sub-val", type: "text_block", settings: { "content": "$249.00", "text-size": "14px", "text-weight": "600" } }
                                         ]
                                     },
@@ -149,17 +149,17 @@ export const defaultCartSchema: ComponentSchema[] = [
                                         type: "flex_box",
                                         settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between" },
                                         children: [
-                                            { id: "ship-lbl", type: "text_block", settings: { "content": "Shipping", "text-size": "13px", "text-color": "#4A4A4A" } },
-                                            { id: "ship-val", type: "text_block", settings: { "content": "Complimentary", "text-size": "13px", "text-color": "#10B981", style: { fontWeight: "600" } } }
+                                            { id: "ship-lbl", type: "text_block", settings: { "content": "Shipping", "text-size": "13px", "text-color": "var(--text-main)" } },
+                                            { id: "ship-val", type: "text_block", settings: { "content": "Complimentary", "text-size": "13px", "text-color": "var(--color-success)", style: { fontWeight: "600" } } }
                                         ]
                                     },
                                     {
                                         id: "sum-total-row",
                                         type: "flex_box",
-                                        settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", style: { borderTop: "1px solid #EBEBEB", paddingTop: "16px" } },
+                                        settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", style: { borderTop: "1px solid var(--border-primary)", paddingTop: "16px" } },
                                         children: [
-                                            { id: "tot-lbl", type: "text_block", settings: { "content": "Total", "text-size": "15px", "text-weight": "bold", "text-color": "#1A1A1A" } },
-                                            { id: "tot-val", type: "text_block", settings: { "content": "$249.00", "text-size": "18px", "text-weight": "bold", "text-color": "#1A1A1A" } }
+                                            { id: "tot-lbl", type: "text_block", settings: { "content": "Total", "text-size": "15px", "text-weight": "bold", "text-color": "var(--text-main)" } },
+                                            { id: "tot-val", type: "text_block", settings: { "content": "$249.00", "text-size": "18px", "text-weight": "bold", "text-color": "var(--text-main)" } }
                                         ]
                                     },
                                     {
@@ -176,8 +176,8 @@ export const defaultCartSchema: ComponentSchema[] = [
                                                 settings: {
                                                     "btn-label": "PROCEED TO SECURE CHECKOUT",
                                                     style: {
-                                                        backgroundColor: "#1A1A1A",
-                                                        color: "#FFFFFF",
+                                                        backgroundColor: "var(--primary)",
+                                                        color: "var(--text-inverted)",
                                                         width: "100%",
                                                         border: "none",
                                                         padding: "16px",
@@ -189,7 +189,7 @@ export const defaultCartSchema: ComponentSchema[] = [
                                                         display: "block"
                                                     }
                                                 }
-                                            }
+                                             }
                                         ]
                                     }
                                 ]

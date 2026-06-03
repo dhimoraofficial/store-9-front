@@ -2,47 +2,47 @@ import { ThemeConfigs } from "@/application/runtime/builder/ThemeBuilder";
 
 /**
  * Default Theme Configuration
- * Elegant, minimalist color palette designed for high-end fashion and lifestyle storefronts.
+ * RGB version
  */
 export const defaultThemeConfig: ThemeConfigs = {
     // 1. Core Brand Identity
-    primary: '#1A1A1A',      // Elegant Charcoal Black
-    secondary: '#C5A880',    // Warm Rose Gold/Beige
-    accent: '#E07A5F',       // Muted Terracotta
+    primary: 'rgb(26, 26, 26)',
+    secondary: 'rgb(197, 168, 128)',
+    accent: 'rgb(224, 122, 95)',
 
     // 2. Semantic Colors
-    colorSuccess: '#10B981',      // Emerald Green
-    colorError: '#EF4444',        // High-Visibility Red
-    colorWarning: '#F59E0B',      // Amber
-    colorInfo: '#3B82F6',         // Information Blue
+    colorSuccess: 'rgb(16, 185, 129)',
+    colorError: 'rgb(239, 68, 68)',
+    colorWarning: 'rgb(245, 158, 11)',
+    colorInfo: 'rgb(59, 130, 246)',
 
     // 3. Neutral Palette & Surfaces
-    bgApp: '#FAFAFA',             // Warm White/Off-white background
-    bgSurface: '#FFFFFF',         // Pure White
-    bgNavigation: '#1A1A1A',      // Charcoal Black Nav
-    textMain: '#2D2D2D',          // Very Dark Grey
-    textMuted: '#7A7A7A',         // Slate Muted Grey
-    textInverted: '#FFFFFF',      // White text
+    bgApp: 'rgb(250, 250, 250)',
+    bgSurface: 'rgb(255, 255, 255)',
+    bgNavigation: 'rgb(26, 26, 26)',
+    textMain: 'rgb(45, 45, 45)',
+    textMuted: 'rgb(122, 122, 122)',
+    textInverted: 'rgb(255, 255, 255)',
 
     // 4. Buttons & Interactive Elements
-    btnRadius: '4px',             // Minimalist sharp-rounded borders
+    btnRadius: '4px',
     btnPaddingBase: '12px 24px',
     btnHoverOpacity: '0.9',
 
     // 5. Layout & Spatial Scale
-    spacingUnit: '4px',           // 4px base
+    spacingUnit: '4px',
     containerMaxWidth: '1200px',
-    gridGutter: '32px',           // Generous fashion-grade margins
+    gridGutter: '32px',
 
     // 6. Borders & Elevation
-    borderPrimary: '#EBEBEB',     // Soft grey border
+    borderPrimary: 'rgb(235, 235, 235)',
     borderRadiusBase: '4px',
     borderRadiusLarge: '8px',
     shadowSoft: '0 2px 8px rgba(0, 0, 0, 0.05)',
     shadowHard: '0 8px 24px rgba(0, 0, 0, 0.08)',
 
     // 7. Typography
-    fontFamilySans: 'Outfit',     // Fashion Sans Serif
+    fontFamilySans: 'Outfit',
     fontFamilyMono: 'Outfit',
     fontSizeRoot: '16px',
     lineHeightBase: '1.6',

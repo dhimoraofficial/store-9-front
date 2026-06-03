@@ -28,7 +28,7 @@ export const defaultSearchSchema: ComponentSchema[] = [
                     "text-element": "h1",
                     "text-size": "28px",
                     "text-weight": "bold",
-                    "text-color": "#1A1A1A",
+                    "text-color": "var(--text-main)",
                     style: { fontFamily: "Playfair Display, Georgia, serif", letterSpacing: "2.5px" }
                 }
             },
@@ -39,7 +39,7 @@ export const defaultSearchSchema: ComponentSchema[] = [
                     "content": "Explore apparel matches and curated collections matching your query.",
                     "text-element": "p",
                     "text-size": "13px",
-                    "text-color": "#7A7A7A"
+                    "text-color": "var(--text-muted)"
                 }
             },
             /* Search input console box */
@@ -66,11 +66,11 @@ export const defaultSearchSchema: ComponentSchema[] = [
                             style: {
                                 flex: "1",
                                 padding: "14px 18px",
-                                border: "1px solid #EBEBEB",
+                                border: "1px solid var(--border-primary)",
                                 borderRight: "none",
                                 borderRadius: "4px 0 0 4px",
                                 fontSize: "14px",
-                                color: "#2D2D2D"
+                                color: "var(--text-main)"
                             }
                         }
                     },
@@ -80,8 +80,8 @@ export const defaultSearchSchema: ComponentSchema[] = [
                         settings: {
                             "btn-label": "SEARCH",
                             style: {
-                                backgroundColor: "#1A1A1A",
-                                color: "#FFFFFF",
+                                backgroundColor: "var(--primary)",
+                                color: "var(--text-inverted)",
                                 border: "none",
                                 padding: "15px 24px",
                                 fontSize: "12px",

@@ -4,7 +4,8 @@ import SplashScreen from "@/application/widgets/splash_screen";
 import { Suspense } from "react";
 import { ApplciationActions } from "../actions";
 import { ApplicationActionEvents, ComponentAction, ComponentActionPayload } from "../actions/type";
-import { AppComponents } from "../dynamic-components";
+import { ComponentAllSchemaSettingsMap } from "../dynamic-components";
+import { COMPONENT_KEY_ALIASES } from "../dynamic-components/aliases";
 import { getParsedSettings } from "../dynamic-components/base";
 import { ComponentSchemaSettings } from "../dynamic-components/core";
 import { ComponentSchema } from "./type";
@@ -68,7 +69,8 @@ import { interpolateSchema } from "./evaluator";
 function ComponentBuilderContent({ schema, context }: { schema: ComponentSchema; context?: any }) {
     if (!schema) return null;
 
-    const Component = AppComponents?.[schema.type]
+    const resolvedType = COMPONENT_KEY_ALIASES[schema.type] || schema.type;
+    const Component = (ComponentAllSchemaSettingsMap?.[resolvedType] as any)?.component
     if (!Component) {
         return null
     }
@@ -93,15 +95,25 @@ function ComponentBuilderContent({ schema, context }: { schema: ComponentSchema;
         ...compoennetActions
     } as ComponentSchemaSettings
 
+    const acceptsChildren = (ComponentAllSchemaSettingsMap?.[resolvedType] as any)?.acceptsChildren !== false;
+
+    if (!acceptsChildren) {
+        return <Component
+            // set the settings directly to the components, 
+            // this will pass all the config values into the style, settings format 
+            {...getParsedSettings(resolvedType as any, finalSettings)}
+        />;
+    }
+
     return <Component
         // set the settings directly to the components, 
         // this will pass all the config values into the style, settings format 
-        {...getParsedSettings(schema.type, finalSettings)}
+        {...getParsedSettings(resolvedType as any, finalSettings)}
     >
         {schema?.children?.map((child, index) => (
             <ComponentBuilderContent key={child.id || index} schema={child} context={context} />
         ))}
-    </Component>
+    </Component>;
 }
 
 export default function ClientComponentBuilderContent({ schema, context }: { schema: ComponentSchema; context?: any }) {

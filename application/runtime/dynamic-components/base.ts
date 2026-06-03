@@ -1,15 +1,8 @@
-import { parseBoxComponentSettings } from "./Box/setting";
-import { parseTextComponentSettings } from "./Text/setting";
-import { parseLinkComponentSettings } from "./Link/setting";
-import { parseButtonComponentSettings } from "./Button/setting";
-import { parseImageComponentSettings } from "./Image/setting";
-import { parseInputComponentSettings } from "./Input/setting";
-import { parseIconComponentSettings } from "./Icon/setting";
-import { parseFormComponentSettings } from "./Form/setting";
-import { parseCarouselBoxComponentSettings } from "./CarouselBox/setting";
-import { ComponentAllSchemaSettingsMap } from "./main";
+import { ComponentAllSchemaSettingsMap } from ".";
 import { ComponentGlobalSchemaSettingsMap, ComponentSchemaSettings, parseGlobalStyle, valdiateComponentSetting } from "./core";
 import { BaseTypes } from "./type";
+import { COMPONENT_KEY_ALIASES } from "./aliases";
+
 
 // settings parser for button, like button-type, onCLick
 function parseGlobalComponentSettings(settings: ComponentSchemaSettings): ComponentSchemaSettings {
@@ -54,7 +47,8 @@ function parseGlobalComponentSettings(settings: ComponentSchemaSettings): Compon
 
 // Generic fallback parser for new layout and loop contexts
 function parseGenericComponentSettings(type: string, settings: ComponentSchemaSettings): ComponentSchemaSettings {
-    const entry = ComponentAllSchemaSettingsMap[type];
+    const resolvedType = COMPONENT_KEY_ALIASES[type] || type;
+    const entry = ComponentAllSchemaSettingsMap[resolvedType];
     if (!entry) return settings;
     const settingsMap = ("settings" in entry) ? entry.settings : entry;
 
@@ -104,28 +98,9 @@ function parseGenericComponentSettings(type: string, settings: ComponentSchemaSe
 // the gloabl router that routes all compoennts
 export function getParsedSettings(type: BaseTypes, settings: ComponentSchemaSettings): ComponentSchemaSettings {
     let parsedSettings: ComponentSchemaSettings = parseGlobalComponentSettings(settings) as ComponentSchemaSettings;
+    parsedSettings = parseGenericComponentSettings(type, parsedSettings);
 
-    if (type === "box" || type === "flex_box" || type === "grid_box" || type === "card_box") {
-        parsedSettings = parseBoxComponentSettings(parsedSettings);
-    } else if (type === "carousel_box") {
-        parsedSettings = parseCarouselBoxComponentSettings(parsedSettings);
-    } else if (type === "text" || type === "text_block") {
-        parsedSettings = parseTextComponentSettings(parsedSettings);
-    } else if (type === "link" || type === "link_block") {
-        parsedSettings = parseLinkComponentSettings(parsedSettings);
-    } else if (type === "button" || type === "button_block") {
-        parsedSettings = parseButtonComponentSettings(parsedSettings);
-    } else if (type === "image" || type === "image_block") {
-        parsedSettings = parseImageComponentSettings(parsedSettings);
-    } else if (type === "input" || type === "search_query" || type === "input_block" || type === "input_field") {
-        parsedSettings = parseInputComponentSettings(parsedSettings);
-    } else if (type === "icon" || type === "svg_icon") {
-        parsedSettings = parseIconComponentSettings(parsedSettings);
-    } else if (type === "form" || type === "form_wrapper") {
-        parsedSettings = parseFormComponentSettings(parsedSettings);
-    } else {
-        parsedSettings = parseGenericComponentSettings(type, parsedSettings);
-    }
+
 
     return parsedSettings;
 }

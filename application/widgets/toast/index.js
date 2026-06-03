@@ -64,7 +64,7 @@ export default function ToastCreator({ toast, clearToast }) {
                         return (
                             <div
                                 key={item.id || index}
-                                className={`border bg-surface rounded-lg shadow-lg p-4 transition-all duration-300 ease-in-out ${isRemoving
+                                className={`border bg-surface rounded-md shadow-lg p-4 transition-all duration-300 ease-in-out ${isRemoving
                                     ? 'opacity-0 translate-x-full scale-95'
                                     : 'opacity-100 translate-x-0 scale-100'
                                     }`}

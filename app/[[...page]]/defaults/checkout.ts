@@ -26,7 +26,7 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                     "text-element": "h1",
                     "text-size": "26px",
                     "text-weight": "bold",
-                    "text-color": "#1A1A1A",
+                    "text-color": "var(--text-main)",
                     style: { fontFamily: "Playfair Display, Georgia, serif", letterSpacing: "2px" }
                 }
             }
@@ -61,14 +61,14 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                         type: "flex_box",
                         settings: { "box-display": "flex", "box-direction": "col", "box-gap": "1rem" },
                         children: [
-                            { id: "form-contact-title", type: "text_block", settings: { "content": "1. CONTACT INFORMATION", "text-size": "12px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
+                            { id: "form-contact-title", type: "text_block", settings: { "content": "1. CONTACT INFORMATION", "text-size": "12px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
                             {
                                 id: "form-contact-email-input",
                                 type: "input_block",
                                 settings: {
                                     "input-type": "email",
                                     "input-placeholder": "Email address (for shipping confirmations)",
-                                    style: { width: "100%", padding: "12px", border: "1px solid #EBEBEB", borderRadius: "4px", fontSize: "13px" }
+                                    style: { width: "100%", padding: "12px", border: "1px solid var(--border-primary)", borderRadius: "4px", fontSize: "13px" }
                                 }
                             }
                         ]
@@ -80,14 +80,14 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                         type: "flex_box",
                         settings: { "box-display": "flex", "box-direction": "col", "box-gap": "1rem" },
                         children: [
-                            { id: "form-delivery-title", type: "text_block", settings: { "content": "2. DELIVERY ADDRESS", "text-size": "12px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
+                            { id: "form-delivery-title", type: "text_block", settings: { "content": "2. DELIVERY ADDRESS", "text-size": "12px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
                             {
                                 id: "form-delivery-name-input",
                                 type: "input_block",
                                 settings: {
                                     "input-type": "text",
                                     "input-placeholder": "Full name",
-                                    style: { width: "100%", padding: "12px", border: "1px solid #EBEBEB", borderRadius: "4px", fontSize: "13px" }
+                                    style: { width: "100%", padding: "12px", border: "1px solid var(--border-primary)", borderRadius: "4px", fontSize: "13px" }
                                 }
                             },
                             {
@@ -96,7 +96,7 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                                 settings: {
                                     "input-type": "text",
                                     "input-placeholder": "Street address, apartment, suite",
-                                    style: { width: "100%", padding: "12px", border: "1px solid #EBEBEB", borderRadius: "4px", fontSize: "13px" }
+                                    style: { width: "100%", padding: "12px", border: "1px solid var(--border-primary)", borderRadius: "4px", fontSize: "13px" }
                                 }
                             },
                             {
@@ -107,12 +107,12 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                                     {
                                         id: "form-delivery-city-input",
                                         type: "input_block",
-                                        settings: { "input-type": "text", "input-placeholder": "City / Region", style: { flex: "1", padding: "12px", border: "1px solid #EBEBEB", borderRadius: "4px", fontSize: "13px" } }
+                                        settings: { "input-type": "text", "input-placeholder": "City / Region", style: { flex: "1", padding: "12px", border: "1px solid var(--border-primary)", borderRadius: "4px", fontSize: "13px" } }
                                     },
                                     {
                                         id: "form-delivery-phone-input",
                                         type: "input_block",
-                                        settings: { "input-type": "tel", "input-placeholder": "Phone number", style: { flex: "1", padding: "12px", border: "1px solid #EBEBEB", borderRadius: "4px", fontSize: "13px" } }
+                                        settings: { "input-type": "tel", "input-placeholder": "Phone number", style: { flex: "1", padding: "12px", border: "1px solid var(--border-primary)", borderRadius: "4px", fontSize: "13px" } }
                                     }
                                 ]
                             }
@@ -137,8 +137,8 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                         settings: {
                             "box-padding": "24px",
                             "box-radius": "4px",
-                            "box-bg": "#FAFAFA",
-                            "box-border": "1px solid #EBEBEB"
+                            "box-bg": "var(--bg-app)",
+                            "box-border": "1px solid var(--border-primary)"
                         },
                         children: [
                             {
@@ -146,33 +146,33 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                                 type: "flex_box",
                                 settings: { "box-display": "flex", "box-direction": "col", "box-gap": "1.25rem" },
                                 children: [
-                                    { id: "chk-sum-title", type: "text_block", settings: { "content": "YOUR ORDER", "text-size": "12px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
+                                    { id: "chk-sum-title", type: "text_block", settings: { "content": "YOUR ORDER", "text-size": "12px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
                                     /* Summary Item 1 */
                                     {
                                         id: "chk-sum-item-1",
                                         type: "flex_box",
                                         settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", "box-align": "center" },
                                         children: [
-                                            { id: "chk-item-name-1", type: "text_block", settings: { "content": "Classic Trenchcoat x 1", "text-size": "13px", "text-color": "#4A4A4A" } },
-                                            { id: "chk-item-price-1", type: "text_block", settings: { "content": "$249.00", "text-size": "13px", "text-weight": "600", "text-color": "#1A1A1A" } }
+                                            { id: "chk-item-name-1", type: "text_block", settings: { "content": "Classic Trenchcoat x 1", "text-size": "13px", "text-color": "var(--text-main)" } },
+                                            { id: "chk-item-price-1", type: "text_block", settings: { "content": "$249.00", "text-size": "13px", "text-weight": "600", "text-color": "var(--text-main)" } }
                                         ]
                                     },
                                     {
                                         id: "chk-sum-subtotal",
                                         type: "flex_box",
-                                        settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", style: { borderTop: "1px solid #EBEBEB", paddingTop: "12px" } },
+                                        settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", style: { borderTop: "1px solid var(--border-primary)", paddingTop: "12px" } },
                                         children: [
-                                            { id: "chk-sub-lbl", type: "text_block", settings: { "content": "Subtotal", "text-size": "13px", "text-color": "#4A4A4A" } },
+                                            { id: "chk-sub-lbl", type: "text_block", settings: { "content": "Subtotal", "text-size": "13px", "text-color": "var(--text-main)" } },
                                             { id: "chk-sub-val", type: "text_block", settings: { "content": "$249.00", "text-size": "13px", "text-weight": "600" } }
                                         ]
                                     },
                                     {
                                         id: "chk-sum-total",
                                         type: "flex_box",
-                                        settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", style: { borderTop: "1px solid #EBEBEB", paddingTop: "12px" } },
+                                        settings: { "box-display": "flex", "box-direction": "row", "box-justify": "space-between", style: { borderTop: "1px solid var(--border-primary)", paddingTop: "12px" } },
                                         children: [
-                                            { id: "chk-tot-lbl", type: "text_block", settings: { "content": "Total Amount", "text-size": "15px", "text-weight": "bold", "text-color": "#1A1A1A" } },
-                                            { id: "chk-tot-val", type: "text_block", settings: { "content": "$249.00", "text-size": "18px", "text-weight": "bold", "text-color": "#1A1A1A" } }
+                                            { id: "chk-tot-lbl", type: "text_block", settings: { "content": "Total Amount", "text-size": "15px", "text-weight": "bold", "text-color": "var(--text-main)" } },
+                                            { id: "chk-tot-val", type: "text_block", settings: { "content": "$249.00", "text-size": "18px", "text-weight": "bold", "text-color": "var(--text-main)" } }
                                         ]
                                     },
                                     {
@@ -181,8 +181,8 @@ export const defaultCheckoutSchema: ComponentSchema[] = [
                                         settings: {
                                             "btn-label": "PLACE ORDER & PAY",
                                             style: {
-                                                backgroundColor: "#1D4ED8", // Royal/Secure Blue
-                                                color: "#FFFFFF",
+                                                backgroundColor: "var(--color-info)",
+                                                color: "var(--text-inverted)",
                                                 width: "100%",
                                                 border: "none",
                                                 padding: "16px",

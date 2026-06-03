@@ -25,14 +25,14 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                 type: "flex_box",
                 settings: {
                     "box-display": "flex",
-                    "box-bg": "#1A1A1A",
+                    "box-bg": "var(--bg-navigation)",
                     "box-justify": "center",
                     "box-align": "center",
                     "w": "100%",
                     "pT": "8px",
                     "pB": "8px",
                     style: {
-                        color: "#FFFFFF",
+                        color: "var(--text-inverted)",
                         fontSize: "12px",
                         letterSpacing: "1px",
                         fontWeight: "500",
@@ -45,7 +45,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                         type: "text_block",
                         settings: {
                             "content": "Complimentary Worldwide Shipping on Orders Over $150 • Shop New Arrivals",
-                            "text-color": "#FFFFFF",
+                            "text-color": "var(--text-inverted)",
                             "text-size": "11px",
                             "text-align": "center"
                         }
@@ -59,7 +59,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                 type: "flex_box",
                 settings: {
                     "box-display": "flex",
-                    "box-bg": "#FFFFFF",
+                    "box-bg": "var(--bg-surface)",
                     "box-direction": "row",
                     "box-align": "center",
                     "box-justify": "space-between",
@@ -69,7 +69,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                     "pT": "16px",
                     "pB": "16px",
                     style: {
-                        borderBottom: "1px solid #EBEBEB"
+                        borderBottom: "1px solid var(--border-primary)"
                     }
                 },
                 children: [
@@ -96,10 +96,10 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                                     style: {
                                         width: "100%",
                                         padding: "8px 12px",
-                                        border: "1px solid #EBEBEB",
+                                        border: "1px solid var(--border-primary)",
                                         borderRadius: "4px",
                                         fontSize: "13px",
-                                        color: "#2D2D2D"
+                                        color: "var(--text-main)"
                                     }
                                 }
                             }
@@ -127,7 +127,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                                     "text-element": "h1",
                                     "text-size": "24px",
                                     "text-weight": "800",
-                                    "text-color": "#1A1A1A",
+                                    "text-color": "var(--text-main)",
                                     style: {
                                         letterSpacing: "4px",
                                         lineHeight: "1"
@@ -141,7 +141,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                                     "content": "ESSENTIALS FOR MODERN LIVING",
                                     "text-element": "span",
                                     "text-size": "8px",
-                                    "text-color": "#7A7A7A",
+                                    "text-color": "var(--text-muted)",
                                     style: {
                                         letterSpacing: "2.5px",
                                         marginTop: "4px"
@@ -171,7 +171,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                                 type: "link_block",
                                 settings: {
                                     "link-url": "/search",
-                                    style: { textDecoration: "none", color: "#1A1A1A", display: "flex", alignItems: "center" }
+                                    style: { textDecoration: "none", color: "var(--text-main)", display: "flex", alignItems: "center" }
                                 },
                                 children: [
                                     { id: "search-text", type: "text_block", settings: { "content": "Search", "text-size": "13px", "text-weight": "500" } }
@@ -182,7 +182,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                                 type: "link_block",
                                 settings: {
                                     "link-url": "/account",
-                                    style: { textDecoration: "none", color: "#1A1A1A", display: "flex", alignItems: "center" }
+                                    style: { textDecoration: "none", color: "var(--text-main)", display: "flex", alignItems: "center" }
                                 },
                                 children: [
                                     { id: "account-text", type: "text_block", settings: { "content": "Account", "text-size": "13px", "text-weight": "500" } }
@@ -193,11 +193,11 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                                 type: "link_block",
                                 settings: {
                                     "link-url": "/cart",
-                                    style: { textDecoration: "none", color: "#1A1A1A", display: "flex", alignItems: "center", gap: "6px" }
+                                    style: { textDecoration: "none", color: "var(--text-main)", display: "flex", alignItems: "center", gap: "6px" }
                                 },
                                 children: [
                                     { id: "cart-label", type: "text_block", settings: { "content": "Bag", "text-size": "13px", "text-weight": "600" } },
-                                    { id: "cart-count-badge", type: "badge_block", settings: { "badge-text": "0", style: { backgroundColor: "#1A1A1A", color: "#FFFFFF", fontSize: "10px", padding: "2px 6px" } } }
+                                    { id: "cart-count-badge", type: "badge_block", settings: { "badge-text": "0", style: { backgroundColor: "var(--primary)", color: "var(--text-inverted)", fontSize: "10px", padding: "2px 6px" } } }
                                 ]
                             }
                         ]
@@ -211,7 +211,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                 type: "flex_box",
                 settings: {
                     "box-display": "flex",
-                    "box-bg": "#FFFFFF",
+                    "box-bg": "var(--bg-surface)",
                     "box-direction": "row",
                     "box-align": "center",
                     "box-justify": "center",
@@ -220,7 +220,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                     "pT": "12px",
                     "pB": "12px",
                     style: {
-                        borderBottom: "1px solid #EBEBEB"
+                        borderBottom: "1px solid var(--border-primary)"
                     }
                 },
                 children: [
@@ -229,7 +229,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                         type: "link_block",
                         settings: {
                             "link-url": "/collection/new-arrivals",
-                            style: { textDecoration: "none", color: "#1A1A1A" }
+                            style: { textDecoration: "none", color: "var(--text-main)" }
                         },
                         children: [{ id: "cat-text-new", type: "text_block", settings: { "content": "NEW ARRIVALS", "text-size": "12px", "text-weight": "600", style: { letterSpacing: "1.5px" } } }]
                     },
@@ -238,7 +238,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                         type: "link_block",
                         settings: {
                             "link-url": "/category/women",
-                            style: { textDecoration: "none", color: "#1A1A1A" }
+                            style: { textDecoration: "none", color: "var(--text-main)" }
                         },
                         children: [{ id: "cat-text-women", type: "text_block", settings: { "content": "WOMEN", "text-size": "12px", "text-weight": "500", style: { letterSpacing: "1.5px" } } }]
                     },
@@ -247,7 +247,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                         type: "link_block",
                         settings: {
                             "link-url": "/category/men",
-                            style: { textDecoration: "none", color: "#1A1A1A" }
+                            style: { textDecoration: "none", color: "var(--text-main)" }
                         },
                         children: [{ id: "cat-text-men", type: "text_block", settings: { "content": "MEN", "text-size": "12px", "text-weight": "500", style: { letterSpacing: "1.5px" } } }]
                     },
@@ -256,7 +256,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                         type: "link_block",
                         settings: {
                             "link-url": "/category/accessories",
-                            style: { textDecoration: "none", color: "#1A1A1A" }
+                            style: { textDecoration: "none", color: "var(--text-main)" }
                         },
                         children: [{ id: "cat-text-accessories", type: "text_block", settings: { "content": "ACCESSORIES", "text-size": "12px", "text-weight": "500", style: { letterSpacing: "1.5px" } } }]
                     },
@@ -265,7 +265,7 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                         type: "link_block",
                         settings: {
                             "link-url": "/collection/sale",
-                            style: { textDecoration: "none", color: "#EF4444" }
+                            style: { textDecoration: "none", color: "var(--color-error)" }
                         },
                         children: [{ id: "cat-text-sale", type: "text_block", settings: { "content": "SALE", "text-size": "12px", "text-weight": "600", style: { letterSpacing: "1.5px" } } }]
                     }

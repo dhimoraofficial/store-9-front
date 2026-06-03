@@ -43,7 +43,7 @@ export const defaultProductSchema: ComponentSchema[] = [
                             style: {
                                 width: "100%",
                                 minHeight: "560px",
-                                backgroundColor: "#FAFAFA",
+                                backgroundColor: "var(--bg-app)",
                                 borderRadius: "4px"
                             }
                         }
@@ -68,7 +68,7 @@ export const defaultProductSchema: ComponentSchema[] = [
                         type: "badge_block",
                         settings: {
                             "badge-text": "${context.product.badgeText}",
-                            style: { backgroundColor: "#E07A5F", color: "#FFFFFF", width: "fit-content" }
+                            style: { backgroundColor: "var(--accent)", color: "var(--text-inverted)", width: "fit-content" }
                         }
                     },
                     /* 2. Product Name & Pricing */
@@ -85,7 +85,7 @@ export const defaultProductSchema: ComponentSchema[] = [
                                     "text-element": "h1",
                                     "text-size": "32px",
                                     "text-weight": "bold",
-                                    "text-color": "#1A1A1A",
+                                    "text-color": "var(--text-main)",
                                     style: { fontFamily: "Playfair Display, Georgia, serif" }
                                 }
                             },
@@ -94,8 +94,8 @@ export const defaultProductSchema: ComponentSchema[] = [
                                 type: "flex_box",
                                 settings: { "box-display": "flex", "box-direction": "row", "box-gap": "1rem", "box-align": "center" },
                                 children: [
-                                    { id: "product-current-price", type: "text_block", settings: { "content": "Rs. ${context.activeVariant.price}", "text-size": "20px", "text-weight": "700", "text-color": "#1A1A1A" } },
-                                    { id: "product-compare-price", type: "text_block", settings: { "content": "Rs. ${context.product.compareAtPrice}", "text-size": "16px", "text-color": "#A3A3A3", style: { textDecoration: "line-through" } } }
+                                    { id: "product-current-price", type: "text_block", settings: { "content": "Rs. ${context.activeVariant.price}", "text-size": "20px", "text-weight": "700", "text-color": "var(--text-main)" } },
+                                    { id: "product-compare-price", type: "text_block", settings: { "content": "Rs. ${context.product.compareAtPrice}", "text-size": "16px", "text-color": "var(--text-muted)", style: { textDecoration: "line-through" } } }
                                 ]
                             }
                         ]
@@ -108,7 +108,7 @@ export const defaultProductSchema: ComponentSchema[] = [
                             "content": "${context.product.description}",
                             "text-element": "p",
                             "text-size": "14px",
-                            "text-color": "#4A4A4A",
+                            "text-color": "var(--text-main)",
                             style: { lineHeight: "1.7" }
                         }
                     },
@@ -119,16 +119,16 @@ export const defaultProductSchema: ComponentSchema[] = [
                         settings: { "box-display": "flex", "box-direction": "col", "box-gap": "1rem" },
                         children: [
                             /* Size label and buttons */
-                            { id: "size-label", type: "text_block", settings: { "content": "SELECT SIZE", "text-size": "11px", "text-weight": "700", "text-color": "#1A1A1A", style: { letterSpacing: "1px" } } },
+                            { id: "size-label", type: "text_block", settings: { "content": "SELECT SIZE", "text-size": "11px", "text-weight": "700", "text-color": "var(--text-main)", style: { letterSpacing: "1px" } } },
                             {
                                 id: "size-buttons-row",
                                 type: "flex_box",
                                 settings: { "box-display": "flex", "box-direction": "row", "box-gap": "0.5rem" },
                                 children: [
-                                    { id: "sz-xs", type: "text_block", settings: { "content": "XS", style: { border: "1px solid #EBEBEB", padding: "8px 16px", fontSize: "12px", cursor: "pointer" } } },
-                                    { id: "sz-s", type: "text_block", settings: { "content": "S", style: { border: "1px solid #1A1A1A", padding: "8px 16px", fontSize: "12px", cursor: "pointer", fontWeight: "bold" } } },
-                                    { id: "sz-m", type: "text_block", settings: { "content": "M", style: { border: "1px solid #EBEBEB", padding: "8px 16px", fontSize: "12px", cursor: "pointer" } } },
-                                    { id: "sz-l", type: "text_block", settings: { "content": "L", style: { border: "1px solid #EBEBEB", padding: "8px 16px", fontSize: "12px", cursor: "pointer" } } }
+                                    { id: "sz-xs", type: "text_block", settings: { "content": "XS", style: { border: "1px solid var(--border-primary)", padding: "8px 16px", fontSize: "12px", cursor: "pointer" } } },
+                                    { id: "sz-s", type: "text_block", settings: { "content": "S", style: { border: "1px solid var(--text-main)", padding: "8px 16px", fontSize: "12px", cursor: "pointer", fontWeight: "bold" } } },
+                                    { id: "sz-m", type: "text_block", settings: { "content": "M", style: { border: "1px solid var(--border-primary)", padding: "8px 16px", fontSize: "12px", cursor: "pointer" } } },
+                                    { id: "sz-l", type: "text_block", settings: { "content": "L", style: { border: "1px solid var(--border-primary)", padding: "8px 16px", fontSize: "12px", cursor: "pointer" } } }
                                 ]
                             }
                         ]
@@ -150,8 +150,8 @@ export const defaultProductSchema: ComponentSchema[] = [
                                 settings: {
                                     "btn-label": "ADD TO SHOPPING BAG",
                                     style: {
-                                        backgroundColor: "#1A1A1A",
-                                        color: "#FFFFFF",
+                                        backgroundColor: "var(--primary)",
+                                        color: "var(--text-inverted)",
                                         flex: "2",
                                         border: "none",
                                         padding: "16px",
@@ -169,9 +169,9 @@ export const defaultProductSchema: ComponentSchema[] = [
                                 settings: {
                                     "btn-label": "♥",
                                     style: {
-                                        backgroundColor: "#FFFFFF",
-                                        color: "#1A1A1A",
-                                        border: "1px solid #1A1A1A",
+                                        backgroundColor: "var(--bg-surface)",
+                                        color: "var(--text-main)",
+                                        border: "1px solid var(--border-primary)",
                                         flex: "0.5",
                                         padding: "16px",
                                         fontWeight: "600",
@@ -207,7 +207,7 @@ export const defaultProductSchema: ComponentSchema[] = [
                     "text-element": "h3",
                     "text-size": "18px",
                     "text-weight": "bold",
-                    "text-color": "#1A1A1A",
+                    "text-color": "var(--text-main)",
                     style: { letterSpacing: "2px" }
                 }
             }
