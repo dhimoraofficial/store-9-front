@@ -11,6 +11,11 @@ import {
     default as Navbar_Ecommerce_Component
 } from "./navbar/ecommerce";
 import {
+    ComponentAnnouncementBarSchemaSettingsMap as Component_announcement_bar_ecommerce_SchemaSettingsMap,
+    parseAnnouncementBarComponentSettings as parse_announcement_bar_ecommerce_ComponentSettings,
+    default as AnnouncementBar_Ecommerce_Component
+} from "./announcement-bar/ecommerce";
+import {
     ComponentBlogSchemaSettingsMap as Component_blog_three_column_grid_SchemaSettingsMap,
     parseBlogComponentSettings as parse_blog_three_column_grid_ComponentSettings,
     default as Blog_ThreeColumnGrid_Component
@@ -40,6 +45,16 @@ export interface ComponentRegistryEntry {
 export const ComponentAllSchemaSettingsMap: Record<string, (ComponentRegistryEntry | ComponentGlobalSchemaSettingsMapType)> = {
     common: ComponentGlobalSchemaSettingsMap,
 
+    "announcement_bar_ecommerce": {
+        acceptsChildren: false,
+        name: "Announcement Bar - eCommerce Premium",
+        icon: "Megaphone",
+        category: "layout",
+        desc: "A highly customizable premium announcement bar featuring sliding/fading text carousels, nested contact information link structures, and custom color themes.",
+        settings: Component_announcement_bar_ecommerce_SchemaSettingsMap as any,
+        parse: parse_announcement_bar_ecommerce_ComponentSettings,
+        component: AnnouncementBar_Ecommerce_Component
+    },
     "footer_ecommerce": {
         acceptsChildren: false,
         name: "Footer - eCommerce Premium",

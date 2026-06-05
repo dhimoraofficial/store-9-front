@@ -1,5 +1,10 @@
 // Backward compatibility mapping for dynamic components
 export const COMPONENT_KEY_ALIASES: Record<string, string> = {
+    "announcement_1": "announcement_bar_ecommerce",
+    "announcement_2": "announcement_bar_ecommerce",
+    "announcement_3": "announcement_bar_ecommerce",
+    "announcement_4": "announcement_bar_ecommerce",
+    "announcement_5": "announcement_bar_ecommerce",
     "about_1": "about_split-right-image",
     "about_2": "about_split-left-image-stats",
     "about_3": "about_centered-image-below",

@@ -45,10 +45,6 @@ interface EcommerceNavbarProps {
       | "compact-utility" 
       | "sidebar-drawer";
     activeIndicator?: "none" | "underline" | "pill";
-    topBannerShow?: boolean;
-    topBannerLeftText?: string;
-    topBannerRightText?: string;
-    topBannerText?: string;
     logoSrc?: string;
     logoHeight?: string;
     searchPlaceholder?: string;
@@ -96,10 +92,6 @@ interface EcommerceNavbarProps {
 export default function ClientComponent({
     layoutVariant = "single-row",
     activeIndicator = "none",
-    topBannerShow = false,
-    topBannerLeftText = " Kathmandu, Nepal  ·  FAQs  ·  Privacy Policy",
-    topBannerRightText = "📞 +077 981-8085380  ·  24/7 Customer Support",
-    topBannerText = " Kathmandu, Nepal  ·  FAQs  ·  Privacy Policy  ·  📞 +077 981-8085380",
     logoSrc,
     logoHeight = "40px",
     searchPlaceholder = "Search products...",
@@ -475,13 +467,6 @@ export default function ClientComponent({
 
     return (
         <header className={baseContainerClass} style={customBgStyle}>
-            {/* TOP BANNER */}
-            {topBannerShow && (
-                <div className="w-full bg-neutral-900 text-neutral-100 dark:bg-neutral-950 dark:text-neutral-200 text-xs py-2.5 px-4 font-semibold tracking-wide text-center border-b border-neutral-800">
-                    <span>{topBannerText}</span>
-                </div>
-            )}
-
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
                 
                 {/* Desktop View Header Bar */}

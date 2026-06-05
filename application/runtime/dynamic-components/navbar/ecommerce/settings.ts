@@ -96,27 +96,6 @@ export const ComponentNavbarSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         description: "Choose how the link for the currently open page is highlighted to guide visitors. Select 'underline' to show a line below the active link, 'pill' for a rounded background bubble, or 'none' for plain text.",
         opt: ["none", "underline", "pill"]
     },
-    topBannerShow: {
-        as: "topBannerShow",
-        tp: "prop",
-        group: "banner",
-        name: "Show Announcement Top Banner",
-        description: "Toggle this on to display a thin banner above the header. Useful for highlighting store promotions, announcements, or custom notices.",
-        opt: ["true", "false"]
-    },
-    topBannerText: {
-        as: "topBannerText",
-        tp: "prop",
-        condition: [{
-            for: "topBannerShow",
-            val: "true"
-        }],
-        group: "banner",
-        name: "Top Banner Announcement Message",
-        description: "The text announcement displayed centered in the top banner. Ideal for sales campaigns, coupon codes, and store news.",
-        rgx: ".*"
-    },
-
     categoriesShow: {
         as: "categoriesShow",
         tp: "prop",
@@ -458,7 +437,6 @@ export function parseNavbarComponentSettings(type: string, settings: any) {
     parsed.bottomRightWidgets = parseSlot(parsed.bottomRightWidgets);
 
     // Boolean configurations
-    parsed.topBannerShow = parsed.topBannerShow === "true" || parsed.topBannerShow === true;
     parsed.wishlistShow = parsed.wishlistShow === "true" || parsed.wishlistShow === true;
     parsed.cartShow = parsed.cartShow === "true" || parsed.cartShow === true;
     parsed.accountShow = parsed.accountShow === "true" || parsed.accountShow === true;
@@ -467,7 +445,6 @@ export function parseNavbarComponentSettings(type: string, settings: any) {
     parsed.enableGlassmorphism = parsed.enableGlassmorphism === "true" || parsed.enableGlassmorphism === true;
 
     // Fallback options
-    if (!parsed.topBannerText) parsed.topBannerText = " Kathmandu, Nepal  ·  FAQs  ·  Privacy Policy  ·  📞 +077 981-8085380";
     if (!parsed.topLeftWidth) parsed.topLeftWidth = "auto";
     if (!parsed.topLeftAlign) parsed.topLeftAlign = "start";
     if (!parsed.topMiddleWidth) parsed.topMiddleWidth = "flex-grow";
