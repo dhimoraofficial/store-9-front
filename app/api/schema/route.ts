@@ -1,18 +1,17 @@
-import { APP } from "@/app";
 import { connectToDatabase, getLayoutCollection } from "@/application/runtime/db/mongo";
 import { ApplicationLayoutFor, ApplicationLayoutType } from "@/application/runtime/pages/type";
 import { NextRequest, NextResponse } from "next/server";
 import {
-    defaultThemeConfig,
     defaultAnnouncementBar,
-    defaultNavbarSchema,
+    defaultCartSchema,
+    defaultCategorySchema,
+    defaultCheckoutSchema,
     defaultFooterSchema,
     defaultHomepageSchema,
+    defaultNavbarSchema,
     defaultProductSchema,
-    defaultCategorySchema,
-    defaultCartSchema,
-    defaultCheckoutSchema,
-    defaultSearchSchema
+    defaultSearchSchema,
+    defaultThemeConfig
 } from "../../[[...page]]/defaults";
 
 function getDefaultRouteInfo(route: string): { type: string, layout: string } {
@@ -79,8 +78,8 @@ export async function GET(req: NextRequest) {
         const routesCollection = db.collection("routes");
         const configsCollection = db.collection("configs");
 
-        const tenantId = req.headers.get("x-tenant-id") || APP.tenant;
-        const storeId = req.headers.get("x-store-id") || APP.store;
+        const tenantId = req.headers.get("x-tenant-id");
+        const storeId = req.headers.get("x-store-id");
 
         // Scenario 1: Compatibility key parameter lookup
         if (keyParam) {
@@ -325,8 +324,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing key in payload" }, { status: 400 });
         }
 
-        const tenantId = req.headers.get("x-tenant-id") || APP.tenant;
-        const storeId = req.headers.get("x-store-id") || APP.store;
+        const tenantId = req.headers.get("x-tenant-id");
+        const storeId = req.headers.get("x-store-id");
 
         const { db } = await connectToDatabase();
 

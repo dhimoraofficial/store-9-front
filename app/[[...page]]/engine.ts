@@ -2,6 +2,9 @@ import { ThemeConfigs } from "@/application/runtime/builder/ThemeBuilder"
 import { ComponentSchema } from "@/application/runtime/builder/type"
 import { connectToDatabase, getLayoutCollection } from "@/application/runtime/db/mongo"
 import { ApplicationLayout, ApplicationLayoutType, ApplicationRoutes } from "@/application/runtime/pages/type"
+import { headers } from "next/headers"
+import { APP_API } from "@/application/providers/api"
+import { servingProduction } from ".."
 import {
     defaultAnnouncementBar,
     defaultCartSchema,
@@ -329,4 +332,81 @@ export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID: st
 
     // Newly registered tenant fallback: return the curated default theme
     return defaultThemeConfig;
+}
+
+const testHere = 'store9nepal.dhimora.com';
+
+export async function getTenantMetaData() {
+    if (!servingProduction) {
+        return {
+            type: "",
+            error: "",
+            host: "",
+            store: '06a192fd-02b9-7204-9679-63a7404e2e22',
+            tenant: '06a192f0-3743-7aff-9094-dd9e55f17b58',
+            slug: "its-drk-here",
+            domain: "drk.com",
+        }
+    }
+
+
+    // no need of headache if the env is developemnt!!!!!!!
+    const headerMeta = await headers()
+    const host = ((((!servingProduction && testHere) || (headerMeta?.get("host") || headerMeta.get("x-forwarded-host")))?.replace(/^www\./, "")) || "").toLowerCase()
+
+    const isFromAppDashboard = host.match(new RegExp(`^([a-z0-9-_]+)\.admin\.dhimora\.com$`))?.[1] || false
+    const isForDashboard = !isFromAppDashboard && host.includes(".admin.")
+    const isFromApp = !isForDashboard && !isFromAppDashboard && host.match(new RegExp(`^([a-z0-9-_]+)\.dhimora\.com$`))?.[1] || false
+
+
+    let tenant;
+    let lookup_type = "store_domain";
+
+    if (isFromAppDashboard) {
+        tenant = isFromAppDashboard
+        lookup_type = "store_slug"
+    }
+
+    else if (isForDashboard) {
+        tenant = host.replaceAll("admin.", "")
+        lookup_type = "store_domain"
+    }
+
+    else if (isFromApp) {
+        tenant = isFromApp
+        lookup_type = "store_slug"
+    }
+
+    else {
+        tenant = host
+    }
+
+    let response = await APP_API.POST(`/v1/store/lookup`, {
+        "lookup": lookup_type,
+        "tenant": tenant
+    }) as {
+        host: string,
+        type: string,
+        error: string,
+        domain: string,
+        tenant: string,
+        store: string
+        slug: string
+    }
+
+    response["host"] = host
+
+    if (response?.type === "FETCH_ERROR") {
+        response["error"] = "FETCH_ERROR"
+    }
+
+    else if (response?.type === "NOT_FOUND" || response?.error) {
+        response["error"] = "NOT_FOUND"
+    }
+
+    else if (isFromApp && !response?.domain) {
+        response["error"] = "DOMAIN_NOT_REGISTERED"
+    }
+
+    return response
 }

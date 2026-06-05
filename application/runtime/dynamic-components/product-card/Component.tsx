@@ -104,7 +104,7 @@ export default function ProductCardAppDisplay(appProductCard: AppProductCard) {
               }}
             >
               {badges.slice(0, 1).map((badge: string, idx: number) => (
-                <Badge key={idx} variant="solid" color="accent" size="1">
+                <Badge key={idx} variant="solid" size="1" style={{ backgroundColor: "var(--accent)", color: "var(--text-inverted)" }}>
                   {badge}
                 </Badge>
               ))}
@@ -144,7 +144,7 @@ export default function ProductCardAppDisplay(appProductCard: AppProductCard) {
             <Flex align="baseline" gap="1">
               {displayPrice ? (
                 <>
-                  <Text size="3" weight="bold" color="accent">
+                  <Text size="3" weight="bold" style={{ color: "var(--accent)" }}>
                     {displayPrice}
                   </Text>
                   {hasDiscount && productPrice && (

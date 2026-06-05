@@ -301,10 +301,10 @@ export function valdiateComponentSetting(settingConfig: ComponentSettingsSchema,
         verification = verification || settingConfig?.opt?.includes(valString)
     }
 
-    return verification
+    return verification as boolean
 }
 
 export function parseGlobalStyle(stylesList: CSSProperties, styleValue: any, settingConfig: ComponentSettingsSchema) {
-    (stylesList as any)[settingConfig?.as] = styleValue
+    (stylesList as any)[settingConfig?.as!] = styleValue
     return stylesList
 }

@@ -1,4 +1,3 @@
-import { APP } from "@/app";
 import { ApplicationEntityTypes, FilterEntityProductList } from "./type";
 import { requestResponse } from "@/application/providers/api/type";
 import { APP_API } from "@/application/providers/api";

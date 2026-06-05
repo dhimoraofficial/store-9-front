@@ -16,6 +16,14 @@ export const AboutUs = `/about`
 
 export const accountSection = "/account"
 
+const LOCAL_TENANT = "069bacae-67ac-7c54-ab11-a0f05589030d"
+const LOCAL_STORE = "069bacc9-c656-7350-a1da-b120c0a2f42a"
+
+export const APP = {
+    tenant: (servingProduction ? "06999c2f-d339-70e6-b712-66ffd12247f4" : LOCAL_TENANT),
+    store: (servingProduction ? "06999c34-59e4-76dd-9847-344f8723498a" : LOCAL_STORE),
+}
+
 export const appConfigCookieName = "__drk__app_config"
 
 export const AppSlugs = {
