@@ -11,7 +11,7 @@ import {
 import { APP_API } from "@/application/providers/api";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { RootState } from "@/application/runtime/store";
+import { RootState } from "@/bundles/store";
 
 interface RouteInfo {
     route: string;

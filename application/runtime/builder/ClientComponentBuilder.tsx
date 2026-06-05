@@ -1,6 +1,5 @@
 "use client"
 
-import SplashScreen from "@/application/widgets/splash_screen";
 import { Suspense } from "react";
 import { ApplciationActions } from "../actions";
 import { ApplicationActionEvents, ComponentAction, ComponentActionPayload } from "../actions/type";
@@ -65,6 +64,7 @@ function returnComponentAction(actions: ComponentAction | ComponentAction[], run
 
 
 import { interpolateSchema } from "./evaluator";
+import SplashScreen from "@/bundles/widgets/splash_screen";
 
 function ComponentBuilderContent({ schema, context }: { schema: ComponentSchema; context?: any }) {
     if (!schema) return null;

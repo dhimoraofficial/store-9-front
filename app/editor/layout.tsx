@@ -1,10 +1,10 @@
 import "@/app/globals.css";
+import { EditorStoreProvider } from "@/bundles/store/Provider";
+import "@radix-ui/themes/styles.css";
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { NoSuchStore, ServiceUnavailable } from "../Errors";
 import { getApplicationPageRender } from "../[[...page]]/engine";
-import { EditorStoreProvider } from "@/application/runtime/store/Provider";
 import { getTenantMetaData } from "../[[...page]]/page";
-import Script from "next/script";
 
 export default async function ApplicationIndexPage({ params, children }: {
     params: Promise<{

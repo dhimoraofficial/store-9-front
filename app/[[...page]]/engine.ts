@@ -1,19 +1,18 @@
 import { ThemeConfigs } from "@/application/runtime/builder/ThemeBuilder"
 import { ComponentSchema } from "@/application/runtime/builder/type"
-import { ApplicationLayout, ApplicationRoutes, ApplicationLayoutType } from "@/application/runtime/pages/type"
-import { getLayoutCollection, connectToDatabase } from "@/application/runtime/db/mongo"
-import { APP } from "@/app"
+import { connectToDatabase, getLayoutCollection } from "@/application/runtime/db/mongo"
+import { ApplicationLayout, ApplicationLayoutType, ApplicationRoutes } from "@/application/runtime/pages/type"
 import {
-    defaultThemeConfig,
     defaultAnnouncementBar,
-    defaultNavbarSchema,
+    defaultCartSchema,
+    defaultCategorySchema,
+    defaultCheckoutSchema,
     defaultFooterSchema,
     defaultHomepageSchema,
+    defaultNavbarSchema,
     defaultProductSchema,
-    defaultCategorySchema,
-    defaultCartSchema,
-    defaultCheckoutSchema,
-    defaultSearchSchema
+    defaultSearchSchema,
+    defaultThemeConfig
 } from "./defaults"
 
 function getDefaultRouteInfo(route: string): { type: string, layout: string } {

@@ -1,6 +1,6 @@
 
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export async function sleep(seconds = 1) {
     return new Promise(resolve => setTimeout(resolve, (seconds * 1000)));
@@ -39,4 +39,25 @@ export function checkRegX(regx: string | undefined, value: any): boolean | "#1" 
     }
 
     return new RegExp(regx).test(String(value)) ? value : false;
+}
+
+export function formatPrice(price?: number | null, currency: string = "NPR", localCurrencyName: string = "NPR"): string {
+    if (price === undefined || price === null) return '';
+    return new Intl.NumberFormat('en-NP', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 0,
+    })
+        .format(price)
+        .replaceAll(currency, localCurrencyName)
+}
+
+export function getInitials(name = ''): string {
+    return name
+        .split(' ')
+        .filter(Boolean)
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
 }

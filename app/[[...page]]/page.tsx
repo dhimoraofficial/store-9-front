@@ -1,22 +1,36 @@
 import "@/app/globals.css";
+import { APP_API } from "@/application/providers/api";
 import Application from '@/application/providers/wrappers/Application';
 import ComponentBuilder from "@/application/runtime/builder/ComponentBuilder";
 import ThemeBuilder from "@/application/runtime/builder/ThemeBuilder";
 import { ApplicationLayout, ApplicationRoutes } from "@/application/runtime/pages/type";
-import { notFound, permanentRedirect, redirect } from 'next/navigation';
+import { headers } from "next/headers";
+import { permanentRedirect, redirect } from 'next/navigation';
+import { servingProduction } from "..";
+import { NoSuchStore, ServiceUnavailable } from "../Errors";
 import { DEFAULT_THEME, getAppGlobalComponent, getApplicationPageRender, getTenantThemeConfig } from './engine';
 import { ApplicationIndexParams } from './types';
-import { headers } from "next/headers";
-import { servingProduction } from "..";
-import { APP_API } from "@/application/providers/api";
-import { NoSuchStore, ServiceUnavailable } from "../Errors";
-import Script from "next/script";
-import ProductPageController from "@/app/run-product/controller";
-import CategoryPageController from "@/app/run-category/controller";
+import CategoryPageController from "@/application/runtime/run-category/controller";
+import ProductPageController from "@/application/runtime/run-product/controller";
+import { EditorStoreProvider } from "@/bundles/store/Provider";
 
 const testHere = 'store9nepal.dhimora.com';
 
 export async function getTenantMetaData() {
+    if (!servingProduction) {
+        return {
+            type: "",
+            error: "",
+            host: "",
+            store: '06a192fd-02b9-7204-9679-63a7404e2e22',
+            tenant: '06a192f0-3743-7aff-9094-dd9e55f17b58',
+            slug: "its-drk-here",
+            domain: "drk.com",
+        }
+    }
+
+
+    // no need of headache if the env is developemnt!!!!!!!
     const headerMeta = await headers()
     const host = ((((!servingProduction && testHere) || (headerMeta?.get("host") || headerMeta.get("x-forwarded-host")))?.replace(/^www\./, "")) || "").toLowerCase()
 
@@ -198,18 +212,27 @@ export default async function ApplicationIndexPage({ params, searchParams }: App
         return pageRoute?.code === 301 ? permanentRedirect(pageRoute?.to!) : redirect(pageRoute?.to!)
     }
 
+    const tenantInfo = response ? {
+        domain: response.domain,
+        slug: response.slug,
+        store: response.store,
+        tenant: response.tenant
+    } : null;
+
     // return the main content, break downed all the pages into x
     return <html lang='en'>
         <head>
             {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
         </head>
         <body className="bg">
-            <ApplicationBuildPage
-                tenant={response.tenant}
-                store={response.store}
-                layout={pageLayout as ApplicationLayout}
-                route={pageRoute as ApplicationRoutes}
-            />
+            <EditorStoreProvider tenantInfo={tenantInfo}>
+                <ApplicationBuildPage
+                    tenant={response.tenant}
+                    store={response.store}
+                    layout={pageLayout as ApplicationLayout}
+                    route={pageRoute as ApplicationRoutes}
+                />
+            </EditorStoreProvider>
         </body>
     </html>
 }

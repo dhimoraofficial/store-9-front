@@ -1,6 +1,6 @@
 "use client"
 
-import SplashScreen from "@/application/widgets/splash_screen"
+import SplashScreen from "@/bundles/widgets/splash_screen"
 import { useSession } from "next-auth/react"
 import { useEffect } from "react"
 

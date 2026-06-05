@@ -34,10 +34,68 @@ export type ComponentSchemaSettings = {
 }
 
 export interface ComponentSettingsSchema {
-    tp: "style" | "prop"
-    as: string
+    /**
+     * The type of settings field:
+     * - "style": Directly maps to CSS styles (e.g. padding, margin, width).
+     * - "prop": Standard component props/options (e.g. text labels, booleans).
+     * - "multiple": Custom array/delimited inputs.
+     * - "map": A repeating array structure containing nested object rows.
+     */
+    tp?: "style" | "prop" | "multiple" | "map"
+
+    /**
+     * The target key alias this setting maps to when rendering the client component.
+     */
+    as?: string
+
+    /**
+     * Regular expression string constraint used to validate the user input value in the editor.
+     */
     rgx?: string
+
+    /**
+     * Pre-defined selection choices rendered as a select menu in the editor sidebar.
+     */
     opt?: string[]
+
+    /**
+     * Prototype map template defining types of properties.
+     */
+    proto?: Record<string, "string" | "number" | "boolean">
+
+    /**
+     * Nested fields configuration used when `tp` is "map" to represent repeating row items.
+     */
+    fields?: ComponentSettingsSchema[]
+
+    /**
+     * Friendly, human-readable display label shown next to the input field in the editor UI.
+     */
+    name?: string
+
+    /**
+     * Detailed description or tooltip explanation displayed on hover to help administrators.
+     */
+    description?: string
+
+    /**
+     * Category group tag name (e.g. "banner", "branding"). 
+     * Fields sharing the same group are grouped under collapsible panel folders in the sidebar.
+     */
+    group?: string
+
+    /**
+     * Conditional visibility rule. The field is only displayed in the editor sidebar 
+     * if the condition evaluates to true based on other settings' current values.
+     */
+    condition?: {
+        /** The dependent field key to monitor. */
+        for: string;
+        /** Allowed values (multiple choices). */
+        opt?: string[];
+        /** A specific single matching value. */
+        val?: string;
+    }[]
 }
 
 export type ComponentGlobalSchemaSettingsMapType = Partial<Record<Partial<keyof ComponentSchemaSettings>, ComponentSettingsSchema | ComponentSettingsSchema[]>>
@@ -198,23 +256,55 @@ export const ComponentGlobalSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
     },
 }
 
-export function valdiateComponentSetting(settingConfig: ComponentSettingsSchema, settingValue: string) {
+export function valdiateComponentSetting(settingConfig: ComponentSettingsSchema, settingValue: any): boolean {
+    if (settingConfig?.tp === "map") {
+        if (settingValue === undefined || settingValue === null) {
+            return true;
+        }
+        if (!Array.isArray(settingValue)) {
+            return false;
+        }
+        if (!settingConfig.fields) {
+            return true;
+        }
+        for (const item of settingValue) {
+            if (typeof item !== "object" || item === null) {
+                return false;
+            }
+            for (const subField of settingConfig.fields) {
+                if (subField.tp === "map") {
+                    const nestedValue = subField.as ? item[subField.as] : undefined;
+                    if (!valdiateComponentSetting(subField, nestedValue)) {
+                        return false;
+                    }
+                } else if (subField.as) {
+                    const subValue = item[subField.as];
+                    if (!valdiateComponentSetting(subField, subValue)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     if (!settingConfig?.rgx && !settingConfig?.opt) {
         return true;
     }
-    let verification = checkRegX(settingConfig?.rgx, settingValue)
+    const valString = String(settingValue ?? "");
+    if (valString === "") {
+        return true;
+    }
+    let verification = checkRegX(settingConfig?.rgx, valString)
 
     if (settingConfig?.opt) {
-        verification = verification || settingConfig?.opt?.includes(settingValue)
+        verification = verification || settingConfig?.opt?.includes(valString)
     }
 
     return verification
 }
 
 export function parseGlobalStyle(stylesList: CSSProperties, styleValue: any, settingConfig: ComponentSettingsSchema) {
-    if (valdiateComponentSetting(settingConfig, styleValue)) {
-        (stylesList as any)[settingConfig?.as] = styleValue
-    }
-
+    (stylesList as any)[settingConfig?.as] = styleValue
     return stylesList
 }

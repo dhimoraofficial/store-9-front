@@ -1,6 +1,7 @@
 "use client"
 
 import { ReactNode, useEffect, useMemo } from 'react'
+import { Theme } from "@radix-ui/themes";
 
 export interface ThemeConfigs {
     primary: string
@@ -67,5 +68,7 @@ export default function ThemeBuilder({ children, themeConfigs }: {
         // Clean up or reset if necessary when tenant changes
     }, [cssVariables]);
 
-    return children
+    return <Theme>
+        {children}
+    </Theme>
 }

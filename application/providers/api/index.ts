@@ -79,6 +79,8 @@ async function request(
             cache: "default"
         })
     } catch (e: any) {
+        console.log(URL);
+        
         throw e
         // If execution reaches here, fetch itself failed.
         // No HTTP status exists because request never completed.

@@ -1,7 +1,9 @@
 import React from 'react'
 
 export default function notFound() {
-    return <>
-        NOT FOUND!!!
-    </>
+    return <html>
+        <body>
+            NOT FOUND!!!
+        </body>
+    </html>
 }

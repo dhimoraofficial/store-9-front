@@ -1,85 +1,35 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/application/runtime/store";
-import { EditorStoreProvider } from "@/application/runtime/store/Provider";
-import {
-    setSchemas,
-    selectNode,
-    updateNodeSettings,
-    updateNodeAction,
-    updateNodeLabel,
-    deleteNode,
-    addNode,
-    moveNode,
-    setTheme,
-    setStatus,
-    setError,
-} from "@/application/runtime/store/editorSlice";
 import { APP_API } from "@/application/providers/api";
-import EditorPreviewBuilder from "@/application/runtime/builder/EditorPreviewBuilder";
 import ThemeBuilder from "@/application/runtime/builder/ThemeBuilder";
 import { ComponentSchema } from "@/application/runtime/builder/type";
-import CanvasViewport from "../CanvasViewport";
-import * as Dialog from "@radix-ui/react-dialog";
-import * as Tabs from "@radix-ui/react-tabs";
 import {
-    Plus,
-    X,
-    Layout,
-    Search,
-    Settings2,
-    Sliders,
-    Laptop,
-    Code2,
-    Link,
-    AlignLeft,
-    Layers,
-    Image as ImageIcon,
-    Square,
-    MessageCircle,
-    Grid,
-    CreditCard,
-    Maximize2,
-    Sidebar,
-    ListCollapse,
-    Folder,
-    Pin,
-    Columns,
-    Type,
-    Sparkles,
-    ArrowUpDown,
-    Minus,
-    Video,
-    Star,
-    Tag,
-    Code,
-    Percent,
-    MapPin,
-    DollarSign,
-    Clock,
-    FileText,
-    CheckSquare,
-    Radio,
-    ChevronDown,
-    Hash,
-    ShoppingBag,
-    FolderOpen,
-    ShoppingCart,
-    Images,
-    Upload,
-    Copy,
-    Check
-} from "lucide-react";
+    addNode,
+    deleteNode,
+    moveNode,
+    selectNode,
+    setError,
+    setSchemas,
+    setStatus,
+    setTheme,
+    updateNodeAction,
+    updateNodeLabel,
+    updateNodeSettings,
+} from "@/bundles/store/editorSlice";
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import CanvasViewport from "../CanvasViewport";
 
+import EditorPreviewBuilder from "@/application/runtime/builder/EditorPreviewBuilder";
+import { RootState } from "@/bundles/store";
 import EditorHeader, { ViewportMode } from "../EditorHeader";
+import SidebarLeft from "../sidebar-left";
+import SidebarRight from "../sidebar-right";
 import AddComponentDialog from "./AddComponentDialog";
 import ImportSchemaDialog from "./ImportSchemaDialog";
-import SidebarLeft from "../SidebarLeft";
-import SidebarRight from "../sidebar-right";
+import { valdiateComponentSetting } from "@/application/runtime/dynamic-components/core";
 
 const VIEWPORT_WIDTHS: Record<ViewportMode, string> = {
     desktop: "100%",
@@ -322,16 +272,13 @@ function ThemeEditorWorkspace() {
         toast.success(`Added: ${type}`);
     };
 
-    const handleUpdateSetting = (settingKey: string, val: string, settingConfig: any) => {
+    const handleUpdateSetting = (settingKey: string, val: any, settingConfig: any) => {
         if (!selectedNode) return;
         let isValid = true;
         if (settingConfig) {
             const activeConfig = Array.isArray(settingConfig) ? settingConfig[0] : settingConfig;
-            const { rgx, opt } = activeConfig || {};
-            if (rgx) {
-                isValid = new RegExp(rgx).test(val) || (opt?.includes(val)) || val === "";
-            } else if (opt) {
-                isValid = opt.includes(val) || val === "";
+            if (activeConfig) {
+                isValid = valdiateComponentSetting(activeConfig, val);
             }
         }
         const newErrors = { ...validationErrors };
@@ -340,8 +287,11 @@ function ThemeEditorWorkspace() {
         setValidationErrors(newErrors);
 
         const settings = { ...(selectedNode.settings || {}) };
-        if (val === "") delete settings[settingKey];
-        else settings[settingKey] = val;
+        if (val === "" || (Array.isArray(val) && val.length === 0)) {
+            delete settings[settingKey];
+        } else {
+            settings[settingKey] = val;
+        }
         dispatch(updateNodeSettings({ id: selectedNode.id, settings }));
     };
 

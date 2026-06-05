@@ -1,7 +1,5 @@
-import React from 'react'
+import SplashScreen from "@/bundles/widgets/splash_screen";
 
 export default function loading() {
-    return (
-        <div>loading...</div>
-    )
+    return <SplashScreen />
 }

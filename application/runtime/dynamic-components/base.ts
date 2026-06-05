@@ -83,10 +83,10 @@ function parseGenericComponentSettings(type: string, settings: ComponentSchemaSe
             if (config?.tp === "style") {
                 finalStyles = {
                     ...finalStyles,
-                    [config.as]: settingValue
+                    [config.as!]: settingValue
                 };
-            } else if (config?.tp === "prop") {
-                newSettings[config.as] = settingValue;
+            } else if (config?.tp === "prop" || config?.tp === "map") {
+                newSettings[config.as!] = settingValue;
             }
         }
     }
@@ -100,7 +100,11 @@ export function getParsedSettings(type: BaseTypes, settings: ComponentSchemaSett
     let parsedSettings: ComponentSchemaSettings = parseGlobalComponentSettings(settings) as ComponentSchemaSettings;
     parsedSettings = parseGenericComponentSettings(type, parsedSettings);
 
-
+    const resolvedType = COMPONENT_KEY_ALIASES[type] || type;
+    const entry = ComponentAllSchemaSettingsMap[resolvedType];
+    if (entry && "parse" in entry && typeof entry.parse === "function") {
+        parsedSettings = entry.parse(resolvedType, parsedSettings);
+    }
 
     return parsedSettings;
 }

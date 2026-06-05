@@ -171,7 +171,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
                 }}
             >
                 <div 
-                    className="border-zinc-200 border bg-white my-10"
+                    className="__drk_editor__ border-zinc-200 border bg-white my-10"
                     style={{
                         width: viewportWidth,
                         height: "auto",

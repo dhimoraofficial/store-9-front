@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { ComponentSchema } from "./type";
+import { RootState } from "@/bundles/store";
+import { selectNode } from "@/bundles/store/editorSlice";
+import React, { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ComponentAllSchemaSettingsMap } from "../dynamic-components";
 import { COMPONENT_KEY_ALIASES } from "../dynamic-components/aliases";
 import { getParsedSettings } from "../dynamic-components/base";
 import { ComponentSchemaSettings } from "../dynamic-components/core";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { selectNode } from "../store/editorSlice";
+import { ComponentSchema } from "./type";
 
 export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchema }) {
     // ALL hooks MUST be called before any conditional returns (Rules of Hooks)
