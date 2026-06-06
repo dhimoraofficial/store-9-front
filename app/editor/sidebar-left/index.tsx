@@ -7,6 +7,7 @@ import { ComponentSchema } from "@/application/runtime/builder/type";
 import TreeNode from "./TreeNode";
 
 interface SidebarLeftProps {
+    width?: number;
     schemas: {
         announcement: ComponentSchema[];
         navbar: ComponentSchema[];
@@ -24,6 +25,7 @@ interface SidebarLeftProps {
 }
 
 export default function SidebarLeft({
+    width = 270,
     schemas,
     selectedNodeId,
     componentSettingsMap,
@@ -45,7 +47,10 @@ export default function SidebarLeft({
     const [navOpen, setNavOpen] = useState(true);
 
     return (
-        <aside className="w-[270px] bg-white border-r border-zinc-200 flex flex-col shrink-0 h-full select-none overflow-hidden">
+        <aside 
+            style={{ width: `${width}px` }}
+            className="bg-white border-r border-zinc-200 flex flex-col shrink-0 h-full select-none overflow-hidden"
+        >
             <ScrollArea.Root className="flex-1 h-full overflow-hidden">
                 <ScrollArea.Viewport className="h-full w-full">
                     <div className="flex flex-col min-w-full w-max">

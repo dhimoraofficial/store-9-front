@@ -32,7 +32,7 @@ import ImportSchemaDialog from "./ImportSchemaDialog";
 import { valdiateComponentSetting } from "@/application/runtime/dynamic-components/core";
 
 const VIEWPORT_WIDTHS: Record<ViewportMode, string> = {
-    desktop: "100%",
+    desktop: "1280px",
     tablet: "768px",
     mobile: "375px",
 };
@@ -63,6 +63,76 @@ function ThemeEditorWorkspace() {
     const [allRoutes, setAllRoutes] = useState<any[]>([]);
     const [viewport, setViewport] = useState<ViewportMode>("desktop");
     const [isThemeOpen, setIsThemeOpen] = useState(false);
+
+    const [leftWidth, setLeftWidth] = useState(270);
+    const [rightWidth, setRightWidth] = useState(300);
+    const [sidebarDark, setSidebarDark] = useState<boolean>(() => {
+        if (typeof window !== "undefined") {
+            return localStorage.getItem("sidebarDark") !== "false";
+        }
+        return true;
+    });
+
+    useEffect(() => {
+        const savedLeft = localStorage.getItem("editor-sidebar-left-width");
+        if (savedLeft) setLeftWidth(parseInt(savedLeft, 10));
+
+        const savedRight = localStorage.getItem("editor-sidebar-right-width");
+        if (savedRight) setRightWidth(parseInt(savedRight, 10));
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("sidebarDark", String(sidebarDark));
+        if (typeof document !== "undefined") {
+            if (sidebarDark) {
+                document.documentElement.classList.add("figma-dark");
+            } else {
+                document.documentElement.classList.remove("figma-dark");
+            }
+        }
+    }, [sidebarDark]);
+
+    const startResizeLeft = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const startX = e.clientX;
+        const startWidth = leftWidth;
+
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const currentX = moveEvent.clientX;
+            const newWidth = Math.max(200, Math.min(500, startWidth + (currentX - startX)));
+            setLeftWidth(newWidth);
+            localStorage.setItem("editor-sidebar-left-width", String(newWidth));
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    };
+
+    const startResizeRight = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const startX = e.clientX;
+        const startWidth = rightWidth;
+
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const currentX = moveEvent.clientX;
+            const newWidth = Math.max(250, Math.min(600, startWidth - (currentX - startX)));
+            setRightWidth(newWidth);
+            localStorage.setItem("editor-sidebar-right-width", String(newWidth));
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    };
 
     const [addingToParentId, setAddingToParentId] = useState<string | null>(null);
     const [addingToSection, setAddingToSection] = useState<"header" | "main" | "footer" | "global" | null>(null);
@@ -334,7 +404,7 @@ function ThemeEditorWorkspace() {
 
 
     return (
-        <div className="h-screen flex flex-col bg-white font-sans text-zinc-800 antialiased overflow-hidden">
+        <div className={`h-screen flex flex-col font-sans antialiased overflow-hidden transition-colors duration-150 ${sidebarDark ? "figma-dark bg-[#1e1e1e]" : "bg-white text-zinc-800"}`}>
             <EditorHeader
                 currentRoute={routePath}
                 routes={allRoutes}
@@ -355,67 +425,101 @@ function ThemeEditorWorkspace() {
                         dispatch(selectNode(null));
                     }
                 }}
+                sidebarDark={sidebarDark}
+                onToggleSidebarDark={() => setSidebarDark(!sidebarDark)}
             />
 
-            <main className="flex-1 flex overflow-hidden min-h-0 bg-[#f4f5f7]">
+            <main className="flex-1 relative overflow-hidden min-h-0 bg-[#f4f5f7]">
+                {/* Center: Preview Workspace (Zoomable and Movable Canvas) */}
+                <div className="absolute inset-0 z-0">
+                    <CanvasViewport viewportWidth={VIEWPORT_WIDTHS[viewport]}>
+                        <ThemeBuilder themeConfigs={theme || {}}>
+                            <div className="w-full h-auto">
+                                {schemas.announcement && <EditorPreviewBuilder schema={schemas.announcement} />}
+                                {schemas.navbar && <EditorPreviewBuilder schema={schemas.navbar} />}
+
+                                {schemas.main && (schemas.main.length > 0) && (
+                                    <EditorPreviewBuilder schema={schemas.main} />
+                                )}
+
+                                {schemas.footer && <EditorPreviewBuilder schema={schemas.footer} />}
+                                {schemas.whatsAppButton && <EditorPreviewBuilder schema={schemas.whatsAppButton} />}
+                            </div>
+                        </ThemeBuilder>
+                    </CanvasViewport>
+                </div>
+
                 {/* Left sidebar */}
-                <SidebarLeft
-                    schemas={schemas}
-                    selectedNodeId={selectedNodeId}
-                    componentSettingsMap={componentSettingsMap}
-                    onSelectNode={(id) => {
-                        dispatch(selectNode(id));
-                        if (id) setIsThemeOpen(false);
-                    }}
-                    onMoveNode={(id, dir) => dispatch(moveNode({ id, direction: dir }))}
-                    onDeleteNode={(id) => {
-                        dispatch(deleteNode({ id }));
-                        if (selectedNodeId === id) dispatch(selectNode(null));
-                        toast.success("Removed");
-                    }}
-                    onAddBlockTrigger={triggerAddPopup}
-                    onImportSchemaTrigger={triggerImportPopup}
+                <div 
+                    style={{ width: `${leftWidth}px` }} 
+                    className={`absolute left-0 top-0 bottom-0 z-20 flex flex-col shadow-md transition-colors duration-150 ${sidebarDark ? "figma-dark" : "bg-white"}`}
+                >
+                    <SidebarLeft
+                        width={leftWidth}
+                        schemas={schemas}
+                        selectedNodeId={selectedNodeId}
+                        componentSettingsMap={componentSettingsMap}
+                        onSelectNode={(id) => {
+                            dispatch(selectNode(id));
+                            if (id) setIsThemeOpen(false);
+                        }}
+                        onMoveNode={(id, dir) => dispatch(moveNode({ id, direction: dir }))}
+                        onDeleteNode={(id) => {
+                            dispatch(deleteNode({ id }));
+                            if (selectedNodeId === id) dispatch(selectNode(null));
+                            toast.success("Removed");
+                        }}
+                        onAddBlockTrigger={triggerAddPopup}
+                        onImportSchemaTrigger={triggerImportPopup}
+                    />
+                </div>
+
+                {/* Left resize handle */}
+                <div 
+                    style={{ left: `${leftWidth}px` }}
+                    className="absolute top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-zinc-300/60 active:bg-zinc-400/80 transition-colors z-30 border-l border-r border-transparent" 
+                    onMouseDown={startResizeLeft}
                 />
 
-                {/* Center: Preview Workspace (Zoomable and Movable Canvas) */}
-                <CanvasViewport viewportWidth={VIEWPORT_WIDTHS[viewport]}>
-                    <ThemeBuilder themeConfigs={theme || {}}>
-                        <div className="w-full h-auto">
-                            {schemas.announcement && <EditorPreviewBuilder schema={schemas.announcement} />}
-                            {schemas.navbar && <EditorPreviewBuilder schema={schemas.navbar} />}
-
-                            {schemas.main && (schemas.main.length > 0) && (
-                                <EditorPreviewBuilder schema={schemas.main} />
-                            )}
-
-                            {schemas.footer && <EditorPreviewBuilder schema={schemas.footer} />}
-                            {schemas.whatsAppButton && <EditorPreviewBuilder schema={schemas.whatsAppButton} />}
-                        </div>
-                    </ThemeBuilder>
-                </CanvasViewport>
+                {/* Right resize handle */}
+                {(selectedNode || isThemeOpen) && (
+                    <div 
+                        style={{ right: `${rightWidth}px` }}
+                        className="absolute top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-zinc-300/60 active:bg-zinc-400/80 transition-colors z-30 border-l border-r border-transparent" 
+                        onMouseDown={startResizeRight}
+                    />
+                )}
 
                 {/* Right sidebar */}
-                <SidebarRight
-                    selectedNode={selectedNode}
-                    isThemeOpen={isThemeOpen}
-                    onCloseTheme={() => setIsThemeOpen(false)}
-                    componentSettingsMap={componentSettingsMap}
-                    theme={theme}
-                    validationErrors={validationErrors}
-                    onUpdateSetting={handleUpdateSetting}
-                    onUpdateLabel={(id, label) => dispatch(updateNodeLabel({ id, label: label || null }))}
-                    onUpdateTheme={(updates) => dispatch(setTheme(updates))}
-                    onUpdateAction={(id, action) => dispatch(updateNodeAction({ id, action }))}
-                    onDeleteNode={(id) => {
-                        dispatch(deleteNode({ id }));
-                        dispatch(selectNode(null));
-                        toast.success("Removed");
-                    }}
-                    onSelectNode={(id) => {
-                        dispatch(selectNode(id));
-                        if (id) setIsThemeOpen(false);
-                    }}
-                />
+                {(selectedNode || isThemeOpen) && (
+                    <div 
+                        style={{ width: `${rightWidth}px` }} 
+                        className={`absolute right-0 top-0 bottom-0 z-20 flex flex-col shadow-md transition-colors duration-150 ${sidebarDark ? "figma-dark" : "bg-white"}`}
+                    >
+                        <SidebarRight
+                            width={rightWidth}
+                            selectedNode={selectedNode}
+                            isThemeOpen={isThemeOpen}
+                            onCloseTheme={() => setIsThemeOpen(false)}
+                            componentSettingsMap={componentSettingsMap}
+                            theme={theme}
+                            validationErrors={validationErrors}
+                            onUpdateSetting={handleUpdateSetting}
+                            onUpdateLabel={(id, label) => dispatch(updateNodeLabel({ id, label: label || null }))}
+                            onUpdateTheme={(updates) => dispatch(setTheme(updates))}
+                            onUpdateAction={(id, action) => dispatch(updateNodeAction({ id, action }))}
+                            onDeleteNode={(id) => {
+                                dispatch(deleteNode({ id }));
+                                dispatch(selectNode(null));
+                                toast.success("Removed");
+                            }}
+                            onSelectNode={(id) => {
+                                dispatch(selectNode(id));
+                                if (id) setIsThemeOpen(false);
+                            }}
+                        />
+                    </div>
+                )}
             </main>
 
             {/* Add Component Dialog */}

@@ -87,6 +87,7 @@ interface EcommerceNavbarProps {
     mobileLogoAlign?: "left" | "center";
     mobileSearchPosition?: "header" | "drawer" | "hidden";
     mobileUtilitiesPosition?: "header" | "drawer" | "hidden";
+    style?: React.CSSProperties;
 }
 
 export default function ClientComponent({
@@ -133,7 +134,8 @@ export default function ClientComponent({
     mobileTriggerAlign = "right",
     mobileLogoAlign = "left",
     mobileSearchPosition = "drawer",
-    mobileUtilitiesPosition = "header"
+    mobileUtilitiesPosition = "header",
+    style
 }: EcommerceNavbarProps) {
     const tenantInfo = useSelector((state: any) => state.editor?.tenantInfo);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -159,11 +161,11 @@ export default function ClientComponent({
     };
 
     const getCleanBrandName = () => {
-        return sanitizeBrandName(brandName) || sanitizeBrandName(tenantInfo?.store) || "STOREFRONT";
+        return sanitizeBrandName(brandName) || sanitizeBrandName(tenantInfo?.store) || "";
     };
 
     const getCleanBrandSlogan = () => {
-        return sanitizeBrandName(brandSlogan) || sanitizeBrandName(tenantInfo?.slug) || "";
+        return sanitizeBrandName(brandSlogan) || "";
     };
 
     // Search bar width presets
@@ -241,16 +243,20 @@ export default function ClientComponent({
                     </div>
                 )}
                 
-                <div className="flex flex-col leading-tight min-w-0">
-                    <span className="text-base font-bold text-foreground tracking-tight uppercase group-hover:text-primary transition-colors truncate">
-                        {cleanName}
-                    </span>
-                    {cleanSlogan && (
-                        <span className="text-[9px] text-muted-foreground font-semibold tracking-wider uppercase truncate">
-                            {cleanSlogan.toUpperCase()}
-                        </span>
-                    )}
-                </div>
+                {(cleanName || cleanSlogan) && (
+                    <div className="flex flex-col leading-tight min-w-0">
+                        {cleanName && (
+                            <span className="text-base font-bold text-foreground tracking-tight uppercase group-hover:text-primary transition-colors truncate">
+                                {cleanName}
+                            </span>
+                        )}
+                        {cleanSlogan && (
+                            <span className="text-[9px] text-muted-foreground font-semibold tracking-wider uppercase truncate">
+                                {cleanSlogan.toUpperCase()}
+                            </span>
+                        )}
+                    </div>
+                )}
             </a>
         );
     };
@@ -309,16 +315,20 @@ export default function ClientComponent({
                                 {wBrandName ? wBrandName.charAt(0) : "S"}
                             </div>
                         )}
-                        <div className="flex flex-col leading-tight min-w-0">
-                            <span className="text-base font-bold text-foreground tracking-tight uppercase group-hover:text-primary transition-colors truncate">
-                                {wBrandName}
-                            </span>
-                            {wBrandSlogan && (
-                                <span className="text-[9px] text-muted-foreground font-semibold tracking-wider uppercase truncate">
-                                    {wBrandSlogan.toUpperCase()}
-                                </span>
-                            )}
-                        </div>
+                        {(wBrandName || wBrandSlogan) && (
+                            <div className="flex flex-col leading-tight min-w-0">
+                                {wBrandName && (
+                                    <span className="text-base font-bold text-foreground tracking-tight uppercase group-hover:text-primary transition-colors truncate">
+                                        {wBrandName}
+                                    </span>
+                                )}
+                                {wBrandSlogan && (
+                                    <span className="text-[9px] text-muted-foreground font-semibold tracking-wider uppercase truncate">
+                                        {wBrandSlogan.toUpperCase()}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </a>
                 );
             }
@@ -466,7 +476,7 @@ export default function ClientComponent({
         (bottomRightWidgets && bottomRightWidgets.length > 0);
 
     return (
-        <header className={baseContainerClass} style={customBgStyle}>
+        <header className={baseContainerClass} style={{ ...customBgStyle, ...style }}>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
                 
                 {/* Desktop View Header Bar */}

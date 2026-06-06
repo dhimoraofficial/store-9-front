@@ -13,10 +13,16 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const [isSpacePressed, setIsSpacePressed] = useState(false);
+    const [isAutoFit, setIsAutoFit] = useState(true);
+    const [containerWidth, setContainerWidth] = useState(0);
     
     const containerRef = useRef<HTMLDivElement>(null);
     const dragStartRef = useRef({ x: 0, y: 0 });
     const posStartRef = useRef({ x: 0, y: 0 });
+
+    const targetWidth = typeof viewportWidth === "number" 
+        ? viewportWidth 
+        : parseInt(viewportWidth, 10) || 1280;
 
     // Track Spacebar key for Figma-style space+drag panning
     useEffect(() => {
@@ -42,6 +48,33 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
         };
     }, []);
 
+    // Monitor container size dynamically to allow auto-fitting
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                setContainerWidth(entry.contentRect.width);
+            }
+        });
+
+        observer.observe(container);
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    // Perform auto-fit calculation when container size or target viewport changes
+    useEffect(() => {
+        if (!isAutoFit || containerWidth <= 0) return;
+
+        const margin = 48;
+        const availableWidth = containerWidth - margin;
+        const fitScale = Math.min(0.9, Math.max(0.15, availableWidth / targetWidth));
+        setScale(fitScale);
+    }, [isAutoFit, containerWidth, targetWidth]);
+
     // Wheel event listener for trackpad panning and zooming
     useEffect(() => {
         const container = containerRef.current;
@@ -64,6 +97,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
                 const dx = mouseX - position.x;
                 const dy = mouseY - position.y;
                 
+                setIsAutoFit(false); // Disable auto-fit when manually zooming
                 setPosition({
                     x: mouseX - dx * (finalScale / scale),
                     y: mouseY - dy * (finalScale / scale)
@@ -121,21 +155,27 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
     };
 
     const handleZoomIn = () => {
+        setIsAutoFit(false);
         setScale((prev) => Math.min(prev * 1.2, 3));
     };
 
     const handleZoomOut = () => {
+        setIsAutoFit(false);
         setScale((prev) => Math.max(prev / 1.2, 0.15));
     };
 
     const handleReset = () => {
+        setIsAutoFit(false);
         setScale(1);
         setPosition({ x: 0, y: 0 });
     };
 
     const handleFit = () => {
+        setIsAutoFit(true);
         if (!containerRef.current) return;
-        setScale(0.85);
+        const availableWidth = containerRef.current.clientWidth - 48;
+        const fitScale = Math.min(0.9, Math.max(0.15, availableWidth / targetWidth));
+        setScale(fitScale);
         setPosition({ x: 0, y: 20 });
     };
 
@@ -171,9 +211,10 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
                 }}
             >
                 <div 
-                    className="__drk_editor__ border-zinc-200 border bg-white my-10"
+                    className="__drk_editor__ storefront-canvas border-zinc-200 border bg-white my-10"
                     style={{
                         width: viewportWidth,
+                        minWidth: viewportWidth === "1280px" ? "1024px" : undefined,
                         height: "auto",
                         pointerEvents: "auto"
                     }}

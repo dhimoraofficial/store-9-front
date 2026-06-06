@@ -14,6 +14,7 @@ interface SetupBannerProps {
     rightAlign?: string;
     className?: string;
     children?: React.ReactNode;
+    style?: React.CSSProperties;
 }
 
 export default function ClientComponent({
@@ -26,7 +27,8 @@ export default function ClientComponent({
     rightWidth = "6",
     rightAlign = "start",
     className = "",
-    children
+    children,
+    style
 }: SetupBannerProps) {
     const childrenArray = React.Children.toArray(children);
 
@@ -97,7 +99,8 @@ export default function ClientComponent({
     };
 
     const customStyles: React.CSSProperties = {
-        height: height || undefined
+        height: height || undefined,
+        ...style
     };
 
     const renderGridStructure = () => {

@@ -12,6 +12,7 @@ interface AnnouncementBarProps {
     layout?: "1-column" | "3-column";
     className?: string;
     children?: React.ReactNode;
+    style?: React.CSSProperties;
 }
 
 export default function ClientComponent({
@@ -22,7 +23,8 @@ export default function ClientComponent({
     mobileShow = "true",
     layout = "3-column",
     className = "",
-    children
+    children,
+    style
 }: AnnouncementBarProps) {
     const childrenArray = React.Children.toArray(children);
 
@@ -54,7 +56,8 @@ export default function ClientComponent({
     };
 
     const customStyles: React.CSSProperties = {
-        height: height || undefined
+        height: height || undefined,
+        ...style
     };
 
     if (layout === "1-column") {

@@ -15,6 +15,7 @@ import ComponentActions from "./ComponentActions";
 import { getDialogComponentIcon, LUCIDE_ICONS_MAP } from "../[[...route]]/ComponentMockupPreview";
 
 interface SidebarRightProps {
+    width?: number;
     selectedNode: ComponentSchema | null;
     isThemeOpen: boolean;
     onCloseTheme: () => void;
@@ -33,6 +34,7 @@ const TAB_STYLES = "flex-1 flex items-center justify-center gap-1.5 text-[11px] 
 
 
 export default function SidebarRight({
+    width = 300,
     selectedNode,
     isThemeOpen,
     onCloseTheme,
@@ -53,7 +55,10 @@ export default function SidebarRight({
     if (!selectedNode && !isThemeOpen) return null;
 
     return (
-        <aside className="w-[300px] bg-white border-l border-zinc-200 flex flex-col shrink-0 h-full select-none shadow-sm font-sans">
+        <aside 
+            style={{ width: `${width}px` }}
+            className="bg-white border-l border-zinc-200 flex flex-col shrink-0 h-full select-none shadow-sm font-sans"
+        >
             {selectedNode && (
                 <div className="h-12 border-b border-zinc-100 px-3.5 flex items-center justify-between shrink-0 bg-white">
                     <div className="flex items-center gap-2.5 overflow-hidden">

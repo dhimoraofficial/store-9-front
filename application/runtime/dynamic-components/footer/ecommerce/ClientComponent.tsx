@@ -25,6 +25,7 @@ interface FooterProps {
     mobileGridColumns?: "1" | "2";
     mobileAlignment?: "inherit" | "center" | "left";
     children?: React.ReactNode;
+    style?: React.CSSProperties;
 }
 
 export default function ClientComponent({
@@ -47,7 +48,8 @@ export default function ClientComponent({
     className = "",
     mobileGridColumns = "1",
     mobileAlignment = "inherit",
-    children
+    children,
+    style
 }: FooterProps) {
     const tenantInfo = useSelector((state: any) => state.editor?.tenantInfo);
     const childrenArray = React.Children.toArray(children);
@@ -79,14 +81,14 @@ export default function ClientComponent({
 
     const getWidthClass = (width: string) => {
         switch (width) {
-            case "1": return "lg:w-[15%] lg:flex-1 min-w-[150px] max-w-full";
-            case "2": return "lg:w-[20%] lg:flex-[2] min-w-[180px] max-w-full";
-            case "3": return "lg:w-[25%] lg:flex-[3] min-w-[200px] max-w-full";
-            case "flex-grow": return "lg:w-[35%] lg:flex-grow min-w-[220px] max-w-full";
-            case "flex-1": return "lg:w-[20%] lg:flex-1 min-w-[180px] max-w-full";
+            case "1": return "lg:w-[15%] lg:flex-1 lg:min-w-[150px] max-w-full";
+            case "2": return "lg:w-[20%] lg:flex-[2] lg:min-w-[180px] max-w-full";
+            case "3": return "lg:w-[25%] lg:flex-[3] lg:min-w-[200px] max-w-full";
+            case "flex-grow": return "lg:w-[35%] lg:flex-grow lg:min-w-[220px] max-w-full";
+            case "flex-1": return "lg:w-[20%] lg:flex-1 lg:min-w-[180px] max-w-full";
             case "auto":
             default:
-                return "lg:w-auto flex-initial min-w-[150px] max-w-full";
+                return "lg:w-auto flex-initial lg:min-w-[150px] max-w-full";
         }
     };
 
@@ -138,14 +140,14 @@ export default function ClientComponent({
     const showCol5 = col5Slot.length > 0;
 
     return (
-        <footer className={cx("w-full border-t py-12 md:py-16 transition-colors duration-200", themeClasses[theme], className)}>
+        <footer style={style} className={cx("w-full border-t py-12 md:py-16 transition-colors duration-200", themeClasses[theme], className)}>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
                 
                 {/* Main dynamic layout columns grid */}
                 <div className={cx(
                     mobileGridColumns === "2"
                         ? "grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row gap-8 lg:gap-10 justify-between w-full"
-                        : "flex flex-col lg:flex-row gap-8 lg:gap-10 flex-wrap justify-between"
+                        : "flex flex-col lg:flex-row gap-8 lg:gap-10 lg:flex-wrap justify-between"
                 )}>
                     {showCol1 && renderSlot(col1Slot, col1Width, col1Align)}
                     {showCol2 && renderSlot(col2Slot, col2Width, col2Align)}

@@ -3,7 +3,7 @@
 import React from "react";
 import {
     Save, Undo2, Redo2, Monitor, Smartphone, Tablet,
-    Palette, Loader2, AlertCircle, Eye
+    Palette, Loader2, AlertCircle, Eye, Moon
 } from "lucide-react";
 import * as Separator from "@radix-ui/react-separator";
 import * as Tooltip from "@radix-ui/react-tooltip";
@@ -22,6 +22,8 @@ interface EditorHeaderProps {
     onRouteLoaded?: () => void;
     isThemeOpen: boolean;
     onToggleTheme: () => void;
+    sidebarDark: boolean;
+    onToggleSidebarDark: () => void;
 }
 
 function Tip({ children, label }: { children: React.ReactNode; label: string }) {
@@ -52,6 +54,8 @@ export default function EditorHeader({
     onRouteLoaded,
     isThemeOpen,
     onToggleTheme,
+    sidebarDark,
+    onToggleSidebarDark,
 }: EditorHeaderProps) {
     const isBusy = status === "saving" || status === "loading";
     const isFailed = status === "failed";
@@ -92,6 +96,20 @@ export default function EditorHeader({
                     <Tip label="Redo (coming soon)">
                         <button disabled className="p-1.5 rounded-md text-zinc-300 border border-transparent cursor-not-allowed">
                             <Redo2 className="w-3.5 h-3.5" />
+                        </button>
+                    </Tip>
+
+                    {/* Dark Sidebars Toggle */}
+                    <Tip label="Toggle Dark Sidebars">
+                        <button
+                            onClick={onToggleSidebarDark}
+                            className={`p-1.5 rounded-md transition-all cursor-pointer outline-none border ${
+                                sidebarDark
+                                    ? "bg-zinc-900 text-white border-zinc-900 shadow-sm"
+                                    : "text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50 border-zinc-200 hover:border-zinc-300"
+                            }`}
+                        >
+                            <Moon className="w-3.5 h-3.5" />
                         </button>
                     </Tip>
 
