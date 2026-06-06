@@ -1,158 +1,4 @@
-import { ComponentGlobalSchemaSettingsMapType, ComponentSettingsSchema } from "../../core";
-
-const widgetFields: ComponentSettingsSchema[] = [
-    {
-        as: "widgetType",
-        name: "Widget Type",
-        tp: "prop",
-        opt: ["logo", "contact_info", "nav_menu", "newsletter", "social_links", "app_downloads", "secure_badge"]
-    },
-    // logo fields
-    {
-        as: "logoSrc",
-        name: "Logo Image URL",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "logo" }],
-        rgx: ".*"
-    },
-    {
-        as: "logoHeight",
-        name: "Logo Height",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "logo" }],
-        rgx: "^\\d*(px|rem|%)?$"
-    },
-    {
-        as: "brandName",
-        name: "Brand Name",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "logo" }],
-        rgx: ".*"
-    },
-    {
-        as: "description",
-        name: "Brand Description",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "logo" }],
-        rgx: ".*"
-    },
-    // contact_info fields
-    {
-        as: "address",
-        name: "Physical Office Address",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "contact_info" }],
-        rgx: ".*"
-    },
-    {
-        as: "phone",
-        name: "Support Hotline Telephone",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "contact_info" }],
-        rgx: ".*"
-    },
-    {
-        as: "email",
-        name: "Support Desk Email",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "contact_info" }],
-        rgx: ".*"
-    },
-    // nav_menu fields
-    {
-        as: "menuTitle",
-        name: "Menu Title Header",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "nav_menu" }],
-        rgx: ".*"
-    },
-    {
-        as: "links",
-        name: "Navigation links list",
-        tp: "map",
-        condition: [{ for: "widgetType", val: "nav_menu" }],
-        fields: [
-            {
-                as: "link",
-                name: "Destination Link URL",
-                tp: "prop",
-                rgx: "^(https?://|/|#|[a-zA-Z0-9_]).*"
-            },
-            {
-                as: "text",
-                name: "Display Label Text",
-                tp: "prop",
-                rgx: ".*"
-            }
-        ]
-    },
-    // newsletter fields
-    {
-        as: "newsletterTitle",
-        name: "Newsletter Header Title",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "newsletter" }],
-        rgx: ".*"
-    },
-    {
-        as: "newsletterDesc",
-        name: "Newsletter Promo Subtitle",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "newsletter" }],
-        rgx: ".*"
-    },
-    {
-        as: "buttonText",
-        name: "Submit Button Text",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "newsletter" }],
-        rgx: ".*"
-    },
-    // social_links fields
-    {
-        as: "socials",
-        name: "Social Media network links list",
-        tp: "map",
-        condition: [{ for: "widgetType", val: "social_links" }],
-        fields: [
-            {
-                as: "platform",
-                name: "Social Platform Name (e.g. facebook, instagram)",
-                tp: "prop",
-                rgx: ".*"
-            },
-            {
-                as: "url",
-                name: "Account Profile URL",
-                tp: "prop",
-                rgx: "^(https?://|/|#|[a-zA-Z0-9_]).*"
-            }
-        ]
-    },
-    // app_downloads fields
-    {
-        as: "playStoreUrl",
-        name: "Google Play Store Download URL",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "app_downloads" }],
-        rgx: ".*"
-    },
-    {
-        as: "appStoreUrl",
-        name: "Apple App Store Download URL",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "app_downloads" }],
-        rgx: ".*"
-    },
-    // secure_badge fields
-    {
-        as: "badgeText",
-        name: "Secure SSL Badge Text",
-        tp: "prop",
-        condition: [{ for: "widgetType", val: "secure_badge" }],
-        rgx: ".*"
-    }
-];
+import { ComponentGlobalSchemaSettingsMapType } from "../../core";
 
 export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapType = {
     theme: {
@@ -186,13 +32,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         name: "Column 1 Alignment",
         opt: ["start", "center", "end", "between"]
     },
-    col1Widgets: {
-        as: "col1Widgets",
-        tp: "map",
-        group: "column_1",
-        name: "Column 1 Widgets",
-        fields: widgetFields
-    },
     // Column 2
     col2Width: {
         as: "col2Width",
@@ -207,13 +46,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         group: "column_2",
         name: "Column 2 Alignment",
         opt: ["start", "center", "end", "between"]
-    },
-    col2Widgets: {
-        as: "col2Widgets",
-        tp: "map",
-        group: "column_2",
-        name: "Column 2 Widgets",
-        fields: widgetFields
     },
     // Column 3
     col3Width: {
@@ -230,13 +62,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         name: "Column 3 Alignment",
         opt: ["start", "center", "end", "between"]
     },
-    col3Widgets: {
-        as: "col3Widgets",
-        tp: "map",
-        group: "column_3",
-        name: "Column 3 Widgets",
-        fields: widgetFields
-    },
     // Column 4
     col4Width: {
         as: "col4Width",
@@ -251,13 +76,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         group: "column_4",
         name: "Column 4 Alignment",
         opt: ["start", "center", "end", "between"]
-    },
-    col4Widgets: {
-        as: "col4Widgets",
-        tp: "map",
-        group: "column_4",
-        name: "Column 4 Widgets",
-        fields: widgetFields
     },
     // Column 5
     col5Width: {
@@ -274,13 +92,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         name: "Column 5 Alignment",
         opt: ["start", "center", "end", "between"]
     },
-    col5Widgets: {
-        as: "col5Widgets",
-        tp: "map",
-        group: "column_5",
-        name: "Column 5 Widgets",
-        fields: widgetFields
-    },
     // Bottom Left
     bottomLeftWidth: {
         as: "bottomLeftWidth",
@@ -296,13 +107,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         name: "Bottom Left Alignment",
         opt: ["start", "center", "end", "between"]
     },
-    bottomLeftWidgets: {
-        as: "bottomLeftWidgets",
-        tp: "map",
-        group: "bottom_bar",
-        name: "Bottom Left Widgets",
-        fields: widgetFields
-    },
     // Bottom Right
     bottomRightWidth: {
         as: "bottomRightWidth",
@@ -317,13 +121,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         group: "bottom_bar",
         name: "Bottom Right Alignment",
         opt: ["start", "center", "end", "between"]
-    },
-    bottomRightWidgets: {
-        as: "bottomRightWidgets",
-        tp: "map",
-        group: "bottom_bar",
-        name: "Bottom Right Widgets",
-        fields: widgetFields
     },
     mobileGridColumns: {
         as: "mobileGridColumns",
@@ -345,26 +142,6 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
 
 export function parseFooterComponentSettings(type: string, settings: any) {
     const parsed = { ...settings };
-
-    const parseSlot = (slot: any) => {
-        if (!slot) return [];
-        if (typeof slot === "string") {
-            try {
-                return JSON.parse(slot);
-            } catch (e) {
-                return [];
-            }
-        }
-        return Array.isArray(slot) ? slot : [];
-    };
-
-    parsed.col1Widgets = parseSlot(parsed.col1Widgets);
-    parsed.col2Widgets = parseSlot(parsed.col2Widgets);
-    parsed.col3Widgets = parseSlot(parsed.col3Widgets);
-    parsed.col4Widgets = parseSlot(parsed.col4Widgets);
-    parsed.col5Widgets = parseSlot(parsed.col5Widgets);
-    parsed.bottomLeftWidgets = parseSlot(parsed.bottomLeftWidgets);
-    parsed.bottomRightWidgets = parseSlot(parsed.bottomRightWidgets);
 
     // Fallbacks
     if (!parsed.theme) parsed.theme = "light";
@@ -388,71 +165,6 @@ export function parseFooterComponentSettings(type: string, settings: any) {
 
     if (!parsed.mobileGridColumns) parsed.mobileGridColumns = "1";
     if (!parsed.mobileAlignment) parsed.mobileAlignment = "inherit";
-
-    // Build defaults if all columns are empty
-    if (parsed.col1Widgets.length === 0 &&
-        parsed.col2Widgets.length === 0 &&
-        parsed.col3Widgets.length === 0 &&
-        parsed.col4Widgets.length === 0 &&
-        parsed.col5Widgets.length === 0) {
-        
-        parsed.col1Widgets = [
-            {
-                widgetType: "logo",
-                logoSrc: "",
-                logoHeight: "32px",
-                brandName: "",
-                description: "Empowering commerce across Nepal with high-quality tech gear and seamless storefront configurations."
-            },
-            {
-                widgetType: "contact_info",
-                address: "Putalisadak, Kathmandu, Nepal",
-                phone: "+977 1-4433221",
-                email: "support@generationnepal.com"
-            }
-        ];
-
-        parsed.col2Widgets = [
-            {
-                widgetType: "nav_menu",
-                menuTitle: "Quick Links",
-                links: [
-                    { link: "/shop", text: "Shop All" },
-                    { link: "/shop/new", text: "New Arrivals" },
-                    { link: "/shop/popular", text: "Best Sellers" }
-                ]
-            }
-        ];
-
-        parsed.col3Widgets = [
-            {
-                widgetType: "nav_menu",
-                menuTitle: "Support Links",
-                links: [
-                    { link: "/contact", text: "Contact Us" },
-                    { link: "/faqs", text: "FAQs" },
-                    { link: "/returns", text: "Returns & Exchanges" }
-                ]
-            }
-        ];
-
-        parsed.col4Widgets = [
-            {
-                widgetType: "newsletter",
-                newsletterTitle: "Subscribe to our Newsletter",
-                newsletterDesc: "Stay updated on flash sales, new products, and local store releases."
-            },
-            {
-                widgetType: "social_links",
-                socials: [
-                    { platform: "facebook", url: "https://facebook.com" },
-                    { platform: "instagram", url: "https://instagram.com" },
-                    { platform: "twitter", url: "https://twitter.com" },
-                    { platform: "youtube", url: "https://youtube.com" }
-                ]
-            }
-        ];
-    }
 
     return parsed;
 }

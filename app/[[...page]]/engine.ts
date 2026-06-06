@@ -278,7 +278,11 @@ export async function getAppGlobalComponent(componentID: string, tenant: string,
         }
 
         if (doc) {
-            return (doc._c || []) as ComponentSchema[];
+            const schema = (doc._c || []) as ComponentSchema[];
+            if (componentID === "footer" && schema.length === 1 && schema[0].type === "footer_ecommerce" && (!schema[0].children || schema[0].children.length === 0)) {
+                schema[0].children = JSON.parse(JSON.stringify(defaultFooterSchema[0].children));
+            }
+            return schema;
         }
 
         // Newly registered tenant fallback: return default schemas if layouts do not exist in DB yet

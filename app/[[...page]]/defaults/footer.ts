@@ -2,237 +2,152 @@ import { ComponentSchema } from "@/application/runtime/builder/type";
 
 /**
  * Default Footer Layout Schema
- * Premium, clean 4-column footer for e-commerce fashion stores.
+ * Premium, clean 5-column and bottom bar slots-based footer.
  */
 export const defaultFooterSchema: ComponentSchema[] = [
     {
-        id: "main-footer-root",
-        type: "box",
+        id: "main-footer-root-premium",
+        type: "footer_ecommerce",
         settings: {
-            "box-display": "flex",
-            "box-direction": "col",
-            "w": "100%",
-            style: {
-                backgroundColor: "var(--bg-navigation)",
-                color: "var(--text-inverted)",
-                padding: "64px 40px 32px 40px",
-                borderTop: "1px solid var(--border-primary)"
-            }
+            theme: "dark",
+            copyright: "© 2026 Generation Nepal. Powered by Dhimora Systems.",
+            col1Width: "flex-grow",
+            col1Align: "start",
+            col2Width: "auto",
+            col2Align: "start",
+            col3Width: "auto",
+            col3Align: "start",
+            col4Width: "flex-grow",
+            col4Align: "start",
+            col5Width: "auto",
+            col5Align: "start",
+            bottomLeftWidth: "auto",
+            bottomLeftAlign: "start",
+            bottomRightWidth: "auto",
+            bottomRightAlign: "end"
         },
         children: [
-            /* Main columns grid */
+            /* Column 1: Brand Info */
             {
-                id: "footer-columns-grid",
-                type: "grid_box",
+                id: "footer-default-brand-desc",
+                type: "text_block",
                 settings: {
-                    "box-display": "grid",
-                    "w": "100%",
-                    style: {
-                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                        gap: "40px",
-                        marginBottom: "48px"
-                    }
+                    slot: "col1",
+                    content: "GENERATION NEPAL TECH"
+                }
+            },
+            {
+                id: "footer-default-brand-text",
+                type: "text_block",
+                settings: {
+                    slot: "col1",
+                    content: "Premium custom desk setups, hardware components, and mechanical keyboard gear curated for power users."
+                }
+            },
+            
+            /* Column 2: Collections Link Group */
+            {
+                id: "footer-default-col-collections",
+                type: "link_group_block",
+                settings: {
+                    slot: "col2",
+                    title: "Collections"
                 },
                 children: [
-                    /* Column 1: Brand Info */
                     {
-                        id: "footer-col-brand",
-                        type: "flex_box",
+                        id: "footer-link-col-1",
+                        type: "link_block",
                         settings: {
-                            "box-display": "flex",
-                            "box-direction": "col",
-                            "box-gap": "1rem"
-                        },
-                        children: [
-                            {
-                                id: "footer-brand-title",
-                                type: "text_block",
-                                settings: {
-                                    "content": "AURA APPAREL",
-                                    "text-element": "h4",
-                                    "text-size": "18px",
-                                    "text-weight": "800",
-                                    "text-color": "var(--text-inverted)",
-                                    style: { letterSpacing: "3px" }
-                                }
-                            },
-                            {
-                                id: "footer-brand-description",
-                                type: "text_block",
-                                settings: {
-                                    "content": "Sustainably crafted clothing for modern lifestyles. Minimalist silhouettes designed to endure seasons.",
-                                    "text-element": "p",
-                                    "text-size": "13px",
-                                    "text-color": "var(--text-muted)",
-                                    style: { lineHeight: "1.6" }
-                                }
-                            }
-                        ]
+                            text: "Custom Keyboards",
+                            href: "/shop/keyboards"
+                        }
                     },
-
-                    /* Column 2: Shop Links */
                     {
-                        id: "footer-col-shop",
-                        type: "flex_box",
+                        id: "footer-link-col-2",
+                        type: "link_block",
                         settings: {
-                            "box-display": "flex",
-                            "box-direction": "col",
-                            "box-gap": "0.75rem"
-                        },
-                        children: [
-                            {
-                                id: "footer-col-shop-title",
-                                type: "text_block",
-                                settings: { "content": "COLLECTIONS", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "var(--secondary)", style: { letterSpacing: "1px" } }
-                            },
-                            {
-                                id: "footer-shop-l1",
-                                type: "link_block",
-                                settings: { "link-url": "/collection/new-arrivals", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-shop-t1", type: "text_block", settings: { "content": "New Arrivals" } }]
-                            },
-                            {
-                                id: "footer-shop-l2",
-                                type: "link_block",
-                                settings: { "link-url": "/category/women", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-shop-t2", type: "text_block", settings: { "content": "Women's Wear" } }]
-                            },
-                            {
-                                id: "footer-shop-l3",
-                                type: "link_block",
-                                settings: { "link-url": "/category/men", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-shop-t3", type: "text_block", settings: { "content": "Men's Wear" } }]
-                            },
-                            {
-                                id: "footer-shop-l4",
-                                type: "link_block",
-                                settings: { "link-url": "/category/accessories", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-shop-t4", type: "text_block", settings: { "content": "Accessories" } }]
-                            }
-                        ]
+                            text: "Desk Mats",
+                            href: "/shop/deskmats"
+                        }
                     },
-
-                    /* Column 3: Customer Care */
                     {
-                        id: "footer-col-support",
-                        type: "flex_box",
+                        id: "footer-link-col-3",
+                        type: "link_block",
                         settings: {
-                            "box-display": "flex",
-                            "box-direction": "col",
-                            "box-gap": "0.75rem"
-                        },
-                        children: [
-                            {
-                                id: "footer-col-support-title",
-                                type: "text_block",
-                                settings: { "content": "CUSTOMER CARE", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "var(--secondary)", style: { letterSpacing: "1px" } }
-                            },
-                            {
-                                id: "footer-support-l1",
-                                type: "link_block",
-                                settings: { "link-url": "/faq", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-supp-t1", type: "text_block", settings: { "content": "FAQ & Shipping" } }]
-                            },
-                            {
-                                id: "footer-support-l2",
-                                type: "link_block",
-                                settings: { "link-url": "/returns", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-supp-t2", type: "text_block", settings: { "content": "Returns & Exchanges" } }]
-                            },
-                            {
-                                id: "footer-support-l3",
-                                type: "link_block",
-                                settings: { "link-url": "/size-guide", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-supp-t3", type: "text_block", settings: { "content": "Sizing Directory" } }]
-                            },
-                            {
-                                id: "footer-support-l4",
-                                type: "link_block",
-                                settings: { "link-url": "/contact", style: { textDecoration: "none", color: "var(--text-muted)", fontSize: "13px" } },
-                                children: [{ id: "f-supp-t4", type: "text_block", settings: { "content": "Get In Touch" } }]
-                            }
-                        ]
-                    },
-
-                    /* Column 4: Newsletter */
-                    {
-                        id: "footer-col-newsletter",
-                        type: "flex_box",
-                        settings: {
-                            "box-display": "flex",
-                            "box-direction": "col",
-                            "box-gap": "0.75rem"
-                        },
-                        children: [
-                            {
-                                id: "footer-col-news-title",
-                                type: "text_block",
-                                settings: { "content": "STAY CONNECTED", "text-element": "h5", "text-size": "12px", "text-weight": "600", "text-color": "var(--secondary)", style: { letterSpacing: "1px" } }
-                            },
-                            {
-                                id: "footer-news-desc",
-                                type: "text_block",
-                                settings: {
-                                    "content": "Sign up to receive announcements, product drops, and exclusive lookbook previews.",
-                                    "text-element": "p",
-                                    "text-size": "12px",
-                                    "text-color": "var(--text-muted)"
-                                }
-                            },
-                            {
-                                id: "footer-news-input-box",
-                                type: "input_block",
-                                settings: {
-                                    "input-type": "email",
-                                    "input-placeholder": "Enter your email...",
-                                    style: {
-                                        width: "100%",
-                                        padding: "10px",
-                                        backgroundColor: "var(--bg-app)",
-                                        border: "1px solid var(--border-primary)",
-                                        borderRadius: "4px",
-                                        color: "var(--text-inverted)",
-                                        fontSize: "13px"
-                                    }
-                                }
-                            }
-                        ]
+                            text: "Hardware Spec Bundles",
+                            href: "/shop/bundles"
+                        }
                     }
                 ]
             },
 
-            /* Bottom Strip: copyright and payment badges */
+            /* Column 3: Customer Care Link Group */
             {
-                id: "footer-bottom-strip",
-                type: "flex_box",
+                id: "footer-default-col-support",
+                type: "link_group_block",
                 settings: {
-                    "box-display": "flex",
-                    "box-direction": "row",
-                    "box-align": "center",
-                    "box-justify": "space-between",
-                    style: {
-                        borderTop: "1px solid var(--border-primary)",
-                        paddingTop: "24px",
-                        fontSize: "12px",
-                        color: "var(--text-muted)"
-                    }
+                    slot: "col3",
+                    title: "Customer Support"
                 },
                 children: [
                     {
-                        id: "footer-copyright-msg",
-                        type: "text_block",
+                        id: "footer-link-sup-1",
+                        type: "link_block",
                         settings: {
-                            "content": "© 2026 Aura Apparel. Powered by Dhimora Multi-Tenant Storefront System."
+                            text: "FAQs & Guides",
+                            href: "/faqs"
                         }
                     },
                     {
-                        id: "footer-payment-methods",
-                        type: "text_block",
+                        id: "footer-link-sup-2",
+                        type: "link_block",
                         settings: {
-                            "content": "Visa • Mastercard • Amex • Apple Pay"
+                            text: "Track Order Status",
+                            href: "/track"
+                        }
+                    },
+                    {
+                        id: "footer-link-sup-3",
+                        type: "link_block",
+                        settings: {
+                            text: "Warranty Claims",
+                            href: "/warranty"
                         }
                     }
                 ]
+            },
+
+            /* Column 4: Newsletter & Socials */
+            {
+                id: "footer-default-col-socials",
+                type: "social_links_block",
+                settings: {
+                    slot: "col4",
+                    platforms: [
+                        { platform: "facebook", url: "https://facebook.com" },
+                        { platform: "instagram", url: "https://instagram.com" },
+                        { platform: "youtube", url: "https://youtube.com" }
+                    ]
+                }
+            },
+
+            /* Bottom Bar Elements */
+            {
+                id: "footer-default-bottom-copyright",
+                type: "text_block",
+                settings: {
+                    slot: "bottomLeft",
+                    content: "© 2026 Generation Nepal. All rights reserved."
+                }
+            },
+            {
+                id: "footer-default-secure-checkout",
+                type: "link_icon_block",
+                settings: {
+                    slot: "bottomRight",
+                    icon: "ShieldCheck",
+                    text: "Secure SSL Checkout Guarantee"
+                }
             }
         ]
     }

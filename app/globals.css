@@ -2,52 +2,57 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  /* Colors */
-  --color-background: var(--bg-app);
-  --color-foreground: var(--text-main);
-  
-  --color-card: var(--bg-surface);
-  --color-card-foreground: var(--text-main);
-  
-  --color-popover: var(--bg-surface);
-  --color-popover-foreground: var(--text-main);
-  
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--text-inverted);
-  
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--text-main);
-  
-  --color-muted: var(--text-muted);
-  --color-muted-foreground: var(--text-main);
-  
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--text-inverted);
-  
-  --color-destructive: var(--color-error);
-  --color-destructive-foreground: var(--text-inverted);
-  
-  --color-border: var(--border-primary);
-  --color-input: var(--border-primary);
-  --color-ring: var(--primary);
+    /* Colors */
+    --color-background: var(--bg-app);
+    --color-foreground: var(--text-main);
 
-  /* Border Radii */
-  --radius-lg: var(--border-radius-large);
-  --radius-md: var(--border-radius-base);
-  --radius-sm: var(--btn-radius);
-  /* Map standard radius to border-radius-large for shadcn base alignment */
-  --radius: var(--border-radius-large);
+    --color-card: var(--bg-surface);
+    --color-card-foreground: var(--text-main);
 
-  /* Ring Widths */
-  --ring-width-3: 3px;
+    --color-popover: var(--bg-surface);
+    --color-popover-foreground: var(--text-main);
 
-  /* Animations & Keyframes */
-  --animate-marquee: marquee 25s linear infinite reverse;
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--text-inverted);
 
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--text-main);
+
+    --color-muted: var(--text-muted);
+    --color-muted-foreground: var(--text-main);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--text-inverted);
+
+    --color-destructive: var(--color-error);
+    --color-destructive-foreground: var(--text-inverted);
+
+    --color-border: var(--border-primary);
+    --color-input: var(--border-primary);
+    --color-ring: var(--primary);
+
+    /* Border Radii */
+    --radius-lg: var(--border-radius-large);
+    --radius-md: var(--border-radius-base);
+    --radius-sm: var(--btn-radius);
+    /* Map standard radius to border-radius-large for shadcn base alignment */
+    --radius: var(--border-radius-large);
+
+    /* Ring Widths */
+    --ring-width-3: 3px;
+
+    /* Animations & Keyframes */
+    --animate-marquee: marquee 25s linear infinite reverse;
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
 }
 
 * {

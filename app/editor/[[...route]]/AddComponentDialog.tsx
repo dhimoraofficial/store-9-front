@@ -20,6 +20,8 @@ interface AddComponentDialogProps {
     componentSettingsMap: any;
     onAddComponent: (type: string) => void;
     availableComponents: CompDef[];
+    parentType: string | null;
+    slotId: string | null;
 }
 
 const CATEGORIES = [
@@ -46,7 +48,9 @@ export default function AddComponentDialog({
     onOpenChange,
     componentSettingsMap,
     onAddComponent,
-    availableComponents
+    availableComponents,
+    parentType,
+    slotId
 }: AddComponentDialogProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("all");
@@ -56,6 +60,21 @@ export default function AddComponentDialog({
         const matchesSearch = comp.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
             comp.type.toLowerCase().includes(searchQuery.toLowerCase());
         if (!matchesSearch) return false;
+
+        if (parentType && slotId) {
+            const registryEntry = componentSettingsMap?.[parentType];
+            const layouts = registryEntry?.slotsConfig ? Object.values(registryEntry.slotsConfig) : [];
+            let allowedChildren: string[] = [];
+            for (const layoutSlots of layouts) {
+                const matchedSlot = (layoutSlots as any[]).find(s => s.id === slotId);
+                if (matchedSlot) {
+                    allowedChildren = [...allowedChildren, ...(matchedSlot.allowedChildren || [])];
+                }
+            }
+            if (allowedChildren.length > 0) {
+                return allowedChildren.includes(comp.type);
+            }
+        }
 
         if (activeCategory === "all") return true;
         const registryEntry = componentSettingsMap?.[comp.type];

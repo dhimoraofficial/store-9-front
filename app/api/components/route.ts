@@ -42,7 +42,9 @@ export async function GET(req: NextRequest) {
                 icon: entry.icon,
                 category: entry.category,
                 desc: entry.desc,
-                acceptsChildren: entry.acceptsChildren
+                acceptsChildren: entry.acceptsChildren,
+                allowedChildren: entry.allowedChildren,
+                slotsConfig: entry.slotsConfig
             };
         }
 

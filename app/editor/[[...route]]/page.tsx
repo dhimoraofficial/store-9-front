@@ -39,6 +39,17 @@ const VIEWPORT_WIDTHS: Record<ViewportMode, string> = {
 
 
 
+const findNodeInTree = (nodes: ComponentSchema[], id: string): ComponentSchema | null => {
+    for (const node of nodes) {
+        if (node.id === id) return node;
+        if (node.children) {
+            const found = findNodeInTree(node.children, id);
+            if (found) return found;
+        }
+    }
+    return null;
+};
+
 function ThemeEditorWorkspace() {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -55,7 +66,15 @@ function ThemeEditorWorkspace() {
 
     const [addingToParentId, setAddingToParentId] = useState<string | null>(null);
     const [addingToSection, setAddingToSection] = useState<"header" | "main" | "footer" | "global" | null>(null);
-     const [showAddPopup, setShowAddPopup] = useState(false);
+    const [addingToSlotId, setAddingToSlotId] = useState<string | null>(null);
+    const [showAddPopup, setShowAddPopup] = useState(false);
+
+    const addingToParentType = React.useMemo(() => {
+        if (!addingToParentId) return null;
+        const roots = [...schemas.announcement, ...schemas.navbar, ...schemas.footer, ...schemas.whatsAppButton, ...schemas.main];
+        const found = findNodeInTree(roots, addingToParentId);
+        return found?.type || null;
+    }, [addingToParentId, schemas]);
  
      // States for schema import
      const [importSection, setImportSection] = useState<"announcement" | "navbar" | "footer" | "main" | null>(null);
@@ -205,17 +224,7 @@ function ThemeEditorWorkspace() {
         }
     };
 
-    // Tree helpers
-    const findNodeInTree = (nodes: ComponentSchema[], id: string): ComponentSchema | null => {
-        for (const node of nodes) {
-            if (node.id === id) return node;
-            if (node.children) {
-                const found = findNodeInTree(node.children, id);
-                if (found) return found;
-            }
-        }
-        return null;
-    };
+
 
     const selectedNode = (() => {
         if (!selectedNodeId) return null;
@@ -248,20 +257,46 @@ function ThemeEditorWorkspace() {
         loadNodeSettings();
     }, [selectedNodeType, hasSettingsLoaded]);
 
-    const triggerAddPopup = (parentId: string | null, section: "header" | "main" | "footer" | "global") => {
+    const triggerAddPopup = (parentId: string | null, section: "header" | "main" | "footer" | "global", slotId?: string) => {
         setAddingToParentId(parentId);
         setAddingToSection(section);
+        setAddingToSlotId(slotId || null);
         setShowAddPopup(true);
     };
 
     const handleAddComponent = (type: string) => {
         const randId = `${type}_${Math.random().toString(36).substr(2, 6)}`;
+        
+        // Pre-seed default children if defined in the registry
+        const registryEntry = componentSettingsMap?.[type];
+        let defaultChildrenNodes: ComponentSchema[] = [];
+        if (registryEntry?.defaultChildren) {
+            const variantKeys = Object.keys(registryEntry.defaultChildren);
+            const selectedVariant = variantKeys.includes("3-column") 
+                ? "3-column" 
+                : variantKeys.includes("split") 
+                    ? "split" 
+                    : variantKeys[0];
+            const defaultNodes = registryEntry.defaultChildren[selectedVariant] || [];
+            
+            const buildChildTree = (nodes: any[]): ComponentSchema[] => {
+                return nodes.map((node: any) => ({
+                    id: `${node.type}_${Math.random().toString(36).substr(2, 6)}`,
+                    type: node.type,
+                    label: node.label,
+                    settings: { ...node.settings },
+                    children: node.children ? buildChildTree(node.children) : []
+                }));
+            };
+            defaultChildrenNodes = buildChildTree(defaultNodes);
+        }
+
         const newNode: ComponentSchema = {
             id: randId,
             type: type as any,
-            settings: {},
+            settings: addingToSlotId ? { slot: addingToSlotId } : {},
             label: type === "text" || type === "button" || type === "link" || type === "text_block" || type === "button_block" || type === "link_block" ? `New ${type.replace("_", " ")}` : undefined,
-            children: [],
+            children: defaultChildrenNodes,
         };
         dispatch(addNode({ parentId: addingToParentId, section: addingToSection!, node: newNode }));
         dispatch(selectNode(randId));
@@ -269,6 +304,7 @@ function ThemeEditorWorkspace() {
         setShowAddPopup(false);
         setAddingToParentId(null);
         setAddingToSection(null);
+        setAddingToSlotId(null);
         toast.success(`Added: ${type}`);
     };
 
@@ -389,6 +425,8 @@ function ThemeEditorWorkspace() {
                 componentSettingsMap={componentSettingsMap}
                 onAddComponent={handleAddComponent}
                 availableComponents={availableComponents}
+                parentType={addingToParentType}
+                slotId={addingToSlotId}
             />
 
             {/* Import / Export JSON Schema Dialog */}

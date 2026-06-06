@@ -138,9 +138,14 @@ export async function GET(req: NextRequest) {
                 return NextResponse.json({ error: `Layout not found: ${keyParam}` }, { status: 404 });
             }
 
+            const schema = doc._c || [];
+            if (keyParam === "footer" && schema.length === 1 && schema[0].type === "footer_ecommerce" && (!schema[0].children || schema[0].children.length === 0)) {
+                schema[0].children = JSON.parse(JSON.stringify(defaultFooterSchema[0].children));
+            }
+
             return NextResponse.json({
                 success: true,
-                schema: doc._c,
+                schema: schema,
                 type: doc.type
             });
         }
@@ -165,11 +170,15 @@ export async function GET(req: NextRequest) {
                 if (typeof cleanId === "string" && (cleanId as string).startsWith(prefix)) {
                     cleanId = (cleanId as string)?.substring(prefix.length);
                 }
+                const schema = dg._c || [];
+                if (cleanId === "footer" && schema.length === 1 && schema[0].type === "footer_ecommerce" && (!schema[0].children || schema[0].children.length === 0)) {
+                    schema[0].children = JSON.parse(JSON.stringify(defaultFooterSchema[0].children));
+                }
                 return {
                     _id: cleanId,
                     for: dg.for,
                     type: dg.type,
-                    _c: dg._c || []
+                    _c: schema
                 };
             });
 
