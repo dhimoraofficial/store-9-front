@@ -341,7 +341,7 @@ export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID: st
 const testHere = 'store9nepal.dhimora.com';
 
 export async function getTenantMetaData() {
-    if (servingProduction) {
+    if (!servingProduction) {
         return {
             type: "",
             error: "",
