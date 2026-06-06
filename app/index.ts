@@ -1,4 +1,4 @@
-export const servingProduction = !(process.env.NODE_ENV === "production")
+export const servingProduction = (process.env.NODE_ENV === "production")
 
 // export const apiSlug = (servingProduction ? "https://apis.dhimora.com" : "http://localhost:2000")
 export const apiSlug = "https://apis.dhimora.com"
