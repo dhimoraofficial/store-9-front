@@ -29,6 +29,7 @@ async function ComponentBuilderContent({ schema, context }: { schema: ComponentS
     if (!acceptsChildren) {
         return <Component
             {...getParsedSettings(resolvedType as any, resolvedSettings as ComponentSchemaSettings)}
+            schema={schema}
         />;
     }
 
@@ -36,6 +37,7 @@ async function ComponentBuilderContent({ schema, context }: { schema: ComponentS
         // set the settings directly yto the comopennts, 
         // this will pass all the config values into the style, settings formate 
         {...getParsedSettings(resolvedType as any, resolvedSettings as ComponentSchemaSettings)}
+        schema={schema}
     >
         {schema?.children?.map((child, index) => (
             <ComponentBuilder key={child.id || index} schema={child} context={context} />

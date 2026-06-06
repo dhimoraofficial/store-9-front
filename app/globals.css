@@ -228,14 +228,48 @@ div[data-radix-popper-content-wrapper] svg {
     box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5) !important;
 }
 
-.figma-dark div[role="dialog"] input,
-.figma-dark div[role="dialog"] select,
-.figma-dark div[role="dialog"] textarea {
-    background-color: #1e1e1e !important;
+/* Override inner panels (bg-white, bg-zinc, bg-gray) inside dialogs */
+.figma-dark div[role="dialog"] div[class*="bg-white"],
+.figma-dark div[role="dialog"] div[class*="bg-zinc-50"],
+.figma-dark div[role="dialog"] div[class*="bg-zinc-100"],
+.figma-dark div[role="dialog"] div[class*="bg-gray-100"],
+.figma-dark div[role="dialog"] div[class*="bg-[#0c0d12]"],
+.figma-dark div[role="dialog"] div[class*="bg-[#11131a]"],
+.figma-dark div[role="dialog"] div[class*="bg-zinc-50\/50"] {
+    background-color: #2c2c2c !important;
     color: #ffffff !important;
-    border: 1px solid #3e3e3e !important;
 }
 
+/* Darken inner input areas, textareas, and tabs list inside dialogs */
+.figma-dark div[role="dialog"] input,
+.figma-dark div[role="dialog"] select,
+.figma-dark div[role="dialog"] textarea,
+.figma-dark div[role="dialog"] [class*="TabsList"],
+.figma-dark div[role="dialog"] [role="tablist"] {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border-color: #3e3e3e !important;
+}
+
+/* Preserve JSON / Code highlights inside dialog code viewers */
+.figma-dark div[role="dialog"] textarea.font-mono {
+    background-color: #0c0d12 !important;
+    color: #89ddff !important;
+    border-color: #222533 !important;
+}
+.figma-dark div[role="dialog"] pre.font-mono {
+    background-color: #0c0d12 !important;
+    color: #c3e88d !important;
+    border-color: #222533 !important;
+}
+.figma-dark div[role="dialog"] div[class*="bg-[#0c0d12]"] {
+    background-color: #0c0d12 !important;
+}
+.figma-dark div[role="dialog"] div[class*="bg-[#11131a]"] {
+    background-color: #11131a !important;
+}
+
+/* Dialog button styling */
 .figma-dark div[role="dialog"] button {
     background-color: #2c2c2c !important;
     color: #e3e3e3 !important;
@@ -244,6 +278,12 @@ div[data-radix-popper-content-wrapper] svg {
 
 .figma-dark div[role="dialog"] button:hover {
     background-color: #3c3c3c !important;
+    color: #ffffff !important;
+}
+
+/* Tabs trigger active styling */
+.figma-dark div[role="dialog"] button[role="tab"][data-state="active"] {
+    background-color: #1e1e1e !important;
     color: #ffffff !important;
 }
 
@@ -257,6 +297,31 @@ div[data-radix-popper-content-wrapper] svg {
     background-color: #0b7cd0 !important;
 }
 
+/* Dialog title and close icon color overrides */
+.figma-dark div[role="dialog"] [class*="Title"],
+.figma-dark div[role="dialog"] [class*="Close"] {
+    color: #ffffff !important;
+}
+
+.figma-dark div[role="dialog"] [class*="text-zinc-900"],
+.figma-dark div[role="dialog"] [class*="text-zinc-800"] {
+    color: #ffffff !important;
+}
+
+.figma-dark div[role="dialog"] [class*="text-zinc-400"],
+.figma-dark div[role="dialog"] [class*="text-zinc-500"] {
+    color: #b3b3b3 !important;
+}
+
+/* Border overrides inside dialog */
+.figma-dark div[role="dialog"] [class*="border"] {
+    border-color: #3e3e3e !important;
+}
+
+/* Premium blurred backdrop overlay */
+.figma-dark div[class*="Overlay"],
+.figma-dark div[class*="overlay"],
 .figma-dark div[style*="backdrop-filter"] {
-    background-color: rgba(0, 0, 0, 0.4) !important;
+    background-color: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(4px) !important;
 }

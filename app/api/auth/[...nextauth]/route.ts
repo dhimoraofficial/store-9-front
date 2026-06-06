@@ -65,8 +65,8 @@ const AuthHandler = NextAuth({
     // Defining Providers
     providers: [
         GoogleProvider({
-            clientId: "933246840942-mfb7rtoe4qfbii962l791ea4jdmci3kg.apps.googleusercontent.com",
-            clientSecret: "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",
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
             authorization: {
                 params: {
                     scope: "openid email profile",
@@ -117,11 +117,11 @@ const AuthHandler = NextAuth({
     },
 
     jwt: {
-        secret: "this-is-great-jwt-secret",
+        secret: process.env.JWT_SECRET || "this-is-great-jwt-secret",
     },
 
     //
-    secret: "this-is-t-p-jwt-secret",
+    secret: process.env.NEXTAUTH_SECRET || "this-is-t-p-jwt-secret",
 
     // Custom pages for extra customization
     pages: {
