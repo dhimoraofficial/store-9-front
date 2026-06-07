@@ -10,6 +10,14 @@ export const ComponentFooterSchemaSettingsMap: ComponentGlobalSchemaSettingsMapT
         description: "Pick the background color theme (light, dark, or slate) for the footer.",
         opt: ["light", "dark", "slate"]
     },
+    backgroundColor: {
+        as: "backgroundColor",
+        tp: "prop",
+        group: "layout",
+        name: "Footer Background Color",
+        description: "Custom CSS background color/gradient code for the footer container (e.g. #0f172a, linear-gradient(...)).",
+        rgx: ".*"
+    },
     copyright: {
         as: "copyright",
         tp: "prop",
@@ -41,6 +49,7 @@ export function parseFooterComponentSettings(type: string, settings: any) {
 
     // Fallbacks
     if (!parsed.theme) parsed.theme = "light";
+    if (!parsed.backgroundColor) parsed.backgroundColor = "";
     if (!parsed.copyright) parsed.copyright = `© ${new Date().getFullYear()} Generation Nepal. All rights reserved.`;
     if (!parsed.mobileGridColumns) parsed.mobileGridColumns = "1";
     if (!parsed.mobileAlignment) parsed.mobileAlignment = "inherit";

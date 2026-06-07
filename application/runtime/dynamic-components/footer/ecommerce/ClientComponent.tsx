@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 interface FooterProps {
     theme?: "light" | "dark" | "slate";
+    backgroundColor?: string;
     copyright?: string;
     className?: string;
     mobileGridColumns?: "1" | "2";
@@ -16,6 +17,7 @@ interface FooterProps {
 
 export default function ClientComponent({
     theme = "light",
+    backgroundColor = "",
     copyright = "",
     className = "",
     mobileGridColumns = "1",
