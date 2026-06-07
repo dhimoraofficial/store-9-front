@@ -24,15 +24,15 @@ export async function getTenantMetaData() {
             host: "",
             store: '06a192fd-02b9-7204-9679-63a7404e2e22',
             tenant: '06a192f0-3743-7aff-9094-dd9e55f17b58',
-            slug: "its-drk-here",
-            domain: "drk.com",
+            slug: "store9nepal",
+            domain: "store9nepal.dhimora.com",
         }
     }
 
 
     // no need of headache if the env is developemnt!!!!!!!
     const headerMeta = await headers()
-    const host = ((((!servingProduction && testHere) || (headerMeta?.get("host") || headerMeta.get("x-forwarded-host")))?.replace(/^www\./, "")) || "").toLowerCase()
+    const host = ((((!servingProduction && testHere) || (headerMeta?.get("x-forwarded-host") || headerMeta.get("host")))?.replace(/^www\./, "")) || "").toLowerCase()
 
     const isFromAppDashboard = host.match(new RegExp(`^([a-z0-9-_]+)\.admin\.dhimora\.com$`))?.[1] || false
     const isForDashboard = !isFromAppDashboard && host.includes(".admin.")
@@ -54,6 +54,11 @@ export async function getTenantMetaData() {
 
     else if (isFromApp) {
         tenant = isFromApp
+        lookup_type = "store_slug"
+    }
+
+    else if (host.includes("railway.app")) {
+        tenant = "store9nepal"
         lookup_type = "store_slug"
     }
 

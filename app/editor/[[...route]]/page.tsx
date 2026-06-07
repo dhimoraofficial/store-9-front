@@ -471,6 +471,7 @@ function ThemeEditorWorkspace() {
                         }}
                         onAddBlockTrigger={triggerAddPopup}
                         onImportSchemaTrigger={triggerImportPopup}
+                        onUpdateLabel={(id, label) => dispatch(updateNodeLabel({ id, label: label || null }))}
                     />
                 </div>
 

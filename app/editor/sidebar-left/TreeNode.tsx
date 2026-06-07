@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronDown, ChevronRight, Plus, Trash2, Folder, FolderOpen } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronDown, ChevronRight, Plus, Trash2, Folder, FolderOpen, Edit2 } from "lucide-react";
 import { ComponentSchema } from "@/application/runtime/builder/type";
 import { getDynamicComponentIcon } from "./utils";
 
@@ -14,6 +14,7 @@ interface TreeNodeProps {
     onSelect: (id: string | null) => void;
     onDelete: (id: string) => void;
     onAdd: (parentId: string | null, section: "header" | "main" | "footer" | "global", slotId?: string) => void;
+    onUpdateLabel: (id: string, label: string) => void;
 }
 
 function VirtualSlotFolderNode({
@@ -25,7 +26,8 @@ function VirtualSlotFolderNode({
     componentSettingsMap,
     onSelect,
     onDelete,
-    onAdd
+    onAdd,
+    onUpdateLabel,
 }: any) {
     const [open, setOpen] = useState(true);
     const hasChildren = childrenNodes.length > 0;
@@ -80,6 +82,7 @@ function VirtualSlotFolderNode({
                             onSelect={onSelect}
                             onDelete={onDelete}
                             onAdd={onAdd}
+                            onUpdateLabel={onUpdateLabel}
                         />
                     ))}
                     {!hasChildren && (
@@ -102,16 +105,74 @@ export default function TreeNode({
     onSelect,
     onDelete,
     onAdd,
+    onUpdateLabel,
 }: TreeNodeProps) {
     const isSelected = selectedId === node.id;
     const hasChildren = node.children && node.children.length > 0;
     const [open, setOpen] = useState(false);
+    
+    // Rename/Inline Edit State
+    const [isEditing, setIsEditing] = useState(false);
+    const [tempLabel, setTempLabel] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Context Menu State
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
     const registryEntry = componentSettingsMap?.[node.type];
     const activeLayout = node.settings?.layout || node.settings?.layoutStructure || "default";
     const slots = registryEntry?.slotsConfig
         ? (registryEntry.slotsConfig[activeLayout] || Object.values(registryEntry.slotsConfig)[0])
         : undefined;
+
+    // Close context menu on outside click
+    useEffect(() => {
+        if (!contextMenu) return;
+        const handleClose = () => setContextMenu(null);
+        window.addEventListener("click", handleClose);
+        window.addEventListener("contextmenu", handleClose);
+        return () => {
+            window.removeEventListener("click", handleClose);
+            window.removeEventListener("contextmenu", handleClose);
+        };
+    }, [contextMenu]);
+
+    // Handle context menu trigger
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setContextMenu({
+            x: e.clientX,
+            y: e.clientY,
+        });
+    };
+
+    // Rename handlers
+    const startRename = () => {
+        setTempLabel(node.label || componentSettingsMap?.[node.type]?.name || node.type);
+        setIsEditing(true);
+        setContextMenu(null);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            saveRename();
+        } else if (e.key === "Escape") {
+            setIsEditing(false);
+        }
+    };
+
+    const handleBlur = () => {
+        saveRename();
+    };
+
+    const saveRename = () => {
+        setIsEditing(false);
+        const trimmed = tempLabel.trim();
+        if (trimmed && trimmed !== (node.label || componentSettingsMap?.[node.type]?.name || node.type)) {
+            onUpdateLabel(node.id, trimmed);
+        }
+    };
 
     const renderChildrenTree = () => {
         if (!slots || slots.length === 0) {
@@ -126,6 +187,7 @@ export default function TreeNode({
                     onSelect={onSelect}
                     onDelete={onDelete}
                     onAdd={onAdd}
+                    onUpdateLabel={onUpdateLabel}
                 />
             ));
         }
@@ -147,6 +209,7 @@ export default function TreeNode({
                     onSelect={onSelect}
                     onDelete={onDelete}
                     onAdd={onAdd}
+                    onUpdateLabel={onUpdateLabel}
                 />
             );
         });
@@ -158,6 +221,7 @@ export default function TreeNode({
         <div>
             <div
                 onClick={(e) => { e.stopPropagation(); onSelect(node.id); }}
+                onContextMenu={handleContextMenu}
                 className={`group relative flex items-center py-1.5 pr-1 cursor-pointer transition-all duration-150 overflow-hidden ${isSelected
                         ? "bg-zinc-100 text-zinc-950 font-semibold border-l-2 border-zinc-900"
                         : "hover:bg-zinc-50 text-zinc-600 border-l-2 border-transparent"
@@ -183,9 +247,24 @@ export default function TreeNode({
                 </span>
 
                 <div className="flex-1 pr-12">
-                    <div className="text-[11.5px] whitespace-nowrap select-none leading-snug font-medium">
-                        {node.label || componentSettingsMap?.[node.type]?.name || node.type}
-                    </div>
+                    {isEditing ? (
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={tempLabel}
+                            onChange={(e) => setTempLabel(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            onBlur={handleBlur}
+                            autoFocus
+                            onFocus={(e) => e.target.select()}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full bg-white text-zinc-950 border border-zinc-300 rounded px-1.5 py-0.5 text-[11px] font-medium focus:outline-none focus:border-zinc-800 focus:ring-1 focus:ring-zinc-800"
+                        />
+                    ) : (
+                        <div className="text-[11.5px] whitespace-nowrap select-none leading-snug font-medium truncate">
+                            {node.label || componentSettingsMap?.[node.type]?.name || node.type}
+                        </div>
+                    )}
                 </div>
 
                 <span className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-150 bg-inherit pl-2">
@@ -207,6 +286,45 @@ export default function TreeNode({
                     </button>
                 </span>
             </div>
+
+            {/* Floating Context Menu */}
+            {contextMenu && (
+                <div
+                    style={{ top: `${contextMenu.y}px`, left: `${contextMenu.x}px` }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="fixed z-[9999] min-w-[130px] bg-white border border-zinc-200 rounded-md shadow-lg py-1 flex flex-col text-[11.5px] font-medium text-zinc-700 editor-context-menu"
+                >
+                    <button
+                        onClick={startRename}
+                        className="editor-context-menu-item"
+                    >
+                        <Edit2 className="w-3 h-3" />
+                        Rename
+                    </button>
+                    {(registryEntry?.acceptsChildren !== false) && !slots && (
+                        <button
+                            onClick={() => {
+                                onAdd(node.id, section);
+                                setContextMenu(null);
+                            }}
+                            className="editor-context-menu-item"
+                        >
+                            <Plus className="w-3 h-3" />
+                            Add child
+                        </button>
+                    )}
+                    <button
+                        onClick={() => {
+                            onDelete(node.id);
+                            setContextMenu(null);
+                        }}
+                        className="editor-context-menu-item text-red-600 hover:text-red-700"
+                    >
+                        <Trash2 className="w-3 h-3" />
+                        Delete
+                    </button>
+                </div>
+            )}
 
             {hasRenderableChildren && open && (
                 <div

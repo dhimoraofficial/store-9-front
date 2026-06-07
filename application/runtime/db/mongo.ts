@@ -1,6 +1,6 @@
 import { MongoClient, Db } from "mongodb";
 
-const MONGODB_URI = process.env.MONGO_URL || "mongodb://127.0.0.1:27017";
+const MONGODB_URI = process.env.MONGO_URL || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
 
 if (!MONGODB_URI) {
     throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
@@ -27,7 +27,6 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     await client.connect();
     const db = client.db("DHIMORA_SUPER_TEMPLATE_DATABASE");
 
-    console.log("MONGO", MONGODB_URI);
 
     cached.client = client;
     cached.db = db;

@@ -22,6 +22,7 @@ interface SidebarLeftProps {
     onDeleteNode: (id: string) => void;
     onAddBlockTrigger: (parentId: string | null, section: "header" | "main" | "footer" | "global") => void;
     onImportSchemaTrigger: (section: "announcement" | "navbar" | "footer" | "main") => void;
+    onUpdateLabel: (id: string, label: string) => void;
 }
 
 export default function SidebarLeft({
@@ -34,6 +35,7 @@ export default function SidebarLeft({
     onDeleteNode,
     onAddBlockTrigger,
     onImportSchemaTrigger,
+    onUpdateLabel,
 }: SidebarLeftProps) {
     const treeProps = {
         selectedId: selectedNodeId,
@@ -41,6 +43,7 @@ export default function SidebarLeft({
         onSelect: onSelectNode,
         onDelete: onDeleteNode,
         onAdd: onAddBlockTrigger,
+        onUpdateLabel,
     };
 
     const [annOpen, setAnnOpen] = useState(true);
