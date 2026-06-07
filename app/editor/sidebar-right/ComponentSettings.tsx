@@ -134,12 +134,19 @@ function AutocompleteInput({
     hasError?: boolean;
 }) {
     const [isOpen, setIsOpen] = React.useState(false);
-    const [localVal, setLocalVal] = React.useState(value);
+    const [localVal, setLocalVal] = React.useState(value || "");
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
     React.useEffect(() => {
-        setLocalVal(value);
+        setLocalVal(value || "");
     }, [value]);
+
+    React.useEffect(() => {
+        return () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, []);
 
     React.useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -168,12 +175,16 @@ function AutocompleteInput({
 
     const handleChange = (newVal: string) => {
         setLocalVal(newVal);
-        checkAndPropagate(newVal);
         setIsOpen(true);
+
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            checkAndPropagate(newVal);
+        }, 150);
     };
 
     const filteredOpts = options.filter(optVal => 
-        optVal.toLowerCase().includes(localVal.toLowerCase())
+        (optVal || "").toLowerCase().includes((localVal || "").toLowerCase())
     );
 
     return (
@@ -206,8 +217,10 @@ function AutocompleteInput({
                         <div
                             key={optVal}
                             onClick={() => {
-                                setLocalVal(optVal);
-                                onChange(optVal);
+                                const selectedValue = optVal || "";
+                                setLocalVal(selectedValue);
+                                if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                                onChange(selectedValue);
                                 setIsOpen(false);
                             }}
                             className={`px-3 py-1.5 rounded-md cursor-pointer transition-colors ${
