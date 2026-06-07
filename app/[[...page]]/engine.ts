@@ -338,7 +338,7 @@ export async function getTenantThemeConfig({ tenantID, storeID }: { tenantID: st
     return defaultThemeConfig;
 }
 
-const testHere = 'store9nepal.dhimora.com';
+const testHere = process.env.LOCAL_STORE_DOMAIN || 'store9nepal.dhimora.com';
 
 export async function getTenantMetaData() {
     if (!servingProduction) {
@@ -346,10 +346,10 @@ export async function getTenantMetaData() {
             type: "",
             error: "",
             host: "",
-            store: '06a192fd-02b9-7204-9679-63a7404e2e22',
-            tenant: '06a192f0-3743-7aff-9094-dd9e55f17b58',
-            slug: "store9nepal",
-            domain: "store9nepal.dhimora.com",
+            store: process.env.LOCAL_STORE_ID || '06a192fd-02b9-7204-9679-63a7404e2e22',
+            tenant: process.env.LOCAL_TENANT_ID || '06a192f0-3743-7aff-9094-dd9e55f17b58',
+            slug: process.env.LOCAL_STORE_SLUG || "store9nepal",
+            domain: process.env.LOCAL_STORE_DOMAIN || "store9nepal.dhimora.com",
         }
     }
 
@@ -382,7 +382,7 @@ export async function getTenantMetaData() {
     }
 
     else if (host.includes("railway.app")) {
-        tenant = "store9nepal"
+        tenant = process.env.DEFAULT_TENANT_SLUG || "store9nepal"
         lookup_type = "store_slug"
     }
 
