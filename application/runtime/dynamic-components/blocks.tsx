@@ -31,10 +31,15 @@ export function SocialLinksBlockComponent({ platforms, style }: any) {
                 
                 let Icon: any = Lucide.Share2;
                 if (type === "facebook") Icon = Lucide.Facebook;
-                if (type === "instagram") Icon = Lucide.Instagram;
-                if (type === "twitter" || type === "x") Icon = Lucide.Twitter;
-                if (type === "youtube") Icon = Lucide.Youtube;
-                if (type === "linkedin") Icon = Lucide.Linkedin;
+                else if (type === "instagram") Icon = Lucide.Instagram;
+                else if (type === "twitter" || type === "x") Icon = Lucide.Twitter;
+                else if (type === "youtube") Icon = Lucide.Youtube;
+                else if (type === "linkedin") Icon = Lucide.Linkedin;
+                else {
+                    const capitalized = type.charAt(0).toUpperCase() + type.slice(1);
+                    const dynamicIcon = (Lucide as any)[capitalized] || (Lucide as any)[type];
+                    if (dynamicIcon) Icon = dynamicIcon;
+                }
                 
                 return (
                     <a

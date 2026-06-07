@@ -42,7 +42,8 @@ import {
     ShoppingBag,
     FolderOpen,
     ShoppingCart,
-    Images
+    Images,
+    Headset
 } from "lucide-react";
 
 export const LUCIDE_ICONS_MAP: Record<string, React.ComponentType<any>> = {
@@ -89,7 +90,8 @@ export const LUCIDE_ICONS_MAP: Record<string, React.ComponentType<any>> = {
     ShoppingBag,
     FolderOpen,
     ShoppingCart,
-    Images
+    Images,
+    Headset
 };
 
 export function getDialogComponentIcon(type: string) {

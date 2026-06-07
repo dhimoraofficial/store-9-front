@@ -116,6 +116,115 @@ function SettingLabel({
     );
 }
 
+function AutocompleteInput({
+    value,
+    options,
+    onChange,
+    rgx,
+    className,
+    placeholder,
+    hasError
+}: {
+    value: string;
+    options: string[];
+    onChange: (val: string) => void;
+    rgx?: string;
+    className?: string;
+    placeholder?: string;
+    hasError?: boolean;
+}) {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [localVal, setLocalVal] = React.useState(value);
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        setLocalVal(value);
+    }, [value]);
+
+    React.useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const checkAndPropagate = (valStr: string) => {
+        let isValid = true;
+        if (rgx) {
+            try {
+                const regex = new RegExp(rgx);
+                isValid = regex.test(valStr);
+            } catch (e) {
+                isValid = true;
+            }
+        }
+        if (isValid) {
+            onChange(valStr);
+        }
+    };
+
+    const handleChange = (newVal: string) => {
+        setLocalVal(newVal);
+        checkAndPropagate(newVal);
+        setIsOpen(true);
+    };
+
+    const filteredOpts = options.filter(optVal => 
+        optVal.toLowerCase().includes(localVal.toLowerCase())
+    );
+
+    return (
+        <div ref={containerRef} className="relative w-full">
+            <div className={`flex items-center w-full bg-white border rounded-md transition-all ${
+                hasError 
+                    ? "border-red-300 bg-red-50/30 focus-within:border-red-400 focus-within:ring-red-100" 
+                    : "border-zinc-200 focus-within:border-zinc-400 focus-within:ring-1 focus-within:ring-zinc-900/10"
+            }`}>
+                <input
+                    type="text"
+                    value={localVal}
+                    onChange={(e) => handleChange(e.target.value)}
+                    onFocus={() => setIsOpen(true)}
+                    className={className}
+                    placeholder={placeholder}
+                />
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="shrink-0 px-2 py-2 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50 transition-colors cursor-pointer outline-none border-l border-zinc-200 rounded-r-md"
+                >
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+            </div>
+
+            {isOpen && filteredOpts.length > 0 && (
+                <div className="absolute left-0 right-0 mt-1 z-[250] max-h-[180px] overflow-y-auto bg-white border border-zinc-200 rounded-md shadow-lg p-1 outline-none font-sans text-[12px]">
+                    {filteredOpts.map((optVal) => (
+                        <div
+                            key={optVal}
+                            onClick={() => {
+                                setLocalVal(optVal);
+                                onChange(optVal);
+                                setIsOpen(false);
+                            }}
+                            className={`px-3 py-1.5 rounded-md cursor-pointer transition-colors ${
+                                value === optVal
+                                    ? "bg-zinc-950 text-white font-medium"
+                                    : "text-zinc-700 hover:bg-zinc-100"
+                            }`}
+                        >
+                            {optVal}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 function IsolatedInput({
     value,
     onChange,
@@ -339,45 +448,15 @@ function MapSettingEditor({
                             let inputNode;
                             if (field.opt && field.rgx) {
                                 inputNode = (
-                                    <div className={`relative flex items-center bg-white border rounded-md transition-all ${
-                                        hasError ? "border-red-300 bg-red-50/30" : "border-zinc-200 focus-within:border-zinc-400 focus-within:ring-1 focus-within:ring-zinc-900/10"
-                                    }`}>
-                                        <IsolatedInput
-                                            value={fieldValue}
-                                            onChange={(val) => handleUpdateItemField(idx, fieldKey, val)}
-                                            rgx={field.rgx}
-                                            className="w-full bg-transparent text-[11px] font-sans font-semibold text-zinc-800 outline-none px-2.5 py-1.5 leading-none"
-                                            placeholder={`Enter ${field.name || "value"} or select option…`}
-                                        />
-                                        <DropdownMenu.Root>
-                                            <DropdownMenu.Trigger asChild>
-                                                <button className="shrink-0 px-2 py-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50 transition-colors cursor-pointer outline-none border-l border-zinc-200 rounded-r-md">
-                                                    <ChevronDown className="w-3.5 h-3.5" />
-                                                </button>
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Portal>
-                                                <DropdownMenu.Content
-                                                    align="end"
-                                                    sideOffset={4}
-                                                    className="z-[200] min-w-[120px] bg-white border border-zinc-200 rounded-md shadow-lg p-1 outline-none font-sans text-[12px]"
-                                                >
-                                                    {field.opt.map((optVal: string) => (
-                                                        <DropdownMenu.Item
-                                                            key={optVal}
-                                                            onSelect={() => handleUpdateItemField(idx, fieldKey, optVal)}
-                                                            className={`px-3 py-2 rounded-md cursor-pointer outline-none transition-colors ${
-                                                                fieldValue === optVal
-                                                                    ? "bg-zinc-900 text-white"
-                                                                    : "text-zinc-700 hover:bg-zinc-100"
-                                                            }`}
-                                                        >
-                                                            {optVal}
-                                                        </DropdownMenu.Item>
-                                                    ))}
-                                                </DropdownMenu.Content>
-                                            </DropdownMenu.Portal>
-                                        </DropdownMenu.Root>
-                                    </div>
+                                    <AutocompleteInput
+                                        value={fieldValue}
+                                        options={field.opt}
+                                        onChange={(val) => handleUpdateItemField(idx, fieldKey, val)}
+                                        rgx={field.rgx}
+                                        className="w-full bg-transparent text-[11px] font-sans font-semibold text-zinc-800 outline-none px-2.5 py-1.5 leading-none"
+                                        placeholder={`Enter ${field.name || "value"} or select…`}
+                                        hasError={hasError}
+                                    />
                                 );
                             } else if (field.opt) {
                                 inputNode = (
@@ -513,45 +592,15 @@ export default function ComponentSettings({
                         validationErrors={validationErrors}
                     />
                 ) : config.opt && config.rgx ? (
-                    <div className={`relative flex items-center bg-white border rounded-md transition-all ${
-                        hasError ? "border-red-300 bg-red-50/30" : "border-zinc-200 focus-within:border-zinc-400 focus-within:ring-1 focus-within:ring-zinc-900/10"
-                    }`}>
-                        <IsolatedInput
-                            value={currentVal}
-                            onChange={(val) => onUpdateSetting(key, val, config)}
-                            rgx={config.rgx}
-                            className="w-full bg-transparent text-[12px] font-sans font-semibold text-zinc-800 outline-none px-3 py-2 leading-none"
-                            placeholder="Enter value or select option…"
-                        />
-                        <DropdownMenu.Root>
-                            <DropdownMenu.Trigger asChild>
-                                <button className="shrink-0 px-2 py-2 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-50 transition-colors cursor-pointer outline-none border-l border-zinc-200 rounded-r-md">
-                                    <ChevronDown className="w-3.5 h-3.5" />
-                                </button>
-                            </DropdownMenu.Trigger>
-                            <DropdownMenu.Portal>
-                                <DropdownMenu.Content
-                                    align="end"
-                                    sideOffset={4}
-                                    className="z-[200] min-w-[120px] bg-white border border-zinc-200 rounded-md shadow-lg p-1 outline-none font-sans text-[12px]"
-                                >
-                                    {config.opt.map((optVal: string) => (
-                                        <DropdownMenu.Item
-                                            key={optVal}
-                                            onSelect={() => onUpdateSetting(key, optVal, config)}
-                                            className={`px-3 py-2 rounded-md cursor-pointer outline-none transition-colors ${
-                                                currentVal === optVal
-                                                    ? "bg-zinc-900 text-white"
-                                                    : "text-zinc-700 hover:bg-zinc-100"
-                                            }`}
-                                        >
-                                            {optVal}
-                                        </DropdownMenu.Item>
-                                    ))}
-                                </DropdownMenu.Content>
-                            </DropdownMenu.Portal>
-                        </DropdownMenu.Root>
-                    </div>
+                    <AutocompleteInput
+                        value={currentVal}
+                        options={config.opt}
+                        onChange={(val) => onUpdateSetting(key, val, config)}
+                        rgx={config.rgx}
+                        className="w-full bg-transparent text-[12px] font-sans font-semibold text-zinc-800 outline-none px-3 py-2 leading-none"
+                        placeholder="Enter custom value or select…"
+                        hasError={hasError}
+                    />
                 ) : config.opt ? (
                     <RadixSelect
                         value={currentVal}
