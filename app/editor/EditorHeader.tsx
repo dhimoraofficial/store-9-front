@@ -24,6 +24,10 @@ interface EditorHeaderProps {
     onToggleTheme: () => void;
     sidebarDark: boolean;
     onToggleSidebarDark: () => void;
+    onUndo: () => void;
+    onRedo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
 function Tip({ children, label }: { children: React.ReactNode; label: string }) {
@@ -56,6 +60,10 @@ export default function EditorHeader({
     onToggleTheme,
     sidebarDark,
     onToggleSidebarDark,
+    onUndo,
+    onRedo,
+    canUndo,
+    canRedo,
 }: EditorHeaderProps) {
     const isBusy = status === "saving" || status === "loading";
     const isFailed = status === "failed";
@@ -88,13 +96,29 @@ export default function EditorHeader({
                 <div className="flex items-center gap-1 shrink-0 w-[180px] justify-end">
 
                     {/* Undo / Redo */}
-                    <Tip label="Undo (coming soon)">
-                        <button disabled className="p-1.5 rounded-md text-zinc-300 border border-transparent cursor-not-allowed">
+                    <Tip label={`Undo (${typeof window !== "undefined" && navigator.platform.includes("Mac") ? "⌘Z" : "Ctrl+Z"})`}>
+                        <button
+                            onClick={onUndo}
+                            disabled={!canUndo}
+                            className={`p-1.5 rounded-md transition-all border ${
+                                canUndo
+                                    ? "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 border-transparent hover:border-zinc-200 cursor-pointer"
+                                    : "text-zinc-300 border-transparent cursor-not-allowed"
+                            }`}
+                        >
                             <Undo2 className="w-3.5 h-3.5" />
                         </button>
                     </Tip>
-                    <Tip label="Redo (coming soon)">
-                        <button disabled className="p-1.5 rounded-md text-zinc-300 border border-transparent cursor-not-allowed">
+                    <Tip label={`Redo (${typeof window !== "undefined" && navigator.platform.includes("Mac") ? "⌘⇧Z" : "Ctrl+Shift+Z"})`}>
+                        <button
+                            onClick={onRedo}
+                            disabled={!canRedo}
+                            className={`p-1.5 rounded-md transition-all border ${
+                                canRedo
+                                    ? "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 border-transparent hover:border-zinc-200 cursor-pointer"
+                                    : "text-zinc-300 border-transparent cursor-not-allowed"
+                            }`}
+                        >
                             <Redo2 className="w-3.5 h-3.5" />
                         </button>
                     </Tip>

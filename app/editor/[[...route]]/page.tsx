@@ -19,6 +19,8 @@ import {
     updateNodeAction,
     updateNodeLabel,
     updateNodeSettings,
+    undo,
+    redo,
 } from "@/bundles/store/editorSlice";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -60,6 +62,8 @@ function ThemeEditorWorkspace() {
     const { schemas, theme, selectedNodeId, status, tenantInfo } = useSelector(
         (state: RootState) => state.editor
     );
+    const canUndo = useSelector((state: RootState) => state.editor.history.past.length > 0);
+    const canRedo = useSelector((state: RootState) => state.editor.history.future.length > 0);
 
     const params = useParams();
     const routeParams = params?.route as string[] | undefined;
@@ -84,6 +88,30 @@ function ThemeEditorWorkspace() {
         const savedRight = localStorage.getItem("editor-sidebar-right-width");
         if (savedRight) setRightWidth(parseInt(savedRight, 10));
     }, []);
+
+    // Global keyboard shortcuts for undo/redo
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const isMac = navigator.platform.includes("Mac");
+            const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+            if (!ctrlOrCmd) return;
+
+            // Ignore if user is typing in an input/textarea/contenteditable
+            const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+            if (tag === "input" || tag === "textarea" || (e.target as HTMLElement)?.isContentEditable) return;
+
+            if (e.key === "z" && !e.shiftKey) {
+                e.preventDefault();
+                dispatch(undo());
+            } else if ((e.key === "z" && e.shiftKey) || e.key === "y") {
+                e.preventDefault();
+                dispatch(redo());
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [dispatch]);
 
     useEffect(() => {
         localStorage.setItem("sidebarDark", String(sidebarDark));
@@ -437,6 +465,10 @@ function ThemeEditorWorkspace() {
                 }}
                 sidebarDark={sidebarDark}
                 onToggleSidebarDark={() => setSidebarDark(!sidebarDark)}
+                onUndo={() => dispatch(undo())}
+                onRedo={() => dispatch(redo())}
+                canUndo={canUndo}
+                canRedo={canRedo}
             />
 
             <main className="flex-1 relative overflow-hidden min-h-0 bg-[#f4f5f7]">

@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentSchema } from "@/application/runtime/builder/type";
 
+const HISTORY_LIMIT = 50;
+
+type SchemasSnapshot = EditorState["schemas"];
+
 export interface EditorState {
     schemas: {
         announcement: ComponentSchema[];
@@ -21,6 +25,11 @@ export interface EditorState {
         store: string;
         tenant: string;
     } | null;
+    // Undo/redo history — only schemas are tracked (not theme/selection/status)
+    history: {
+        past: SchemasSnapshot[];
+        future: SchemasSnapshot[];
+    };
 }
 
 const initialState: EditorState = {
@@ -38,7 +47,22 @@ const initialState: EditorState = {
     status: 'idle',
     error: null,
     tenantInfo: null,
+    history: {
+        past: [],
+        future: [],
+    },
 };
+
+// Snapshot current schemas into history.past before a mutation
+function snapshotHistory(state: EditorState) {
+    const snapshot: SchemasSnapshot = JSON.parse(JSON.stringify(state.schemas));
+    state.history.past.push(snapshot);
+    if (state.history.past.length > HISTORY_LIMIT) {
+        state.history.past.shift();
+    }
+    // Any new mutation clears the redo future
+    state.history.future = [];
+}
 
 // Helper: Recursively search and modify a node in a tree/array of ComponentSchema
 function modifyNodeInTree(
@@ -132,7 +156,22 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<Partial<EditorState["schemas"]>>
         ) => {
+            // setSchemas is a bulk load (e.g., on page load) — reset history
             state.schemas = { ...state.schemas, ...action.payload };
+            state.history.past = [];
+            state.history.future = [];
+        },
+        undo: (state) => {
+            if (state.history.past.length === 0) return;
+            const previous = state.history.past.pop()!;
+            state.history.future.unshift(JSON.parse(JSON.stringify(state.schemas)));
+            state.schemas = previous;
+        },
+        redo: (state) => {
+            if (state.history.future.length === 0) return;
+            const next = state.history.future.shift()!;
+            state.history.past.push(JSON.parse(JSON.stringify(state.schemas)));
+            state.schemas = next;
         },
         selectNode: (state, action: PayloadAction<string | null>) => {
             state.selectedNodeId = action.payload;
@@ -167,6 +206,7 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ id: string; settings: Record<string, any> }>
         ) => {
+            snapshotHistory(state);
             mutateGlobalSchemas(state.schemas, action.payload.id, (node) => {
                 node.settings = { ...action.payload.settings };
             });
@@ -175,6 +215,7 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ id: string; action: any | null }>
         ) => {
+            snapshotHistory(state);
             mutateGlobalSchemas(state.schemas, action.payload.id, (node) => {
                 if (action.payload.action === null) {
                     delete node.action;
@@ -187,11 +228,13 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ id: string; label: string | null }>
         ) => {
+            snapshotHistory(state);
             mutateGlobalSchemas(state.schemas, action.payload.id, (node) => {
                 node.label = action.payload.label;
             });
         },
         deleteNode: (state, action: PayloadAction<{ id: string }>) => {
+            snapshotHistory(state);
             const id = action.payload.id;
             if (state.selectedNodeId === id) {
                 state.selectedNodeId = null;
@@ -211,6 +254,7 @@ export const editorSlice = createSlice({
                 node: ComponentSchema;
             }>
         ) => {
+            snapshotHistory(state);
             const { parentId, section, node } = action.payload;
 
             if (parentId) {
@@ -252,6 +296,7 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ id: string; direction: "up" | "down" }>
         ) => {
+            snapshotHistory(state);
             const { id, direction } = action.payload;
             const searchRoots = [
                 ...state.schemas.announcement,
@@ -275,6 +320,7 @@ export const editorSlice = createSlice({
             }
         },
         duplicateNode: (state, action: PayloadAction<{ id: string }>) => {
+            snapshotHistory(state);
             const id = action.payload.id;
             
             // Helper function to deep clone node with new IDs
@@ -309,6 +355,7 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ dragId: string; dropId: string; position: "before" | "after" | "inside" }>
         ) => {
+            snapshotHistory(state);
             const { dragId, dropId, position } = action.payload;
             if (dragId === dropId) return;
 
@@ -368,6 +415,7 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ dragId: string; parentId: string; slotId: string }>
         ) => {
+            snapshotHistory(state);
             const { dragId, parentId, slotId } = action.payload;
 
             // 1. Remove dragged node
@@ -426,6 +474,7 @@ export const editorSlice = createSlice({
             state,
             action: PayloadAction<{ dragId: string; section: "announcement" | "navbar" | "footer" | "main" }>
         ) => {
+            snapshotHistory(state);
             const { dragId, section } = action.payload;
 
             // 1. Remove dragged node
@@ -485,6 +534,8 @@ export const editorSlice = createSlice({
 
 export const {
     setSchemas,
+    undo,
+    redo,
     selectNode,
     hoverNode,
     updateNodeSettings,
