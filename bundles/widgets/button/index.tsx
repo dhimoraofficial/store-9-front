@@ -26,7 +26,7 @@ export default function Button({
     // DOM elements
     disabled?: boolean | undefined,
     className?: string | undefined,
-    style?: object | undefined,
+    style?: React.CSSProperties | undefined,
     title?: string | undefined,
     htmlRef?: RefObject<HTMLButtonElement> | undefined,
     children?: ReactNode | undefined,

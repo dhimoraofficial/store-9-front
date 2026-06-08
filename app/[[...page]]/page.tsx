@@ -13,6 +13,7 @@ import { ApplicationIndexParams } from './types';
 import CategoryPageController from "@/application/runtime/run-category/controller";
 import ProductPageController from "@/application/runtime/run-product/controller";
 import { EditorStoreProvider } from "@/bundles/store/Provider";
+import Script from "next/script";
 
 const testHere = 'store9nepal.dhimora.com';
 
@@ -227,7 +228,7 @@ export default async function ApplicationIndexPage({ params, searchParams }: App
     // return the main content, break downed all the pages into x
     return <html lang='en'>
         <head>
-            {/* <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" /> */}
+            <Script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" />
         </head>
         <body className="bg">
             <EditorStoreProvider tenantInfo={tenantInfo}>

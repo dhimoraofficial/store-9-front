@@ -269,6 +269,191 @@ export const editorSlice = createSlice({
                 siblings[newIndex] = temp;
             }
         },
+        duplicateNode: (state, action: PayloadAction<{ id: string }>) => {
+            const id = action.payload.id;
+            
+            // Helper function to deep clone node with new IDs
+            const cloneNodeWithNewIds = (node: ComponentSchema): ComponentSchema => {
+                const newId = `${node.type}_${Math.random().toString(36).substr(2, 6)}`;
+                return {
+                    ...node,
+                    id: newId,
+                    children: node.children ? node.children.map(cloneNodeWithNewIds) : undefined,
+                    settings: node.settings ? JSON.parse(JSON.stringify(node.settings)) : undefined,
+                };
+            };
+
+            const searchAndDuplicate = (roots: ComponentSchema[]): boolean => {
+                const result = findParentAndSiblings(roots, id);
+                if (result) {
+                    const { siblings, index } = result;
+                    const cloned = cloneNodeWithNewIds(siblings[index]);
+                    siblings.splice(index + 1, 0, cloned);
+                    return true;
+                }
+                return false;
+            };
+
+            if (searchAndDuplicate(state.schemas.announcement)) return;
+            if (searchAndDuplicate(state.schemas.navbar)) return;
+            if (searchAndDuplicate(state.schemas.footer)) return;
+            if (searchAndDuplicate(state.schemas.whatsAppButton)) return;
+            searchAndDuplicate(state.schemas.main);
+        },
+        moveNodeToTarget: (
+            state,
+            action: PayloadAction<{ dragId: string; dropId: string; position: "before" | "after" | "inside" }>
+        ) => {
+            const { dragId, dropId, position } = action.payload;
+            if (dragId === dropId) return;
+
+            // 1. Find the dragged node and remove it from its current position
+            let draggedNode: ComponentSchema | null = null;
+            
+            const removeNode = (nodes: ComponentSchema[]): boolean => {
+                for (let i = 0; i < nodes.length; i++) {
+                    if (nodes[i].id === dragId) {
+                        draggedNode = nodes[i];
+                        nodes.splice(i, 1);
+                        return true;
+                    }
+                    if (nodes[i].children && nodes[i].children!.length > 0) {
+                        if (removeNode(nodes[i].children!)) return true;
+                    }
+                }
+                return false;
+            };
+
+            removeNode(state.schemas.announcement);
+            removeNode(state.schemas.navbar);
+            removeNode(state.schemas.footer);
+            removeNode(state.schemas.whatsAppButton);
+            removeNode(state.schemas.main);
+
+            if (!draggedNode) return;
+
+            // 2. Insert the draggedNode into the new position relative to dropId
+            const insertNode = (nodes: ComponentSchema[]): boolean => {
+                for (let i = 0; i < nodes.length; i++) {
+                    if (nodes[i].id === dropId) {
+                        if (position === "before") {
+                            nodes.splice(i, 0, draggedNode!);
+                        } else if (position === "after") {
+                            nodes.splice(i + 1, 0, draggedNode!);
+                        } else if (position === "inside") {
+                            if (!nodes[i].children) nodes[i].children = [];
+                            nodes[i].children!.push(draggedNode!);
+                        }
+                        return true;
+                    }
+                    if (nodes[i].children && nodes[i].children!.length > 0) {
+                        if (insertNode(nodes[i].children!)) return true;
+                    }
+                }
+                return false;
+            };
+
+            if (insertNode(state.schemas.announcement)) return;
+            if (insertNode(state.schemas.navbar)) return;
+            if (insertNode(state.schemas.footer)) return;
+            if (insertNode(state.schemas.whatsAppButton)) return;
+            insertNode(state.schemas.main);
+        },
+        moveNodeToSlot: (
+            state,
+            action: PayloadAction<{ dragId: string; parentId: string; slotId: string }>
+        ) => {
+            const { dragId, parentId, slotId } = action.payload;
+
+            // 1. Remove dragged node
+            let draggedNode: ComponentSchema | null = null;
+            const removeNode = (nodes: ComponentSchema[]): boolean => {
+                for (let i = 0; i < nodes.length; i++) {
+                    if (nodes[i].id === dragId) {
+                        draggedNode = nodes[i];
+                        nodes.splice(i, 1);
+                        return true;
+                    }
+                    if (nodes[i].children && nodes[i].children!.length > 0) {
+                        if (removeNode(nodes[i].children!)) return true;
+                    }
+                }
+                return false;
+            };
+            removeNode(state.schemas.announcement);
+            removeNode(state.schemas.navbar);
+            removeNode(state.schemas.footer);
+            removeNode(state.schemas.whatsAppButton);
+            removeNode(state.schemas.main);
+
+            if (!draggedNode) return;
+
+            // 2. Update slot setting
+            if (!draggedNode.settings) draggedNode.settings = {};
+            if (slotId === "center") {
+                delete draggedNode.settings.slot;
+            } else {
+                draggedNode.settings.slot = slotId;
+            }
+
+            // 3. Add to parent's children
+            const addToParent = (nodes: ComponentSchema[]): boolean => {
+                for (let i = 0; i < nodes.length; i++) {
+                    if (nodes[i].id === parentId) {
+                        if (!nodes[i].children) nodes[i].children = [];
+                        nodes[i].children!.push(draggedNode!);
+                        return true;
+                    }
+                    if (nodes[i].children && nodes[i].children!.length > 0) {
+                        if (addToParent(nodes[i].children!)) return true;
+                    }
+                }
+                return false;
+            };
+
+            if (addToParent(state.schemas.announcement)) return;
+            if (addToParent(state.schemas.navbar)) return;
+            if (addToParent(state.schemas.footer)) return;
+            if (addToParent(state.schemas.whatsAppButton)) return;
+            addToParent(state.schemas.main);
+        },
+        moveNodeToSectionRoot: (
+            state,
+            action: PayloadAction<{ dragId: string; section: "announcement" | "navbar" | "footer" | "main" }>
+        ) => {
+            const { dragId, section } = action.payload;
+
+            // 1. Remove dragged node
+            let draggedNode: ComponentSchema | null = null;
+            const removeNode = (nodes: ComponentSchema[]): boolean => {
+                for (let i = 0; i < nodes.length; i++) {
+                    if (nodes[i].id === dragId) {
+                        draggedNode = nodes[i];
+                        nodes.splice(i, 1);
+                        return true;
+                    }
+                    if (nodes[i].children && nodes[i].children!.length > 0) {
+                        if (removeNode(nodes[i].children!)) return true;
+                    }
+                }
+                return false;
+            };
+            removeNode(state.schemas.announcement);
+            removeNode(state.schemas.navbar);
+            removeNode(state.schemas.footer);
+            removeNode(state.schemas.whatsAppButton);
+            removeNode(state.schemas.main);
+
+            if (!draggedNode) return;
+
+            // Clear any slot settings
+            if (draggedNode.settings) {
+                delete draggedNode.settings.slot;
+            }
+
+            // 2. Add to section root
+            state.schemas[section].push(draggedNode);
+        },
         setTheme: (
             state,
             action: PayloadAction<any>
@@ -302,6 +487,10 @@ export const {
     deleteNode,
     addNode,
     moveNode,
+    duplicateNode,
+    moveNodeToTarget,
+    moveNodeToSlot,
+    moveNodeToSectionRoot,
     setTheme,
     setStatus,
     setError,

@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@/application/utility";
 import React from "react";
-import { cx } from "../../_shared";
 
 interface SetupBannerProps {
     theme?: "pri" | "sec" | "bg";
@@ -89,7 +89,7 @@ export default function ClientComponent({
 
     const renderSlot = (slotChildren: any[], align: string) => {
         return (
-            <div className={cx(
+            <div className={cn(
                 "flex flex-col w-full h-full gap-5",
                 getAlignClass(align)
             )}>
@@ -134,12 +134,12 @@ export default function ClientComponent({
         return (
             <div className="grid grid-cols-12 gap-10 items-center w-full">
                 {hasLeft && (
-                    <div className={cx(getColSpanClass(leftWidth), "w-full")}>
+                    <div className={cn(getColSpanClass(leftWidth), "w-full")}>
                         {renderSlot(leftSlot, leftAlign)}
                     </div>
                 )}
                 {hasRight && (
-                    <div className={cx(getColSpanClass(rightWidth), "w-full")}>
+                    <div className={cn(getColSpanClass(rightWidth), "w-full")}>
                         {renderSlot(rightSlot, rightAlign)}
                     </div>
                 )}
@@ -150,7 +150,7 @@ export default function ClientComponent({
     return (
         <section 
             style={customStyles}
-            className={cx(
+            className={cn(
                 "w-full flex items-center select-none py-12 md:py-20 overflow-hidden transition-colors duration-200",
                 themeClasses[theme],
                 mobileShow === "false" ? "hidden lg:flex" : "flex",

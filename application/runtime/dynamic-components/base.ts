@@ -1,7 +1,6 @@
 import { ComponentAllSchemaSettingsMap } from ".";
 import { ComponentGlobalSchemaSettingsMap, ComponentSchemaSettings, parseGlobalStyle, valdiateComponentSetting } from "./core";
 import { BaseTypes } from "./type";
-import { COMPONENT_KEY_ALIASES } from "./aliases";
 
 
 // settings parser for button, like button-type, onCLick
@@ -47,8 +46,7 @@ function parseGlobalComponentSettings(settings: ComponentSchemaSettings): Compon
 
 // Generic fallback parser for new layout and loop contexts
 function parseGenericComponentSettings(type: string, settings: ComponentSchemaSettings): ComponentSchemaSettings {
-    const resolvedType = COMPONENT_KEY_ALIASES[type] || type;
-    const entry = ComponentAllSchemaSettingsMap[resolvedType];
+    const entry = ComponentAllSchemaSettingsMap[type];
     if (!entry) return settings;
     const settingsMap = ("settings" in entry) ? entry.settings : entry;
 
@@ -100,10 +98,9 @@ export function getParsedSettings(type: BaseTypes, settings: ComponentSchemaSett
     let parsedSettings: ComponentSchemaSettings = parseGlobalComponentSettings(settings) as ComponentSchemaSettings;
     parsedSettings = parseGenericComponentSettings(type, parsedSettings);
 
-    const resolvedType = COMPONENT_KEY_ALIASES[type] || type;
-    const entry = ComponentAllSchemaSettingsMap[resolvedType];
+    const entry = ComponentAllSchemaSettingsMap[type];
     if (entry && "parse" in entry && typeof entry.parse === "function") {
-        parsedSettings = entry.parse(resolvedType, parsedSettings);
+        parsedSettings = entry.parse(type, parsedSettings);
     }
 
     return parsedSettings;

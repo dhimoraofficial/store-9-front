@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import ClientComponentBuilderContent from "./ClientComponentBuilder";
 import { ComponentSchema } from "./type";
 import { ComponentAllSchemaSettingsMap } from "../dynamic-components";
-import { COMPONENT_KEY_ALIASES } from "../dynamic-components/aliases";
 import { getParsedSettings } from "../dynamic-components/base";
 import { ComponentSchemaSettings } from "../dynamic-components/core";
 import { interpolateSchema } from "./evaluator";
@@ -10,8 +9,7 @@ import { interpolateSchema } from "./evaluator";
 async function ComponentBuilderContent({ schema, context }: { schema: ComponentSchema; context?: any }) {
     if (!schema) return null;
 
-    const resolvedType = COMPONENT_KEY_ALIASES[schema.type] || schema.type;
-    const Component = (ComponentAllSchemaSettingsMap?.[resolvedType] as any)?.component;
+    const Component = (ComponentAllSchemaSettingsMap?.[schema.type] as any)?.component;
     if (!Component) {
         return null
     }
@@ -24,11 +22,11 @@ async function ComponentBuilderContent({ schema, context }: { schema: ComponentS
         ? interpolateSchema(schema.settings, context)
         : schema.settings;
 
-    const acceptsChildren = (ComponentAllSchemaSettingsMap?.[resolvedType] as any)?.acceptsChildren !== false;
+    const acceptsChildren = (ComponentAllSchemaSettingsMap?.[schema.type] as any)?.acceptsChildren !== false;
 
     if (!acceptsChildren) {
         return <Component
-            {...getParsedSettings(resolvedType as any, resolvedSettings as ComponentSchemaSettings)}
+            {...getParsedSettings(schema.type as any, resolvedSettings as ComponentSchemaSettings)}
             schema={schema}
         />;
     }
@@ -36,7 +34,7 @@ async function ComponentBuilderContent({ schema, context }: { schema: ComponentS
     return <Component
         // set the settings directly yto the comopennts, 
         // this will pass all the config values into the style, settings formate 
-        {...getParsedSettings(resolvedType as any, resolvedSettings as ComponentSchemaSettings)}
+        {...getParsedSettings(schema.type as any, resolvedSettings as ComponentSchemaSettings)}
         schema={schema}
     >
         {schema?.children?.map((child, index) => (

@@ -41,12 +41,14 @@ import {
     FolderOpen,
     ShoppingCart,
     Images,
-    Laptop
+    Laptop,
+    Box
 } from "lucide-react";
 
 export const LUCIDE_ICONS_MAP: Record<string, React.ComponentType<any>> = {
     Plus,
     X: Plus, // fallback for close/x if needed
+    Box,
     Layout,
     Search,
     Settings2: Sliders,
@@ -128,9 +130,36 @@ export function getComponentIcon(type: string, id: string) {
 export function getDynamicComponentIcon(type: string, id: string, componentSettingsMap: any) {
     const entry = componentSettingsMap?.[type];
     const iconName = entry?.icon;
+    
+    let colorClass = "text-zinc-500";
+    if (entry) {
+        switch (entry.category) {
+            case "layout":
+            case "navbar":
+            case "footer":
+                colorClass = "text-indigo-500 dark:text-indigo-400";
+                break;
+            case "content":
+                if (type === "social_links_block") {
+                    colorClass = "text-rose-500 dark:text-rose-400";
+                } else if (type === "link_group_block" || type === "link_block") {
+                    colorClass = "text-sky-500 dark:text-sky-400";
+                } else {
+                    colorClass = "text-emerald-500 dark:text-emerald-400";
+                }
+                break;
+            case "hero":
+                colorClass = "text-amber-500 dark:text-amber-400";
+                break;
+            case "ecommerce":
+                colorClass = "text-violet-500 dark:text-violet-400";
+                break;
+        }
+    }
+
     if (iconName && LUCIDE_ICONS_MAP[iconName]) {
         const IconComp = LUCIDE_ICONS_MAP[iconName];
-        return <IconComp className="w-3.5 h-3.5 text-zinc-500 shrink-0" />;
+        return <IconComp className={`w-3.5 h-3.5 ${colorClass} shrink-0`} />;
     }
     return getComponentIcon(type, id);
 }

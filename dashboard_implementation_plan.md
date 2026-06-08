@@ -98,16 +98,16 @@ interface EditorState {
 
 ## 5. Theme Editor UI Layout (`/editor/[[...route]]`)
 
-### Left Panel (Sections & Figma-style Adding)
+### Left Panel (Sections & theme-style Adding)
 Displays the site structure split into 4 parts:
 1. **Header** (Announcement, Navbar)
 2. **Main** (Current page body layout elements)
 3. **Footer** (Footer layout)
 4. **Global** (WhatsApp Button, etc.)
 
-* **Figma-style Block Addition**:
+* **theme-style Block Addition**:
   * Next to each component node and section, we display an "+ Add Block/Section" button.
-  * Clicking this button opens a Figma-style popup displaying all available components registered in `AppComponents`.
+  * Clicking this button opens a theme-style popup displaying all available components registered in `AppComponents`.
   * Selecting a component appends or inserts it under the target parent.
 
 ### Center Panel (Live Site Preview)
@@ -133,5 +133,5 @@ Loads the configuration settings for the selected component from `ComponentAllSc
 4. **API Endpoints**: Implement Next.js `/api/schema` and `/api/components` routes.
 5. **Redux Store Setup**: Create the Redux provider and slice definitions.
 6. **Workspace Shell**: Build the split-pane theme editor interface.
-7. **Interactive Tree & Preview**: Link tree nodes, Figma-style component popups, and the live renderer.
+7. **Interactive Tree & Preview**: Link tree nodes, theme-style component popups, and the live renderer.
 8. **Form & Validation Inspector**: Set up the dynamic form fields with pattern/options validation.

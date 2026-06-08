@@ -7,6 +7,10 @@ import {
     addNode,
     deleteNode,
     moveNode,
+    duplicateNode,
+    moveNodeToTarget,
+    moveNodeToSlot,
+    moveNodeToSectionRoot,
     selectNode,
     setError,
     setSchemas,
@@ -85,9 +89,9 @@ function ThemeEditorWorkspace() {
         localStorage.setItem("sidebarDark", String(sidebarDark));
         if (typeof document !== "undefined") {
             if (sidebarDark) {
-                document.documentElement.classList.add("figma-dark");
+                document.documentElement.classList.add("theme-dark");
             } else {
-                document.documentElement.classList.remove("figma-dark");
+                document.documentElement.classList.remove("theme-dark");
             }
         }
     }, [sidebarDark]);
@@ -145,15 +149,15 @@ function ThemeEditorWorkspace() {
         const found = findNodeInTree(roots, addingToParentId);
         return found?.type || null;
     }, [addingToParentId, schemas]);
- 
-     // States for schema import
-     const [importSection, setImportSection] = useState<"announcement" | "navbar" | "footer" | "main" | null>(null);
-     const [showImportPopup, setShowImportPopup] = useState(false);
- 
-     const triggerImportPopup = (section: "announcement" | "navbar" | "footer" | "main") => {
-         setImportSection(section);
-         setShowImportPopup(true);
-     };
+
+    // States for schema import
+    const [importSection, setImportSection] = useState<"announcement" | "navbar" | "footer" | "main" | null>(null);
+    const [showImportPopup, setShowImportPopup] = useState(false);
+
+    const triggerImportPopup = (section: "announcement" | "navbar" | "footer" | "main") => {
+        setImportSection(section);
+        setShowImportPopup(true);
+    };
 
 
     const [componentSettingsMap, setComponentSettingsMap] = useState<any>({});
@@ -336,19 +340,25 @@ function ThemeEditorWorkspace() {
 
     const handleAddComponent = (type: string) => {
         const randId = `${type}_${Math.random().toString(36).substr(2, 6)}`;
-        
+
         // Pre-seed default children if defined in the registry
         const registryEntry = componentSettingsMap?.[type];
         let defaultChildrenNodes: ComponentSchema[] = [];
+        
         if (registryEntry?.defaultChildren) {
-            const variantKeys = Object.keys(registryEntry.defaultChildren);
-            const selectedVariant = variantKeys.includes("3-column") 
-                ? "3-column" 
-                : variantKeys.includes("split") 
-                    ? "split" 
-                    : variantKeys[0];
-            const defaultNodes = registryEntry.defaultChildren[selectedVariant] || [];
-            
+            let defaultNodes = [];
+            if (Array.isArray(registryEntry.defaultChildren)) {
+                defaultNodes = registryEntry.defaultChildren;
+            } else {
+                const variantKeys = Object.keys(registryEntry.defaultChildren);
+                const selectedVariant = variantKeys.includes("3-column")
+                    ? "3-column"
+                    : variantKeys.includes("split")
+                        ? "split"
+                        : variantKeys[0];
+                defaultNodes = registryEntry.defaultChildren[selectedVariant] || [];
+            }
+
             const buildChildTree = (nodes: any[]): ComponentSchema[] => {
                 return nodes.map((node: any) => ({
                     id: `${node.type}_${Math.random().toString(36).substr(2, 6)}`,
@@ -404,7 +414,7 @@ function ThemeEditorWorkspace() {
 
 
     return (
-        <div className={`h-screen flex flex-col font-sans antialiased overflow-hidden transition-colors duration-150 ${sidebarDark ? "figma-dark bg-[#1e1e1e]" : "bg-white text-zinc-800"}`}>
+        <div className={`h-screen flex flex-col font-sans antialiased overflow-hidden transition-colors duration-150 ${sidebarDark ? "theme-dark bg-[#1e1e1e]" : "bg-white text-zinc-800"}`}>
             <EditorHeader
                 currentRoute={routePath}
                 routes={allRoutes}
@@ -450,9 +460,9 @@ function ThemeEditorWorkspace() {
                 </div>
 
                 {/* Left sidebar */}
-                <div 
-                    style={{ width: `${leftWidth}px` }} 
-                    className={`absolute left-0 top-0 bottom-0 z-20 flex flex-col shadow-md transition-colors duration-150 ${sidebarDark ? "figma-dark" : "bg-white"}`}
+                <div
+                    style={{ width: `${leftWidth}px` }}
+                    className={`absolute left-0 top-0 bottom-0 z-20 flex flex-col shadow-md transition-colors duration-150 ${sidebarDark ? "theme-dark" : "bg-white"}`}
                 >
                     <SidebarLeft
                         width={leftWidth}
@@ -469,6 +479,19 @@ function ThemeEditorWorkspace() {
                             if (selectedNodeId === id) dispatch(selectNode(null));
                             toast.success("Removed");
                         }}
+                        onDuplicateNode={(id) => {
+                            dispatch(duplicateNode({ id }));
+                            toast.success("Duplicated");
+                        }}
+                        onMoveNodeToTarget={(dragId, dropId, position) => {
+                            dispatch(moveNodeToTarget({ dragId, dropId, position }));
+                        }}
+                        onMoveNodeToSlot={(dragId, parentId, slotId) => {
+                            dispatch(moveNodeToSlot({ dragId, parentId, slotId }));
+                        }}
+                        onMoveNodeToSectionRoot={(dragId, section) => {
+                            dispatch(moveNodeToSectionRoot({ dragId, section }));
+                        }}
                         onAddBlockTrigger={triggerAddPopup}
                         onImportSchemaTrigger={triggerImportPopup}
                         onUpdateLabel={(id, label) => dispatch(updateNodeLabel({ id, label: label || null }))}
@@ -476,26 +499,26 @@ function ThemeEditorWorkspace() {
                 </div>
 
                 {/* Left resize handle */}
-                <div 
+                <div
                     style={{ left: `${leftWidth}px` }}
-                    className="absolute top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-zinc-300/60 active:bg-zinc-400/80 transition-colors z-30 border-l border-r border-transparent" 
+                    className="absolute top-0 bottom-0 w-0.5 cursor-col-resize hover:bg-zinc-300/60 active:bg-zinc-400/80 transition-colors z-30 border-l border-r border-transparent"
                     onMouseDown={startResizeLeft}
                 />
 
                 {/* Right resize handle */}
                 {(selectedNode || isThemeOpen) && (
-                    <div 
+                    <div
                         style={{ right: `${rightWidth}px` }}
-                        className="absolute top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-zinc-300/60 active:bg-zinc-400/80 transition-colors z-30 border-l border-r border-transparent" 
+                        className="absolute top-0 bottom-0 w-0.5 cursor-col-resize hover:bg-zinc-300/60 active:bg-zinc-400/80 transition-colors z-30 border-l border-r border-transparent"
                         onMouseDown={startResizeRight}
                     />
                 )}
 
                 {/* Right sidebar */}
                 {(selectedNode || isThemeOpen) && (
-                    <div 
-                        style={{ width: `${rightWidth}px` }} 
-                        className={`absolute right-0 top-0 bottom-0 z-20 flex flex-col shadow-md transition-colors duration-150 ${sidebarDark ? "figma-dark" : "bg-white"}`}
+                    <div
+                        style={{ width: `${rightWidth}px` }}
+                        className={`absolute right-0 top-0 bottom-0 z-20 flex flex-col shadow-md transition-colors duration-150 ${sidebarDark ? "theme-dark" : "bg-white"}`}
                     >
                         <SidebarRight
                             width={rightWidth}

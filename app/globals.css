@@ -71,121 +71,121 @@ body {
     font-family: var(--font-family-sans), system-ui, sans-serif;
 }
 
-/* --- FIGMA DARK MODE SIDEBARS --- */
-.figma-dark {
+/* --- theme DARK MODE SIDEBARS --- */
+.theme-dark {
     background-color: #1e1e1e !important;
     color: #e3e3e3 !important;
 }
 
 /* Base text color overrides for elements that don't have explicit tailwind color classes */
-.figma-dark:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark :not(.storefront-canvas):not(.storefront-canvas *):not(button):not(input):not(select):not(textarea):not(svg) {
+.theme-dark:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark :not(.storefront-canvas):not(.storefront-canvas *):not(button):not(input):not(select):not(textarea):not(svg) {
     color: #e3e3e3;
 }
 
 /* Background overrides */
-.figma-dark .bg-white:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .bg-zinc-50:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .bg-zinc-50\/50:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .bg-gray-100\/40:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .bg-zinc-100\/40:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark aside:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark header:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .bg-white:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .bg-zinc-50:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .bg-zinc-50\/50:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .bg-gray-100\/40:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .bg-zinc-100\/40:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark aside:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark header:not(.storefront-canvas):not(.storefront-canvas *) {
     background-color: #2c2c2c !important;
 }
 
-/* Sub-panels, inputs, and list containers (Figma uses a darker color for inner boxes) */
-.figma-dark .bg-gray-100:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .bg-zinc-100:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark input:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark select:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark textarea:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark button.w-full:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-dashed:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .bg-\[\#f4f5f7\]:not(.storefront-canvas):not(.storefront-canvas *) {
+/* Sub-panels, inputs, and list containers (theme uses a darker color for inner boxes) */
+.theme-dark .bg-gray-100:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .bg-zinc-100:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark input:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark select:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark textarea:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark button.w-full:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-dashed:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .bg-\[\#f4f5f7\]:not(.storefront-canvas):not(.storefront-canvas *) {
     background-color: #1e1e1e !important;
     color: #ffffff !important;
 }
 
 /* Border overrides */
-.figma-dark .border:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-zinc-200:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-zinc-100:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-zinc-300:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-gray-200:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-b:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-t:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-l:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-r:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .border-zinc-100\/85:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .border:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-zinc-200:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-zinc-100:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-zinc-300:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-gray-200:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-b:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-t:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-l:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-r:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .border-zinc-100\/85:not(.storefront-canvas):not(.storefront-canvas *) {
     border-color: #3e3e3e !important;
 }
 
 /* Text color overrides */
-.figma-dark .text-zinc-950:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-zinc-900:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-zinc-800:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-zinc-700:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-zinc-600:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-gray-900:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .text-zinc-950:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-zinc-900:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-zinc-800:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-zinc-700:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-zinc-600:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-gray-900:not(.storefront-canvas):not(.storefront-canvas *) {
     color: #e3e3e3 !important;
 }
 
-.figma-dark .text-zinc-500:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-zinc-400:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-gray-500:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-gray-400:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .text-zinc-500:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-zinc-400:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-gray-500:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-gray-400:not(.storefront-canvas):not(.storefront-canvas *) {
     color: #b3b3b3 !important;
 }
 
-.figma-dark .text-zinc-300:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .text-zinc-300:not(.storefront-canvas):not(.storefront-canvas *) {
     color: #8c8c8c !important;
 }
 
-/* Figma accents */
-.figma-dark .text-blue-500:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .text-blue-600:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:text-blue-600:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark [data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
+/* theme accents */
+.theme-dark .text-blue-500:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .text-blue-600:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:text-blue-600:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark [data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
     color: #0c8ce9 !important;
 }
 
-.figma-dark [data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark [data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
     border-color: #0c8ce9 !important;
 }
 
 /* Custom indicator for Radix Tabs active state */
-.figma-dark button[data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark button[data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
     border-bottom-color: #0c8ce9 !important;
     color: #ffffff !important;
 }
 
 /* Hover background overrides */
-.figma-dark .hover\:bg-zinc-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-zinc-100:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-gray-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-gray-100:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-zinc-100\/60:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-zinc-200:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-gray-200:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-red-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:bg-red-50\/50:hover:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .hover\:bg-zinc-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-zinc-100:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-gray-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-gray-100:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-zinc-100\/60:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-zinc-200:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-gray-200:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-red-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:bg-red-50\/50:hover:not(.storefront-canvas):not(.storefront-canvas *) {
     background-color: #3c3c3c !important;
 }
 
 /* Hover text overrides */
-.figma-dark .hover\:text-zinc-700:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:text-zinc-600:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .hover\:text-zinc-950:hover:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .group:hover .text-zinc-800:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark .group:hover .text-zinc-750:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark .hover\:text-zinc-700:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:text-zinc-600:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .hover\:text-zinc-950:hover:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .group:hover .text-zinc-800:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark .group:hover .text-zinc-750:not(.storefront-canvas):not(.storefront-canvas *) {
     color: #ffffff !important;
 }
 
 /* Scroll area background */
-.figma-dark [data-radix-scroll-area-viewport]:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark [style*="overflow: scroll"]:not(.storefront-canvas):not(.storefront-canvas *),
-.figma-dark [style*="overflow: auto"]:not(.storefront-canvas):not(.storefront-canvas *) {
+.theme-dark [data-radix-scroll-area-viewport]:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark [style*="overflow: scroll"]:not(.storefront-canvas):not(.storefront-canvas *),
+.theme-dark [style*="overflow: auto"]:not(.storefront-canvas):not(.storefront-canvas *) {
     background-color: #2c2c2c !important;
 }
 
@@ -220,8 +220,8 @@ div[data-radix-popper-content-wrapper] svg {
 }
 
 /* Dialog & Radix Modal Portals in Dark Mode */
-.figma-dark div[data-radix-focus-guard] ~ div[style*="position: fixed"],
-.figma-dark div[role="dialog"] {
+.theme-dark div[data-radix-focus-guard] ~ div[style*="position: fixed"],
+.theme-dark div[role="dialog"] {
     background-color: #2c2c2c !important;
     color: #ffffff !important;
     border: 1px solid #3e3e3e !important;
@@ -229,69 +229,69 @@ div[data-radix-popper-content-wrapper] svg {
 }
 
 /* Override inner panels (bg-white, bg-zinc, bg-gray) inside dialogs */
-.figma-dark div[role="dialog"] div[class*="bg-white"],
-.figma-dark div[role="dialog"] div[class*="bg-zinc-50"],
-.figma-dark div[role="dialog"] div[class*="bg-zinc-100"],
-.figma-dark div[role="dialog"] div[class*="bg-gray-100"],
-.figma-dark div[role="dialog"] div[class*="bg-[#0c0d12]"],
-.figma-dark div[role="dialog"] div[class*="bg-[#11131a]"],
-.figma-dark div[role="dialog"] div[class*="bg-zinc-50\/50"] {
+.theme-dark div[role="dialog"] div[class*="bg-white"],
+.theme-dark div[role="dialog"] div[class*="bg-zinc-50"],
+.theme-dark div[role="dialog"] div[class*="bg-zinc-100"],
+.theme-dark div[role="dialog"] div[class*="bg-gray-100"],
+.theme-dark div[role="dialog"] div[class*="bg-[#0c0d12]"],
+.theme-dark div[role="dialog"] div[class*="bg-[#11131a]"],
+.theme-dark div[role="dialog"] div[class*="bg-zinc-50\/50"] {
     background-color: #2c2c2c !important;
     color: #ffffff !important;
 }
 
 /* Darken inner input areas, textareas, and tabs list inside dialogs */
-.figma-dark div[role="dialog"] input,
-.figma-dark div[role="dialog"] select,
-.figma-dark div[role="dialog"] textarea,
-.figma-dark div[role="dialog"] [class*="TabsList"],
-.figma-dark div[role="dialog"] [role="tablist"] {
+.theme-dark div[role="dialog"] input,
+.theme-dark div[role="dialog"] select,
+.theme-dark div[role="dialog"] textarea,
+.theme-dark div[role="dialog"] [class*="TabsList"],
+.theme-dark div[role="dialog"] [role="tablist"] {
     background-color: #1e1e1e !important;
     color: #ffffff !important;
     border-color: #3e3e3e !important;
 }
 
 /* Preserve JSON / Code highlights inside dialog code viewers */
-.figma-dark div[role="dialog"] textarea.font-mono {
+.theme-dark div[role="dialog"] textarea.font-mono {
     background-color: #0c0d12 !important;
     color: #89ddff !important;
     border-color: #222533 !important;
 }
-.figma-dark div[role="dialog"] pre.font-mono {
+.theme-dark div[role="dialog"] pre.font-mono {
     background-color: #0c0d12 !important;
     color: #c3e88d !important;
     border-color: #222533 !important;
 }
-.figma-dark div[role="dialog"] div[class*="bg-[#0c0d12]"] {
+.theme-dark div[role="dialog"] div[class*="bg-[#0c0d12]"] {
     background-color: #0c0d12 !important;
 }
-.figma-dark div[role="dialog"] div[class*="bg-[#11131a]"] {
+.theme-dark div[role="dialog"] div[class*="bg-[#11131a]"] {
     background-color: #11131a !important;
 }
 
 /* Dialog button styling */
-.figma-dark div[role="dialog"] button {
+.theme-dark div[role="dialog"] button {
     background-color: #2c2c2c !important;
     color: #e3e3e3 !important;
     border: 1px solid #3e3e3e !important;
 }
 
-.figma-dark div[role="dialog"] button:hover {
+.theme-dark div[role="dialog"] button:hover {
     background-color: #3c3c3c !important;
     color: #ffffff !important;
 }
 
 /* Tabs list container in dark mode */
-.figma-dark div[role="dialog"] [role="tablist"],
-.figma-dark div[role="dialog"] div[class*="bg-zinc-100"] {
+.theme-dark div[role="dialog"] [role="tablist"],
+.theme-dark div[role="dialog"] div[class*="bg-zinc-100"] {
     background-color: #1e1e1e !important;
     border: 1px solid #3e3e3e !important;
     padding: 2px !important;
 }
 
 /* Inactive tabs inside dialogs */
-.figma-dark div[role="dialog"] button[role="tab"],
-.figma-dark div[role="dialog"] [role="tablist"] button {
+.theme-dark div[role="dialog"] button[role="tab"],
+.theme-dark div[role="dialog"] [role="tablist"] button {
     background-color: transparent !important;
     border: none !important;
     color: #8c8c8c !important;
@@ -299,9 +299,9 @@ div[data-radix-popper-content-wrapper] svg {
 }
 
 /* Active tabs inside dialogs */
-.figma-dark div[role="dialog"] button[role="tab"][data-state="active"],
-.figma-dark div[role="dialog"] [role="tablist"] button[data-state="active"],
-.figma-dark div[role="dialog"] [role="tablist"] button[class*="bg-white"] {
+.theme-dark div[role="dialog"] button[role="tab"][data-state="active"],
+.theme-dark div[role="dialog"] [role="tablist"] button[data-state="active"],
+.theme-dark div[role="dialog"] [role="tablist"] button[class*="bg-white"] {
     background-color: #2c2c2c !important;
     color: #ffffff !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
@@ -309,47 +309,47 @@ div[data-radix-popper-content-wrapper] svg {
 }
 
 /* Tab hover states */
-.figma-dark div[role="dialog"] button[role="tab"]:hover,
-.figma-dark div[role="dialog"] [role="tablist"] button:hover {
+.theme-dark div[role="dialog"] button[role="tab"]:hover,
+.theme-dark div[role="dialog"] [role="tablist"] button:hover {
     color: #ffffff !important;
     background-color: transparent !important;
 }
 
-.figma-dark div[role="dialog"] button[type="submit"] {
+.theme-dark div[role="dialog"] button[type="submit"] {
     background-color: #0c8ce9 !important;
     border-color: #0c8ce9 !important;
     color: #ffffff !important;
 }
 
-.figma-dark div[role="dialog"] button[type="submit"]:hover {
+.theme-dark div[role="dialog"] button[type="submit"]:hover {
     background-color: #0b7cd0 !important;
 }
 
 /* Dialog title and close icon color overrides */
-.figma-dark div[role="dialog"] [class*="Title"],
-.figma-dark div[role="dialog"] [class*="Close"] {
+.theme-dark div[role="dialog"] [class*="Title"],
+.theme-dark div[role="dialog"] [class*="Close"] {
     color: #ffffff !important;
 }
 
-.figma-dark div[role="dialog"] [class*="text-zinc-900"],
-.figma-dark div[role="dialog"] [class*="text-zinc-800"] {
+.theme-dark div[role="dialog"] [class*="text-zinc-900"],
+.theme-dark div[role="dialog"] [class*="text-zinc-800"] {
     color: #ffffff !important;
 }
 
-.figma-dark div[role="dialog"] [class*="text-zinc-400"],
-.figma-dark div[role="dialog"] [class*="text-zinc-500"] {
+.theme-dark div[role="dialog"] [class*="text-zinc-400"],
+.theme-dark div[role="dialog"] [class*="text-zinc-500"] {
     color: #b3b3b3 !important;
 }
 
 /* Border overrides inside dialog */
-.figma-dark div[role="dialog"] [class*="border"] {
+.theme-dark div[role="dialog"] [class*="border"] {
     border-color: #3e3e3e !important;
 }
 
 /* Premium blurred backdrop overlay */
-.figma-dark div[class*="Overlay"],
-.figma-dark div[class*="overlay"],
-.figma-dark div[style*="backdrop-filter"] {
+.theme-dark div[class*="Overlay"],
+.theme-dark div[class*="overlay"],
+.theme-dark div[style*="backdrop-filter"] {
     background-color: rgba(0, 0, 0, 0.65) !important;
     backdrop-filter: blur(4px) !important;
 }
@@ -358,7 +358,7 @@ div[data-radix-popper-content-wrapper] svg {
 .editor-context-menu {
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
-.figma-dark .editor-context-menu {
+.theme-dark .editor-context-menu {
     background-color: #2c2c2c !important;
     border-color: #3e3e3e !important;
     color: #e3e3e3 !important;
@@ -379,7 +379,7 @@ div[data-radix-popper-content-wrapper] svg {
     background-color: #f4f4f5;
     color: #09090b;
 }
-.figma-dark .editor-context-menu-item:hover {
+.theme-dark .editor-context-menu-item:hover {
     background-color: #3c3c3c !important;
     color: #ffffff !important;
 }

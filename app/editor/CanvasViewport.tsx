@@ -15,16 +15,16 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
     const [isSpacePressed, setIsSpacePressed] = useState(false);
     const [isAutoFit, setIsAutoFit] = useState(true);
     const [containerWidth, setContainerWidth] = useState(0);
-    
+
     const containerRef = useRef<HTMLDivElement>(null);
     const dragStartRef = useRef({ x: 0, y: 0 });
     const posStartRef = useRef({ x: 0, y: 0 });
 
-    const targetWidth = typeof viewportWidth === "number" 
-        ? viewportWidth 
+    const targetWidth = typeof viewportWidth === "number"
+        ? viewportWidth
         : parseInt(viewportWidth, 10) || 1280;
 
-    // Track Spacebar key for Figma-style space+drag panning
+    // Track Spacebar key for theme-style space+drag panning
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.code === "Space" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
@@ -96,7 +96,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
 
                 const dx = mouseX - position.x;
                 const dy = mouseY - position.y;
-                
+
                 setIsAutoFit(false); // Disable auto-fit when manually zooming
                 setPosition({
                     x: mouseX - dx * (finalScale / scale),
@@ -122,7 +122,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
         // Drag-pan trigger: left-click on background, middle-click, or Space + click anywhere
         const isBgClick = e.target === containerRef.current || (e.target as HTMLElement).getAttribute("data-canvas-bg") === "true";
         const isMiddleClick = e.button === 1;
-        
+
         if (isBgClick || isSpacePressed || isMiddleClick) {
             e.preventDefault();
             setIsDragging(true);
@@ -135,10 +135,10 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
     const handlePointerMove = (e: React.PointerEvent) => {
         if (!isDragging) return;
         e.preventDefault();
-        
+
         const dx = e.clientX - dragStartRef.current.x;
         const dy = e.clientY - dragStartRef.current.y;
-        
+
         setPosition({
             x: posStartRef.current.x + dx,
             y: posStartRef.current.y + dy
@@ -150,7 +150,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
             setIsDragging(false);
             try {
                 (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-            } catch (err) {}
+            } catch (err) { }
         }
     };
 
@@ -186,7 +186,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
     };
 
     return (
-        <div 
+        <div
             ref={containerRef}
             data-canvas-bg="true"
             onPointerDown={handlePointerDown}
@@ -196,7 +196,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
             className="flex-1 w-full h-full relative overflow-hidden select-none outline-none"
             style={{
                 cursor: getCursorStyle(),
-                backgroundImage: "radial-gradient(rgba(0, 0, 0, 0.08) 1.2px, transparent 1.2px)", // Soft glowing dots
+                backgroundImage: "radial-gradient(#fbfafa2e 1.2px, transparent 1.2px)",
                 backgroundSize: "20px 20px"
             }}
         >
@@ -210,7 +210,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
                     pointerEvents: "none"
                 }}
             >
-                <div 
+                <div
                     className="__drk_editor__ storefront-canvas border-zinc-200 border bg-white my-10"
                     style={{
                         width: viewportWidth,
@@ -223,14 +223,14 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
                 </div>
             </div>
 
-            {/* Floating Figma-Style Controls */}
+            {/* Floating theme-Style Controls */}
             <div className="absolute bottom-5 right-5 flex items-center bg-white border border-zinc-200/80 rounded-md shadow-lg px-2.5 py-1.5 gap-2.5 z-40 select-none">
                 <span className="text-[11px] font-bold text-zinc-500 w-10 text-center font-mono">
                     {Math.round(scale * 100)}%
                 </span>
-                
+
                 <div className="h-4 w-px bg-zinc-200" />
-                
+
                 <button
                     onClick={handleZoomOut}
                     className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
@@ -245,9 +245,9 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
                 >
                     <Plus className="w-3.5 h-3.5" />
                 </button>
-                
+
                 <div className="h-4 w-px bg-zinc-200" />
-                
+
                 <button
                     onClick={handleFit}
                     className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"

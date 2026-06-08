@@ -23,6 +23,12 @@ interface SidebarLeftProps {
     onAddBlockTrigger: (parentId: string | null, section: "header" | "main" | "footer" | "global") => void;
     onImportSchemaTrigger: (section: "announcement" | "navbar" | "footer" | "main") => void;
     onUpdateLabel: (id: string, label: string) => void;
+    
+    // Drag/drop & Duplicate
+    onDuplicateNode: (id: string) => void;
+    onMoveNodeToTarget: (dragId: string, dropId: string, position: "before" | "after" | "inside") => void;
+    onMoveNodeToSlot: (dragId: string, parentId: string, slotId: string) => void;
+    onMoveNodeToSectionRoot: (dragId: string, section: "announcement" | "navbar" | "footer" | "main") => void;
 }
 
 export default function SidebarLeft({
@@ -36,7 +42,33 @@ export default function SidebarLeft({
     onAddBlockTrigger,
     onImportSchemaTrigger,
     onUpdateLabel,
+    onDuplicateNode,
+    onMoveNodeToTarget,
+    onMoveNodeToSlot,
+    onMoveNodeToSectionRoot,
 }: SidebarLeftProps) {
+    const [dragOverSection, setDragOverSection] = useState<string | null>(null);
+
+    const handleDragOverSection = (e: React.DragEvent, section: "announcement" | "navbar" | "main" | "footer") => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragOverSection(section);
+    };
+
+    const handleDragLeaveSection = () => {
+        setDragOverSection(null);
+    };
+
+    const handleDropSection = (e: React.DragEvent, section: "announcement" | "navbar" | "main" | "footer") => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragOverSection(null);
+        const dragId = e.dataTransfer.getData("text/plain");
+        if (dragId) {
+            onMoveNodeToSectionRoot(dragId, section);
+        }
+    };
+
     const treeProps = {
         selectedId: selectedNodeId,
         componentSettingsMap,
@@ -44,6 +76,9 @@ export default function SidebarLeft({
         onDelete: onDeleteNode,
         onAdd: onAddBlockTrigger,
         onUpdateLabel,
+        onDuplicate: onDuplicateNode,
+        onMoveToTarget: onMoveNodeToTarget,
+        onMoveToSlot: onMoveNodeToSlot,
     };
 
     const [annOpen, setAnnOpen] = useState(true);
@@ -72,7 +107,12 @@ export default function SidebarLeft({
                                 </button>
                             </div>
 
-                            <div className="w-full">
+                            <div 
+                                className={`w-full transition-all duration-200 ${dragOverSection === "announcement" ? "ring-2 ring-indigo-500 ring-offset-1 bg-indigo-50/10" : ""}`}
+                                onDragOver={(e) => handleDragOverSection(e, "announcement")}
+                                onDragLeave={handleDragLeaveSection}
+                                onDrop={(e) => handleDropSection(e, "announcement")}
+                            >
                                 <div
                                     onClick={() => setAnnOpen(!annOpen)}
                                     className="group flex items-center justify-between py-[7px] px-3.5 hover:bg-zinc-50 text-zinc-700 cursor-pointer"
@@ -108,7 +148,12 @@ export default function SidebarLeft({
                                 )}
                             </div>
 
-                            <div className="w-full mt-0.5">
+                            <div 
+                                className={`w-full mt-0.5 transition-all duration-200 ${dragOverSection === "navbar" ? "ring-2 ring-indigo-500 ring-offset-1 bg-indigo-50/10" : ""}`}
+                                onDragOver={(e) => handleDragOverSection(e, "navbar")}
+                                onDragLeave={handleDragLeaveSection}
+                                onDrop={(e) => handleDropSection(e, "navbar")}
+                            >
                                 <div
                                     onClick={() => setNavOpen(!navOpen)}
                                     className="group flex items-center justify-between py-[7px] px-3.5 hover:bg-zinc-50 text-zinc-700 cursor-pointer"
@@ -145,7 +190,12 @@ export default function SidebarLeft({
                             </div>
                         </div>
 
-                        <div className="border-b border-zinc-100 pb-2">
+                        <div 
+                            className={`border-b border-zinc-100 pb-2 transition-all duration-200 ${dragOverSection === "main" ? "ring-2 ring-indigo-500 ring-offset-1 bg-indigo-50/10" : ""}`}
+                            onDragOver={(e) => handleDragOverSection(e, "main")}
+                            onDragLeave={handleDragLeaveSection}
+                            onDrop={(e) => handleDropSection(e, "main")}
+                        >
                             <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1 h-3.5 bg-zinc-800 rounded-full" />
@@ -188,7 +238,12 @@ export default function SidebarLeft({
                             </div>
                         </div>
 
-                        <div className="pb-4">
+                        <div 
+                            className={`pb-4 transition-all duration-200 ${dragOverSection === "footer" ? "ring-2 ring-indigo-500 ring-offset-1 bg-indigo-50/10" : ""}`}
+                            onDragOver={(e) => handleDragOverSection(e, "footer")}
+                            onDragLeave={handleDragLeaveSection}
+                            onDrop={(e) => handleDropSection(e, "footer")}
+                        >
                             <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1 h-3.5 bg-zinc-800 rounded-full" />

@@ -67,7 +67,7 @@ export default function SidebarRight({
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[12.5px] font-bold text-zinc-800 truncate">
-                                {componentSettingsMap?.[selectedNode.type]?.name || selectedNode.type.replace(/_/g, " ")}
+                                {selectedNode.label || componentSettingsMap?.[selectedNode.type]?.name || selectedNode.type.replace(/_/g, " ")}
                             </span>
                             <span className="text-[10px] text-zinc-400 font-mono font-normal select-all">
                                 #{selectedNode.id}

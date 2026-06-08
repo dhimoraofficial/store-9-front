@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { cx } from '../../_shared';
+import { cn } from '@/application/utility';
 
 // Laptop SVG Fallback for Post 1 and 3
 const LaptopSvg = () => (
@@ -71,7 +71,7 @@ export default function BlogThreeColumnGrid({
   className = ""
 }) {
   return (
-    <section className={cx("py-20 px-6 md:px-12 bg-background text-foreground", className)}>
+    <section className={cn("py-20 px-6 md:px-12 bg-background text-foreground", className)}>
       <div className="max-w-7xl mx-auto">
         
         {/* Header Section */}

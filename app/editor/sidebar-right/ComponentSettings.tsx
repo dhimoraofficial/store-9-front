@@ -436,6 +436,7 @@ export default function ComponentSettings({
     componentSettingsMap,
     validationErrors,
     onUpdateSetting,
+    onUpdateLabel,
 }: ComponentSettingsProps) {
     const [collapsedGroups, setCollapsedGroups] = React.useState<Record<string, boolean>>({});
 

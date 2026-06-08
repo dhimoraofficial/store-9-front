@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@/application/utility";
 import React from "react";
-import { cx } from "../../_shared";
 
 interface AnnouncementBarProps {
     theme?: "pri" | "sec" | "bg";
@@ -68,7 +68,7 @@ export default function ClientComponent({
         return (
             <div
                 style={customStyles}
-                className={cx(
+                className={cn(
                     "w-full flex items-center select-none z-50 transition-colors duration-200 overflow-hidden",
                     themeClasses[theme],
                     fontSizeClasses[fontSize],
@@ -92,7 +92,7 @@ export default function ClientComponent({
     return (
         <div
             style={customStyles}
-            className={cx(
+            className={cn(
                 "w-full flex items-center select-none z-50 transition-colors duration-200 overflow-hidden",
                 themeClasses[theme],
                 fontSizeClasses[fontSize],

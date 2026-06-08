@@ -51,7 +51,7 @@ export default function ProductCardAppDisplay(appProductCard: AppProductCard) {
   };
 
   const productID = cardData?.id;
-  const imageURL = cardData?.img_src || "/icon.ico";
+  const imageURL = cardData?.img_src || "/icon.png";
   const imageALT = cardData?.img_alt ?? cardData?.title_name ?? "Product image";
   const title = cardData?.title_name ?? "Untitled product";
   const productURL = productID ? `${AppSlugs.product}/${productID}` : "#";
