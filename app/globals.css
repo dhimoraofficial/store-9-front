@@ -771,3 +771,136 @@ div[data-canvas-bg="true"] > .absolute.flex.items-center:hover {
     z-index: 61;
 }
 
+/* Left sidebar redesign: single coherent dark palette */
+.theme-dark aside.border-r {
+    --sb-bg: #292929;
+    --sb-surface: #313131;
+    --sb-surface-hover: #373737;
+    --sb-surface-active: #3b3b3b;
+    --sb-border: rgba(255,255,255,0.08);
+    --sb-border-strong: rgba(255,255,255,0.13);
+    --sb-text: #f1f1f1;
+    --sb-text-muted: #a5abb2;
+    --sb-accent: #8fb3ff;
+    background: linear-gradient(180deg, #2a2a2a 0%, var(--sb-bg) 100%) !important;
+    color: var(--sb-text) !important;
+    border-right-color: #3a3a3a !important;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,0.02);
+}
+
+.theme-dark aside.border-r [class*="border-zinc-100"],
+.theme-dark aside.border-r [class*="border-zinc-200"],
+.theme-dark aside.border-r [class*="border-zinc-300"],
+.theme-dark aside.border-r .border-l,
+.theme-dark aside.border-r .border-b {
+    border-color: var(--sb-border) !important;
+}
+
+.theme-dark aside.border-r [class*="text-zinc-950"],
+.theme-dark aside.border-r [class*="text-zinc-900"],
+.theme-dark aside.border-r [class*="text-zinc-800"],
+.theme-dark aside.border-r [class*="text-zinc-700"],
+.theme-dark aside.border-r [class*="text-zinc-600"],
+.theme-dark aside.border-r [class*="text-zinc-500"],
+.theme-dark aside.border-r [class*="text-zinc-400"] {
+    color: var(--sb-text-muted) !important;
+}
+
+.theme-dark aside.border-r [class*="uppercase tracking-widest"],
+.theme-dark aside.border-r [class*="font-extrabold"] {
+    color: var(--sb-text) !important;
+    letter-spacing: 0.14em !important;
+}
+
+.theme-dark aside.border-r button {
+    color: var(--sb-text-muted);
+}
+
+.theme-dark aside.border-r button:hover {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: var(--sb-text) !important;
+}
+
+/* Section bars / headers */
+.theme-dark aside.border-r .border-b {
+    border-bottom-color: var(--sb-border) !important;
+}
+
+.theme-dark aside.border-r [class*="bg-zinc-800"] {
+    background-color: #8e939a !important;
+}
+
+/* Tree rows: consistent idle / hover / selected states */
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1.pr-1,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1.cursor-grab,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1.cursor-pointer {
+    border-radius: 10px;
+    margin-inline: 8px;
+    min-height: 32px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    color: var(--sb-text);
+    transition: background-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1:hover,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1.pr-1:hover {
+    background-color: var(--sb-surface-hover) !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1.bg-zinc-100,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1.pr-1.bg-zinc-100 {
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.045)) !important;
+    color: #ffffff !important;
+    box-shadow: inset 3px 0 0 var(--sb-accent), inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1.bg-zinc-100 [class*="text-zinc-"],
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1.pr-1.bg-zinc-100 [class*="text-zinc-"] {
+    color: #ffffff !important;
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .absolute.right-1\.5,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .absolute.mr-1.right-1\.5 {
+    background: linear-gradient(90deg, transparent, var(--sb-bg) 30%);
+    padding-left: 12px;
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .absolute.right-1\.5 button,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .absolute.mr-1.right-1\.5 button {
+    color: var(--sb-text-muted);
+    border-radius: 8px;
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .absolute.right-1\.5 button:hover,
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .absolute.mr-1.right-1\.5 button:hover {
+    background-color: rgba(255,255,255,0.06) !important;
+    color: var(--sb-text) !important;
+}
+
+.theme-dark aside.border-r .group.relative.flex.items-center.py-1\.5.pr-1 .border-dashed {
+    border-color: rgba(255,255,255,0.09) !important;
+}
+
+.theme-dark aside.border-r [class*="ring-indigo-500"] {
+    background-color: rgba(255,255,255,0.025) !important;
+    box-shadow: inset 0 0 0 1px rgba(143,179,255,0.16);
+}
+
+.theme-dark aside.border-r [class*="bg-indigo-50"] {
+    background-color: rgba(143,179,255,0.06) !important;
+}
+
+/* Scrollbars in the sidebar */
+.theme-dark aside.border-r [data-radix-scroll-area-scrollbar] [data-radix-scroll-area-thumb],
+.theme-dark aside.border-r [class*="bg-zinc-200"].rounded-lg {
+    background-color: rgba(255,255,255,0.14) !important;
+}
+
+.theme-dark aside.border-r [data-radix-scroll-area-scrollbar] [data-radix-scroll-area-thumb]:hover,
+.theme-dark aside.border-r [class*="bg-zinc-300"].rounded-lg:hover {
+    background-color: rgba(255,255,255,0.2) !important;
+}
+
