@@ -10,11 +10,14 @@ interface CanvasViewportProps {
 
 export default function CanvasViewport({ children, viewportWidth }: CanvasViewportProps) {
     const [scale, setScale] = useState(.9);
+    const [isEditingScale, setIsEditingScale] = useState(false);
+    const [editValue, setEditValue] = useState("");
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const [isSpacePressed, setIsSpacePressed] = useState(false);
     const [isAutoFit, setIsAutoFit] = useState(true);
     const [containerWidth, setContainerWidth] = useState(0);
+    const scrubRef = useRef({ active: false, startX: 0, startScale: 1 });
 
     const containerRef = useRef<HTMLDivElement>(null);
     const dragStartRef = useRef({ x: 0, y: 0 });
@@ -118,6 +121,30 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
         };
     }, [scale, position]);
 
+    // Scrubbing (drag horizontally on the percent badge to adjust zoom)
+    useEffect(() => {
+        const handlePointerMove = (e: PointerEvent) => {
+            if (!scrubRef.current.active) return;
+            const dx = e.clientX - scrubRef.current.startX;
+            // exponential scaling for smooth feel
+            const nextScale = Math.min(Math.max(scrubRef.current.startScale * Math.pow(1.005, dx), 0.15), 3);
+            setScale(nextScale);
+        };
+
+        const handlePointerUp = () => {
+            if (scrubRef.current.active) {
+                scrubRef.current.active = false;
+            }
+        };
+
+        window.addEventListener("pointermove", handlePointerMove);
+        window.addEventListener("pointerup", handlePointerUp);
+        return () => {
+            window.removeEventListener("pointermove", handlePointerMove);
+            window.removeEventListener("pointerup", handlePointerUp);
+        };
+    }, []);
+
     const handlePointerDown = (e: React.PointerEvent) => {
         // Drag-pan trigger: left-click on background, middle-click, or Space + click anywhere
         const isBgClick = e.target === containerRef.current || (e.target as HTMLElement).getAttribute("data-canvas-bg") === "true";
@@ -179,6 +206,33 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
         setPosition({ x: 0, y: 20 });
     };
 
+    // percent badge interactions: double-click to edit, pointerdown to start scrub
+    const handlePercentDoubleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsEditingScale(true);
+        setEditValue(String(Math.round(scale * 100)));
+    };
+
+    const handlePercentPointerDown = (e: React.PointerEvent) => {
+        // start scrubbing
+        e.stopPropagation();
+        scrubRef.current.active = true;
+        scrubRef.current.startX = e.clientX;
+        scrubRef.current.startScale = scale;
+        setIsAutoFit(false);
+    };
+
+    const commitEditValue = () => {
+        const parsed = parseFloat(editValue);
+        if (!isNaN(parsed)) {
+            const clamped = Math.min(Math.max(parsed, 15), 300);
+            setScale(clamped / 100);
+            setIsAutoFit(false);
+        }
+        setIsEditingScale(false);
+    };
+
+
     const getCursorStyle = () => {
         if (isDragging) return "grabbing";
         if (isSpacePressed) return "grab";
@@ -224,10 +278,36 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
             </div>
 
             {/* Floating theme-Style Controls */}
-            <div className="absolute bottom-5 right-5 flex items-center bg-white border border-zinc-200/80 rounded-md shadow-lg px-2.5 py-1.5 gap-2.5 z-40 select-none">
-                <span className="text-[11px] font-bold text-zinc-500 w-10 text-center font-mono">
-                    {Math.round(scale * 100)}%
-                </span>
+                <div className="absolute bottom-5 right-5 flex items-center bg-white border border-zinc-200/80 rounded-md shadow-lg px-2.5 py-1.5 gap-2.5 z-40 select-none">
+                {/* Percent badge: supports double-click edit, pointer-drag scrubbing, and hover tooltip */}
+                {!isEditingScale ? (
+                    <span
+                        className="text-[11px] font-bold text-zinc-500 w-10 text-center font-mono"
+                        onDoubleClick={handlePercentDoubleClick}
+                        onPointerDown={handlePercentPointerDown}
+                        role="button"
+                        tabIndex={0}
+                        data-tooltip={`${(scale * 100).toFixed(1)}%`}
+                        aria-label={`Zoom ${(scale * 100).toFixed(1)} percent`}
+                    >
+                        {Math.round(scale * 100)}%
+                    </span>
+                ) : (
+                    <input
+                        className="text-[11px] font-bold text-zinc-800 w-14 text-center font-mono rounded px-1 py-0.5"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        onBlur={() => commitEditValue()}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                commitEditValue();
+                            } else if (e.key === "Escape") {
+                                setIsEditingScale(false);
+                            }
+                        }}
+                        autoFocus
+                    />
+                )}
 
                 <div className="h-4 w-px bg-zinc-200" />
 

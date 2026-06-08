@@ -623,3 +623,151 @@ div[style*="backdrop-filter"] {
     background: linear-gradient(90deg, var(--ui-accent-soft), color-mix(in srgb, var(--ui-accent-soft-strong) 72%, transparent)) !important;
     color: var(--ui-text) !important;
 }
+
+/* Canvas Floating Controls - Figma-like styling */
+div[data-canvas-bg="true"] > .absolute.flex.items-center {
+    /* soft translucent pill */
+    background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(250,250,255,0.6));
+    border: 1px solid var(--ui-border);
+    box-shadow: 0 6px 18px rgba(22, 32, 68, 0.08);
+    backdrop-filter: blur(6px) saturate(1.05);
+    padding: 6px 8px;
+    gap: 10px;
+    border-radius: 12px;
+    align-items: center;
+}
+
+/* Dark mode variant relies on tokens */
+.theme-dark div[data-canvas-bg="true"] > .absolute.flex.items-center {
+    background: linear-gradient(180deg, rgba(26,30,40,0.88), rgba(22,26,36,0.82));
+    border: 1px solid color-mix(in srgb, var(--ui-border) 60%, black 20%);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+/* percent badge */
+div[data-canvas-bg="true"] > .absolute.flex.items-center > span.font-mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.02));
+    color: var(--ui-text-muted);
+    font-weight: 700;
+    font-family: var(--font-family-sans), ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Segoe UI Mono', 'Helvetica Neue', monospace;
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
+}
+
+.theme-dark div[data-canvas-bg="true"] > .absolute.flex.items-center > span.font-mono {
+    background: transparent;
+    color: var(--ui-text);
+}
+
+/* separator */
+div[data-canvas-bg="true"] > .absolute.flex.items-center > .h-4.w-px {
+    width: 1px !important;
+    height: 18px !important;
+    background: var(--ui-border) !important;
+    opacity: 0.85;
+}
+
+/* icon buttons */
+div[data-canvas-bg="true"] > .absolute.flex.items-center button {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--ui-text-muted);
+    transition: all 140ms cubic-bezier(.2,.9,.2,1);
+}
+
+div[data-canvas-bg="true"] > .absolute.flex.items-center button svg {
+    stroke: currentColor;
+    color: inherit;
+}
+
+div[data-canvas-bg="true"] > .absolute.flex.items-center button:hover {
+    background: var(--ui-accent-soft);
+    color: var(--ui-text);
+    transform: translateY(-1px);
+}
+
+div[data-canvas-bg="true"] > .absolute.flex.items-center button:active {
+    transform: translateY(0);
+    background: color-mix(in srgb, var(--ui-accent-soft) 70%, transparent);
+}
+
+div[data-canvas-bg="true"] > .absolute.flex.items-center button:focus {
+    outline: 2px solid var(--ui-accent);
+    outline-offset: 2px;
+}
+
+/* group small spacing for better hit targets */
+div[data-canvas-bg="true"] > .absolute.flex.items-center button.p-1 {
+    padding: 6px;
+}
+
+/* subtle hover on the whole control to indicate interactivity */
+div[data-canvas-bg="true"] > .absolute.flex.items-center:hover {
+    box-shadow: 0 10px 30px rgba(22,32,68,0.12);
+}
+
+/* Make controls responsive on very small screens */
+@media (max-width: 520px) {
+    div[data-canvas-bg="true"] > .absolute.flex.items-center {
+        padding: 6px;
+        gap: 8px;
+        right: 8px !important;
+        bottom: 8px !important;
+    }
+
+        div[data-canvas-bg="true"] > .absolute.flex.items-center > span.font-mono {
+        min-width: 38px;
+        padding: 4px 6px;
+    }
+
+    div[data-canvas-bg="true"] > .absolute.flex.items-center button {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* Tiny tooltip for showing precise zoom on hover (used by percent badge) */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ui-surface-strong);
+    color: var(--ui-text);
+    padding: 6px 8px;
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(22,32,68,0.12);
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 60;
+    border: 1px solid var(--ui-border);
+}
+
+[data-tooltip]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 108%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--ui-surface-strong);
+    z-index: 61;
+}
+
