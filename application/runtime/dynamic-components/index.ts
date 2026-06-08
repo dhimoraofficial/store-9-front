@@ -4,15 +4,16 @@ import { ComponentRegistryEntry } from "./type";
 // Content Blocks
 import { ABoxBlockComponent } from "./content/box-block";
 import { AContainerBlockComponent } from "./content/container-block";
+import { AImageBlockComponent } from "./content/image-block";
 import { ALinkBlockComponent } from "./content/link";
 import { ALinkGroupBlockComponent } from "./content/link-group";
 import { ALinkIconBlockComponent } from "./content/link-icon";
 import { ALogoBlockComponent } from "./content/logo-block";
 import { ANavUtilitiesBlockComponent } from "./content/nav-utilities-block";
+import { ARichTextBlockComponent } from "./content/rich-text-block";
 import { ASearchBarBlockComponent } from "./content/search-bar-block";
 import { ASocialLinksBlockComponent } from "./content/social-links";
 import { ATextBlockComponent } from "./content/text-block";
-import { ARichTextBlockComponent } from "./content/rich-text-block";
 import { ATextCarouselComponent } from "./content/text-carousel";
 
 // Hero Blocks
@@ -22,9 +23,6 @@ import { ASearchBlockComponent } from "./hero/search-block";
 import { ASpecsBlockComponent } from "./hero/specs-block";
 
 // Layout & Section Components
-import { AAnnouncementBarEcommerceComponent } from "./announcement-bar/ecommerce";
-import { AFooterEcommerceComponent } from "./footer/ecommerce";
-import { ANavbarEcommerceComponent } from "./navbar/ecommerce";
 
 export const ComponentAllSchemaSettingsMap: Record<string, (ComponentRegistryEntry | ComponentGlobalSchemaSettingsMapType)> = {
     common: ComponentGlobalSchemaSettingsMap,
@@ -44,13 +42,10 @@ export const ComponentAllSchemaSettingsMap: Record<string, (ComponentRegistryEnt
     "link_block": ALinkBlockComponent,
     "box_block": ABoxBlockComponent,
     "container_block": AContainerBlockComponent,
+    "image_block": AImageBlockComponent,
     "logo_block": ALogoBlockComponent,
     "search_bar_block": ASearchBarBlockComponent,
     "nav_utilities_block": ANavUtilitiesBlockComponent,
-
-    "announcement_bar_ecommerce": AAnnouncementBarEcommerceComponent,
-    "footer_ecommerce": AFooterEcommerceComponent,
-    "navbar_ecommerce": ANavbarEcommerceComponent,
 };
 
 export type { BaseTypes } from "./type";

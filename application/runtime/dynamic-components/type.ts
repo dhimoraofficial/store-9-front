@@ -14,6 +14,7 @@ export type BaseTypes =
     | "link_block"
     | "box_block"
     | "container_block"
+    | "image_block"
     | "logo_block"
     | "search_bar_block"
     | "nav_utilities_block"

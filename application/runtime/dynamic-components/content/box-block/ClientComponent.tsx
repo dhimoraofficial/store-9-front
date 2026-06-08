@@ -9,8 +9,11 @@ interface BoxBlockProps {
     align?: "start" | "center" | "end" | "stretch";
     justify?: "start" | "center" | "end" | "between";
     gap?: "none" | "small" | "medium" | "large";
-    backgroundColor?: "transparent" | "white" | "slate-50" | "slate-100" | "zinc-900";
+    backgroundColor?: "transparent" | "white" | "slate-50" | "slate-100" | "zinc-900" | "primary" | "secondary";
     padding?: "none" | "small" | "medium" | "large";
+    display?: "flex" | "grid";
+    gridColumns?: string;
+    hoverEffect?: "none" | "shadow-raise" | "scale-up" | "bg-tint";
     className?: string;
     children?: React.ReactNode;
     style?: React.CSSProperties;
@@ -24,6 +27,9 @@ export default function ClientComponent({
     gap = "medium",
     backgroundColor = "transparent",
     padding = "none",
+    display = "flex",
+    gridColumns = "1",
+    hoverEffect = "none",
     className = "",
     children,
     style
@@ -65,7 +71,9 @@ export default function ClientComponent({
         white: "bg-white",
         "slate-50": "bg-slate-50",
         "slate-100": "bg-slate-100",
-        "zinc-900": "bg-zinc-900 text-white"
+        "zinc-900": "bg-zinc-900 text-white",
+        primary: "bg-primary text-primary-foreground",
+        secondary: "bg-secondary text-secondary-foreground"
     };
 
     const paddingClasses = {
@@ -75,23 +83,33 @@ export default function ClientComponent({
         large: "p-6 md:p-8"
     };
 
+    const hoverClasses = {
+        none: "",
+        "shadow-raise": "hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-out",
+        "scale-up": "hover:scale-[1.02] transition-transform duration-300 ease-out",
+        "bg-tint": "hover:bg-zinc-900/[0.03] dark:hover:bg-white/[0.03] transition-colors duration-300 ease-out"
+    };
+
     const isCustomWidth = typeof width === "string" && /^\d+(\.\d+)?rem$/.test(width);
     const customStyle = {
         ...style,
-        ...(isCustomWidth ? { width: width, flex: `0 0 ${width}` } : {})
+        ...(isCustomWidth ? { width: width, flex: `0 0 ${width}` } : {}),
+        ...(display === "grid" ? { gridTemplateColumns: `repeat(${gridColumns || 1}, minmax(0, 1fr))` } : {})
     };
 
     return (
         <div
             className={cn(
-                "flex min-w-0 transition-all duration-200",
-                direction === "row" ? "flex-row flex-wrap" : "flex-col",
+                "min-w-0 transition-all duration-200",
+                display === "grid" ? "grid" : "flex",
+                display === "flex" && (direction === "row" ? "flex-row flex-wrap" : "flex-col"),
                 widthClasses[width as keyof typeof widthClasses] || "",
                 alignClasses[align],
                 justifyClasses[justify],
                 gapClasses[gap],
                 bgClasses[backgroundColor],
                 paddingClasses[padding],
+                hoverClasses[hoverEffect],
                 className
             )}
             style={customStyle}

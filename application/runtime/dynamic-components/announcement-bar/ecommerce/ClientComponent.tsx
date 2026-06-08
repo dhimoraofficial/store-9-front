@@ -20,6 +20,7 @@ export default function ClientComponent({
     fontSize = "xs",
     fontWeight = "normal",
     height = "36px",
+
     mobileShow = "true",
     layout = "3-column",
     className = "",
@@ -58,6 +59,7 @@ export default function ClientComponent({
     const customStyles: React.CSSProperties = {
         height: height || undefined,
         ...style
+    
     };
 
     if (layout === "1-column") {

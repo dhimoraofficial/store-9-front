@@ -107,6 +107,8 @@ A premium, full-featured slider block with support for header badges, background
 *   **Settings Map**: `ComponentHeroCarouselBlockSchemaSettingsMap`
 *   **Properties**:
     *   `autoplaySpeed` (`prop`): Slide duration in ms (`name: "Auto Slide Speed"`, `rgx: "^[0-9]+$"`)
+    *   `showArrows` (`prop`): Show Navigation Arrows. Options: `["true", "false"]`
+    *   `showDots` (`prop`): Show Pagination Dots. Options: `["true", "false"]`
     *   `slides` (`map`): Carousel Slides List (`name: "Carousel Slides List"`)
         *   *Nested fields*:
             *   `title`: Heading / Title Text. Regex: `.*`
@@ -119,6 +121,8 @@ A premium, full-featured slider block with support for header badges, background
             *   `secondaryCtaUrl`: Secondary Button URL. Regex: `.*`
 *   **Parser Action**:
     *   `autoplaySpeed` default: `4000` (parsed as decimal integer)
+    *   `showArrows` default: `"true"`
+    *   `showDots` default: `"true"`
     *   `slides` default: `[]`
 
 ### 6. Hero Banner Block (`hero_banner_block`)
@@ -188,8 +192,11 @@ A generic layout flex container used to group, align, and size columns, rows, an
     *   `align` (`prop`, group: `layout`): Cross-axis Alignment. Options: `["start", "center", "end", "stretch"]`
     *   `justify` (`prop`, group: `layout`): Main-axis distribution. Options: `["start", "center", "end", "between"]`
     *   `gap` (`prop`, group: `layout`): Inner Gap Spacing. Options: `["none", "small", "medium", "large"]`
-    *   `backgroundColor` (`prop`, group: `style`): Custom Background Color. Options: `["transparent", "white", "slate-50", "slate-100", "zinc-900"]`
+    *   `display` (`prop`, group: `layout`): Layout Engine. Options: `["flex", "grid"]`
+    *   `gridColumns` (`prop`, group: `layout`): Grid Columns Count. Options: `["1", "2", "3", "4", "5", "6", "12"]` (or custom string via regex `^\d+$`)
+    *   `backgroundColor` (`prop`, group: `style`): Custom Background Color. Options: `["transparent", "white", "slate-50", "slate-100", "zinc-900", "primary", "secondary"]`
     *   `padding` (`prop`, group: `style`): Padding Size. Options: `["none", "small", "medium", "large"]`
+    *   `hoverEffect` (`prop`, group: `style`): Hover Interaction Effect. Options: `["none", "shadow-raise", "scale-up", "bg-tint"]`
 *   **Parser Action**:
     *   `direction` default: `"column"`
     *   `width` default: `"auto"`
@@ -198,6 +205,9 @@ A generic layout flex container used to group, align, and size columns, rows, an
     *   `gap` default: `"medium"`
     *   `backgroundColor` default: `"transparent"`
     *   `padding` default: `"none"`
+    *   `display` default: `"flex"`
+    *   `gridColumns` default: `"1"`
+    *   `hoverEffect` default: `"none"`
 
 ### 11b. Bounded Container (`container_block`)
 A bounded, customizable layout block that supports maximum width constraints and horizontal auto-centering.
@@ -210,8 +220,11 @@ A bounded, customizable layout block that supports maximum width constraints and
     *   `align` (`prop`, group: `layout`): Cross-axis Alignment. Options: `["start", "center", "end", "stretch"]`
     *   `justify` (`prop`, group: `layout`): Main-axis distribution. Options: `["start", "center", "end", "between"]`
     *   `gap` (`prop`, group: `layout`): Inner Gap Spacing. Options: `["none", "small", "medium", "large"]`
-    *   `backgroundColor` (`prop`, group: `style`): Custom Background Color. Options: `["transparent", "white", "slate-50", "slate-100", "zinc-900"]`
+    *   `display` (`prop`, group: `layout`): Layout Engine. Options: `["flex", "grid"]`
+    *   `gridColumns` (`prop`, group: `layout`): Grid Columns Count. Options: `["1", "2", "3", "4", "5", "6", "12"]` (or custom string via regex `^\d+$`)
+    *   `backgroundColor` (`prop`, group: `style`): Custom Background Color. Options: `["transparent", "white", "slate-50", "slate-100", "zinc-900", "primary", "secondary"]`
     *   `padding` (`prop`, group: `style`): Padding Size. Options: `["none", "small", "medium", "large"]`
+    *   `hoverEffect` (`prop`, group: `style`): Hover Interaction Effect. Options: `["none", "shadow-raise", "scale-up", "bg-tint"]`
 *   **Parser Action**:
     *   `direction` default: `"column"`
     *   `width` default: `"auto"`
@@ -222,6 +235,9 @@ A bounded, customizable layout block that supports maximum width constraints and
     *   `gap` default: `"medium"`
     *   `backgroundColor` default: `"transparent"`
     *   `padding` default: `"none"`
+    *   `display` default: `"flex"`
+    *   `gridColumns` default: `"1"`
+    *   `hoverEffect` default: `"none"`
 
 ### 12. Brand Logo Block (`logo_block`)
 Displays brand graphics and names inside top headers or page footers.
@@ -327,10 +343,29 @@ An advanced text element with support for customizable variants, theme colors, t
     *   `color` (`style`): Text Color Theme (`name: "Text Color Theme"`, `opt: ["primary", "secondary", "muted", "accent"]`)
     *   `transform` (`style`): Text Transformation (`name: "Text Transformation"`, `opt: ["none", "uppercase", "capitalize"]`)
     *   `weight` (`style`): Text Font Weight (`name: "Text Font Weight"`, `opt: ["400", "500", "600", "700"]`)
+    *   `lineHeight` (`style`): Line Height (`name: "Line Height"`, `opt: ["tight", "snug", "normal", "relaxed"]`)
+    *   `letterSpacing` (`style`): Letter Spacing (`name: "Letter Spacing"`, `opt: ["tighter", "normal", "wider", "tracking-widest"]`)
+    *   `responsiveSize` (`prop`): Responsive Font Sizes (`name: "Responsive Font Sizes"`, type: `map`, fields: `mobileSize`, `tabletSize`, `desktopSize`)
 *   **Parser Action**:
     *   `content` default: `""`
     *   `href` default: `""`
     *   `variant` default: `"body"`
+    *   `lineHeight` mapped to numeric value (`tight` -> `1.25`, `snug` -> `1.375`, `normal` -> `1.5`, `relaxed` -> `1.625`).
+    *   `letterSpacing` mapped to numeric em (`tighter` -> `-0.05em`, `normal` -> `0em`, `wider` -> `0.05em`, `tracking-widest` -> `0.15em`).
+    *   `responsiveSize` values used to dynamically inject viewport-specific media query styles.
+
+### 18b. Image Block (`image_block`)
+A premium image container with object-fit and aspect-ratio sizing controls, replacing legacy image logo workarounds.
+*   **Settings Map**: `ComponentImageBlockSchemaSettingsMap`
+*   **Properties**:
+    *   `src` (`prop`, group: `media`): Image Source URL (`name: "Image Source URL"`, `rgx: ".*"`)
+    *   `alt` (`prop`, group: `media`): Alternative Text (`name: "Alternative Text"`, `rgx: ".*"`)
+    *   `objectFit` (`style`, group: `media`): Object Fit (`name: "Object Fit"`, `opt: ["contain", "cover", "fill"]`)
+    *   `aspectRatio` (`style`, group: `media`): Aspect Ratio (`name: "Aspect Ratio"`, `opt: ["square", "video", "auto", "4/3"]`)
+*   **Parser Action**:
+    *   `src` default: `"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"`
+    *   `alt` default: `"Asset image"`
+    *   `aspectRatio` mapped to CSS values (`square` -> `1 / 1`, `video` -> `16 / 9`, `auto` -> `auto`, `4/3` -> `4 / 3`).
 
 ---
 

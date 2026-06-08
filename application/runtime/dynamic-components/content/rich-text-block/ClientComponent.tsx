@@ -2,7 +2,10 @@
 
 import React from "react";
 
-export default function ClientComponent({ content, href, variant = "body", style }: any) {
+export default function ClientComponent({ content, href, variant = "body", style, responsiveSize }: any) {
+    const uniqueId = React.useId().replace(/:/g, "");
+    const responsiveClass = `rtc-${uniqueId}`;
+
     const resolveColorStyle = (color: string | undefined) => {
         if (!color) return undefined;
         const mapping: Record<string, string> = {
@@ -19,47 +22,73 @@ export default function ClientComponent({ content, href, variant = "body", style
         finalStyle.color = resolveColorStyle(finalStyle.color);
     }
 
+    const hasResponsive = responsiveSize && (responsiveSize.mobileSize || responsiveSize.tabletSize || responsiveSize.desktopSize);
+
     const renderContent = () => {
+        const combinedClass = hasResponsive ? responsiveClass : "";
         switch (variant) {
             case "h6":
                 return (
-                    <h6 className="text-base font-bold leading-tight select-none" style={finalStyle}>
+                    <h6 className={`${combinedClass} text-base font-bold leading-tight select-none`} style={finalStyle}>
                         {content}
                     </h6>
                 );
             case "overline":
                 return (
-                    <span className="text-[10px] tracking-wider uppercase font-semibold leading-none select-none" style={finalStyle}>
+                    <span className={`${combinedClass} text-[10px] tracking-wider uppercase font-semibold leading-none select-none`} style={finalStyle}>
                         {content}
                     </span>
                 );
             case "caption":
                 return (
-                    <span className="text-xs leading-normal select-none" style={finalStyle}>
+                    <span className={`${combinedClass} text-xs leading-normal select-none`} style={finalStyle}>
                         {content}
                     </span>
                 );
             case "body":
             default:
                 return (
-                    <p className="text-sm leading-relaxed select-none" style={finalStyle}>
+                    <p className={`${combinedClass} text-sm leading-relaxed select-none`} style={finalStyle}>
                         {content}
                     </p>
                 );
         }
     };
 
-    if (href) {
-        return (
-            <a
-                href={href}
-                className="hover:underline transition-all inline-block"
-                style={{ textDecoration: "none" }}
-            >
-                {renderContent()}
-            </a>
-        );
-    }
+    const elementContent = renderContent();
 
-    return renderContent();
+    const output = (
+        <>
+            {hasResponsive && (
+                <style>{`
+                    .${responsiveClass} {
+                        ${responsiveSize.mobileSize ? `font-size: ${responsiveSize.mobileSize} !important;` : ""}
+                    }
+                    @media (min-width: 640px) {
+                        .${responsiveClass} {
+                            ${responsiveSize.tabletSize ? `font-size: ${responsiveSize.tabletSize} !important;` : ""}
+                        }
+                    }
+                    @media (min-width: 1024px) {
+                        .${responsiveClass} {
+                            ${responsiveSize.desktopSize ? `font-size: ${responsiveSize.desktopSize} !important;` : ""}
+                        }
+                    }
+                `}</style>
+            )}
+            {href ? (
+                <a
+                    href={href}
+                    className="hover:underline transition-all inline-block"
+                    style={{ textDecoration: "none" }}
+                >
+                    {elementContent}
+                </a>
+            ) : (
+                elementContent
+            )}
+        </>
+    );
+
+    return output;
 }

@@ -7,6 +7,18 @@ export const ComponentHeroCarouselBlockSchemaSettingsMap: ComponentGlobalSchemaS
         name: "Auto Slide Speed (ms, e.g. 4000)",
         rgx: "^[0-9]+$"
     },
+    showArrows: {
+        as: "showArrows",
+        tp: "prop",
+        name: "Show Navigation Arrows",
+        opt: ["true", "false"]
+    },
+    showDots: {
+        as: "showDots",
+        tp: "prop",
+        name: "Show Pagination Dots",
+        opt: ["true", "false"]
+    },
     slides: {
         as: "slides",
         name: "Carousel Slides List",
@@ -27,6 +39,8 @@ export const ComponentHeroCarouselBlockSchemaSettingsMap: ComponentGlobalSchemaS
 export function parseHeroCarouselComponentSettings(type: string, settings: any) {
     const parsed: any = {};
     parsed.autoplaySpeed = settings?.autoplaySpeed ? parseInt(settings.autoplaySpeed, 10) : 4000;
+    parsed.showArrows = settings?.showArrows !== undefined ? settings.showArrows : "true";
+    parsed.showDots = settings?.showDots !== undefined ? settings.showDots : "true";
     parsed.slides = Array.isArray(settings?.slides) ? settings.slides : [];
     return parsed;
 }

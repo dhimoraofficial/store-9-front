@@ -60,13 +60,38 @@ export const ComponentContainerBlockSchemaSettingsMap: ComponentGlobalSchemaSett
         description: "Spacing between direct children.",
         opt: ["none", "small", "medium", "large"]
     },
+    display: {
+        as: "display",
+        tp: "prop",
+        group: "layout",
+        name: "Layout Engine",
+        description: "Choose between flexbox or grid layout engine.",
+        opt: ["flex", "grid"]
+    },
+    gridColumns: {
+        as: "gridColumns",
+        tp: "prop",
+        group: "layout",
+        name: "Grid Columns Count",
+        description: "Number of grid column tracks (only active when display is grid).",
+        opt: ["1", "2", "3", "4", "5", "6", "12"],
+        rgx: "^\\d+$"
+    },
+    hoverEffect: {
+        as: "hoverEffect",
+        tp: "prop",
+        group: "style",
+        name: "Hover Interaction Effect",
+        description: "Interactive visual transition on hover.",
+        opt: ["none", "shadow-raise", "scale-up", "bg-tint"]
+    },
     backgroundColor: {
         as: "backgroundColor",
         tp: "prop",
         group: "style",
         name: "Custom Background Color",
         description: "Background color of the column.",
-        opt: ["transparent", "white", "slate-50", "slate-100", "zinc-900"]
+        opt: ["transparent", "white", "slate-50", "slate-100", "zinc-900", "primary", "secondary"]
     },
     padding: {
         as: "padding",
@@ -94,6 +119,9 @@ export function parseContainerBlockComponentSettings(type: string, settings: any
     if (!parsed.padding) parsed.padding = "none";
     if (!parsed.maxWidth) parsed.maxWidth = "var(--container-max-width)";
     if (!parsed.mxAuto) parsed.mxAuto = "true";
+    if (!parsed.display) parsed.display = "flex";
+    if (!parsed.gridColumns) parsed.gridColumns = "1";
+    if (!parsed.hoverEffect) parsed.hoverEffect = "none";
 
     return parsed;
 }
