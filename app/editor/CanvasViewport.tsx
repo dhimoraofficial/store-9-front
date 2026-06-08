@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Maximize2, Minus, Plus, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CanvasViewportProps {
     children: React.ReactNode;
@@ -311,37 +312,45 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
 
                 <div className="h-4 w-px bg-zinc-200" />
 
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={handleZoomOut}
-                    className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
                     title="Zoom Out"
+                    className="p-1"
                 >
                     <Minus className="w-3.5 h-3.5" />
-                </button>
-                <button
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={handleZoomIn}
-                    className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
                     title="Zoom In"
+                    className="p-1"
                 >
                     <Plus className="w-3.5 h-3.5" />
-                </button>
+                </Button>
 
                 <div className="h-4 w-px bg-zinc-200" />
 
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={handleFit}
-                    className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
                     title="Fit view"
+                    className="p-1"
                 >
                     <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-                <button
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={handleReset}
-                    className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
                     title="Reset view"
+                    className="p-1"
                 >
                     <RotateCcw className="w-3.5 h-3.5" />
-                </button>
+                </Button>
             </div>
         </div>
     );

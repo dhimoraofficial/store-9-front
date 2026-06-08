@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c621342b-8b2f-48db-887e-3768d83d79d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/editor/CanvasViewport.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/editor/CanvasViewport.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +107,7 @@
       <updated>1780906976765</updated>
       <workItem from="1780906977794" duration="133000" />
       <workItem from="1780907132089" duration="894000" />
-      <workItem from="1780929321521" duration="3113000" />
+      <workItem from="1780929321521" duration="3420000" />
     </task>
     <servers />
   </component>
