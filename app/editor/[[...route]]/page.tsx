@@ -442,7 +442,10 @@ function ThemeEditorWorkspace() {
             <main className="flex-1 relative overflow-hidden min-h-0 bg-[#f4f5f7]">
                 {/* Center: Preview Workspace (Zoomable and Movable Canvas) */}
                 <div className="absolute inset-0 z-0">
-                    <CanvasViewport viewportWidth={VIEWPORT_WIDTHS[viewport]}>
+                    <CanvasViewport 
+                        viewportWidth={VIEWPORT_WIDTHS[viewport]}
+                        onBgClick={() => dispatch(selectNode(null))}
+                    >
                         <ThemeBuilder themeConfigs={theme || {}}>
                             <div className="w-full h-auto">
                                 {schemas.announcement && <EditorPreviewBuilder schema={schemas.announcement} />}

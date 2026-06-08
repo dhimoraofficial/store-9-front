@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 interface CanvasViewportProps {
     children: React.ReactNode;
     viewportWidth: string | number;
+    onBgClick?: () => void;
 }
 
-export default function CanvasViewport({ children, viewportWidth }: CanvasViewportProps) {
+export default function CanvasViewport({ children, viewportWidth, onBgClick }: CanvasViewportProps) {
     const [scale, setScale] = useState(.9);
     const [isEditingScale, setIsEditingScale] = useState(false);
     const [editValue, setEditValue] = useState("");
@@ -156,7 +157,14 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
             setIsDragging(true);
             dragStartRef.current = { x: e.clientX, y: e.clientY };
             posStartRef.current = { ...position };
-            (e.target as HTMLElement).setPointerCapture(e.pointerId);
+            try {
+                (e.target as HTMLElement).setPointerCapture(e.pointerId);
+            } catch (err) {}
+
+            // Unselect if clicking background (left-click, not panning)
+            if (e.button === 0 && !isSpacePressed) {
+                onBgClick?.();
+            }
         }
     };
 
@@ -267,6 +275,7 @@ export default function CanvasViewport({ children, viewportWidth }: CanvasViewpo
             >
                 <div
                     className="__drk_editor__ storefront-canvas border-zinc-200 border bg-white my-10"
+                    data-canvas-bg="true"
                     style={{
                         width: viewportWidth,
                         minWidth: viewportWidth === "1280px" ? "1024px" : undefined,

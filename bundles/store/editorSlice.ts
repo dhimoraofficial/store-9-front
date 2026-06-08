@@ -11,6 +11,7 @@ export interface EditorState {
     };
     theme: any | null; // Global theme config
     selectedNodeId: string | null;
+    hoveredNodeId: string | null;
     activeSection: 'header' | 'main' | 'footer' | 'global' | null;
     status: 'idle' | 'loading' | 'saving' | 'failed';
     error: string | null;
@@ -32,6 +33,7 @@ const initialState: EditorState = {
     },
     theme: null,
     selectedNodeId: null,
+    hoveredNodeId: null,
     activeSection: null,
     status: 'idle',
     error: null,
@@ -157,6 +159,9 @@ export const editorSlice = createSlice({
             } else if (findInSection(state.schemas.main)) {
                 state.activeSection = "main";
             }
+        },
+        hoverNode: (state, action: PayloadAction<string | null>) => {
+            state.hoveredNodeId = action.payload;
         },
         updateNodeSettings: (
             state,
@@ -481,6 +486,7 @@ export const editorSlice = createSlice({
 export const {
     setSchemas,
     selectNode,
+    hoverNode,
     updateNodeSettings,
     updateNodeAction,
     updateNodeLabel,
