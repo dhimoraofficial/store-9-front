@@ -173,6 +173,21 @@ export const editorSlice = createSlice({
             state.history.past.push(JSON.parse(JSON.stringify(state.schemas)));
             state.schemas = next;
         },
+        // Takes a snapshot of current schemas without any mutation.
+        // Used to checkpoint before a debounced text burst begins.
+        snapshotSchemas: (state) => {
+            snapshotHistory(state);
+        },
+        // Updates settings without creating a history snapshot.
+        // Used for live canvas preview during debounced text input.
+        updateNodeSettingsLive: (
+            state,
+            action: PayloadAction<{ id: string; settings: Record<string, any> }>
+        ) => {
+            mutateGlobalSchemas(state.schemas, action.payload.id, (node) => {
+                node.settings = { ...action.payload.settings };
+            });
+        },
         selectNode: (state, action: PayloadAction<string | null>) => {
             state.selectedNodeId = action.payload;
             if (action.payload === null) {
@@ -536,6 +551,8 @@ export const {
     setSchemas,
     undo,
     redo,
+    snapshotSchemas,
+    updateNodeSettingsLive,
     selectNode,
     hoverNode,
     updateNodeSettings,

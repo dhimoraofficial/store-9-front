@@ -19,11 +19,13 @@ import {
     updateNodeAction,
     updateNodeLabel,
     updateNodeSettings,
+    updateNodeSettingsLive,
+    snapshotSchemas,
     undo,
     redo,
 } from "@/bundles/store/editorSlice";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import CanvasViewport from "../CanvasViewport";
@@ -416,7 +418,11 @@ function ThemeEditorWorkspace() {
         toast.success(`Added: ${type}`);
     };
 
-    const handleUpdateSetting = (settingKey: string, val: any, settingConfig: any) => {
+    // Refs to track debounced settings burst (snapshot once per burst, live-update in between)
+    const settingsBurstActiveRef = useRef(false);
+    const settingsBurstTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const handleUpdateSetting = useCallback((settingKey: string, val: any, settingConfig: any) => {
         if (!selectedNode) return;
         let isValid = true;
         if (settingConfig) {
@@ -436,8 +442,24 @@ function ThemeEditorWorkspace() {
         } else {
             settings[settingKey] = val;
         }
-        dispatch(updateNodeSettings({ id: selectedNode.id, settings }));
-    };
+
+        // First keystroke of a burst: snapshot BEFORE any change so undo
+        // returns to the state before the user started typing.
+        if (!settingsBurstActiveRef.current) {
+            settingsBurstActiveRef.current = true;
+            dispatch(snapshotSchemas());
+        }
+
+        // Always apply the update live (no snapshot) for immediate canvas preview.
+        dispatch(updateNodeSettingsLive({ id: selectedNode.id, settings }));
+
+        // Reset burst after 400ms of inactivity so the next change
+        // creates a new snapshot checkpoint.
+        if (settingsBurstTimerRef.current) clearTimeout(settingsBurstTimerRef.current);
+        settingsBurstTimerRef.current = setTimeout(() => {
+            settingsBurstActiveRef.current = false;
+        }, 400);
+    }, [selectedNode, validationErrors, dispatch]);
 
 
 
