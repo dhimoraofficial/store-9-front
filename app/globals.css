@@ -69,25 +69,25 @@
     --border-radius-base: 0.75rem;
     --btn-radius: 0.65rem;
     --font-family-sans: Inter;
-    --ui-app-bg: #f6f8fc;
-    --ui-app-glow: rgba(91, 124, 250, 0.12);
-    --ui-app-glow-alt: rgba(99, 102, 241, 0.08);
-    --ui-surface: rgba(255, 255, 255, 0.84);
+    --ui-app-bg: #f7f9fd;
+    --ui-app-glow: rgba(91, 124, 250, 0.08);
+    --ui-app-glow-alt: rgba(124, 92, 255, 0.05);
+    --ui-surface: rgba(255, 255, 255, 0.9);
     --ui-surface-strong: #ffffff;
-    --ui-surface-muted: #eef3ff;
-    --ui-border: rgba(91, 124, 250, 0.18);
-    --ui-border-strong: rgba(91, 124, 250, 0.28);
+    --ui-surface-muted: #f3f6ff;
+    --ui-border: rgba(91, 124, 250, 0.14);
+    --ui-border-strong: rgba(91, 124, 250, 0.22);
     --ui-text: #1f2937;
-    --ui-text-muted: #5b6475;
+    --ui-text-muted: #677085;
     --ui-accent: #5b7cfa;
     --ui-accent-2: #7c5cff;
     --ui-accent-hover: #4868e6;
-    --ui-accent-soft: rgba(91, 124, 250, 0.12);
-    --ui-accent-soft-strong: rgba(91, 124, 250, 0.18);
+    --ui-accent-soft: rgba(91, 124, 250, 0.1);
+    --ui-accent-soft-strong: rgba(91, 124, 250, 0.14);
     --ui-surface-gradient-start: rgba(255, 255, 255, 0.96);
-    --ui-surface-gradient-end: rgba(240, 245, 255, 0.94);
-    --ui-shadow-popup: 0 16px 36px rgba(59, 84, 150, 0.14);
-    --ui-shadow-dialog: 0 24px 64px rgba(59, 84, 150, 0.18);
+    --ui-surface-gradient-end: rgba(244, 247, 255, 0.96);
+    --ui-shadow-popup: 0 14px 32px rgba(59, 84, 150, 0.12);
+    --ui-shadow-dialog: 0 22px 56px rgba(59, 84, 150, 0.15);
     --ui-overlay: rgba(15, 23, 42, 0.12);
 }
 
@@ -102,25 +102,25 @@
     --border-radius-base: 0.75rem;
     --btn-radius: 0.65rem;
     --font-family-sans: Inter;
-    --ui-app-bg: #12151d;
-    --ui-app-glow: rgba(110, 168, 255, 0.12);
-    --ui-app-glow-alt: rgba(59, 130, 246, 0.08);
-    --ui-surface: rgba(24, 29, 40, 0.9);
-    --ui-surface-strong: #1b2230;
-    --ui-surface-muted: #151a24;
-    --ui-border: rgba(110, 168, 255, 0.16);
-    --ui-border-strong: rgba(110, 168, 255, 0.28);
-    --ui-text: #e8ebf2;
-    --ui-text-muted: #aab2c2;
-    --ui-accent: #74a7ff;
-    --ui-accent-2: #7ee0c3;
-    --ui-accent-hover: #4f8dff;
-    --ui-accent-soft: rgba(116, 167, 255, 0.14);
-    --ui-accent-soft-strong: rgba(116, 167, 255, 0.2);
-    --ui-surface-gradient-start: rgba(28, 35, 49, 0.98);
-    --ui-surface-gradient-end: rgba(23, 28, 40, 0.96);
-    --ui-shadow-popup: 0 16px 36px rgba(0, 0, 0, 0.35);
-    --ui-shadow-dialog: 0 24px 70px rgba(0, 0, 0, 0.45);
+    --ui-app-bg: #11141b;
+    --ui-app-glow: rgba(116, 167, 255, 0.09);
+    --ui-app-glow-alt: rgba(126, 224, 195, 0.04);
+    --ui-surface: rgba(25, 30, 41, 0.92);
+    --ui-surface-strong: #1a2030;
+    --ui-surface-muted: #141924;
+    --ui-border: rgba(116, 167, 255, 0.12);
+    --ui-border-strong: rgba(116, 167, 255, 0.2);
+    --ui-text: #edf1f7;
+    --ui-text-muted: #a5afbf;
+    --ui-accent: #7aa9ff;
+    --ui-accent-2: #68d6be;
+    --ui-accent-hover: #5d98ff;
+    --ui-accent-soft: rgba(122, 169, 255, 0.12);
+    --ui-accent-soft-strong: rgba(122, 169, 255, 0.16);
+    --ui-surface-gradient-start: rgba(28, 34, 47, 0.98);
+    --ui-surface-gradient-end: rgba(21, 26, 37, 0.97);
+    --ui-shadow-popup: 0 14px 32px rgba(0, 0, 0, 0.3);
+    --ui-shadow-dialog: 0 22px 60px rgba(0, 0, 0, 0.4);
     --ui-overlay: rgba(0, 0, 0, 0.42);
     background-color: var(--ui-app-bg) !important;
     color: var(--ui-text) !important;
@@ -144,6 +144,68 @@ body {
     font-family: var(--font-family-sans), system-ui, sans-serif;
 }
 
+html {
+    scrollbar-color: var(--ui-border) transparent;
+    scrollbar-width: thin;
+}
+
+::selection {
+    background: var(--ui-accent-soft-strong);
+    color: var(--ui-text);
+}
+
+.theme-dark ::selection {
+    background: rgba(122, 169, 255, 0.22);
+    color: #ffffff;
+}
+
+:focus-visible {
+    outline: 2px solid var(--ui-accent);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--ui-accent-soft);
+}
+
+button,
+input,
+select,
+textarea,
+a,
+[role="button"],
+[role="tab"] {
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--ui-border);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .animate-marquee {
+        animation: none !important;
+    }
+}
+
 /* Base text color overrides for elements that don't have explicit tailwind color classes */
 .theme-dark:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark :not(.storefront-canvas):not(.storefront-canvas *):not(button):not(input):not(select):not(textarea):not(svg) {
@@ -158,7 +220,7 @@ body {
 .theme-dark .bg-zinc-100\/40:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark aside:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark header:not(.storefront-canvas):not(.storefront-canvas *) {
-    background-color: #2c2c2c !important;
+    background-color: var(--ui-surface-strong) !important;
 }
 
 /* Sub-panels, inputs, and list containers (theme uses a darker color for inner boxes) */
@@ -170,8 +232,8 @@ body {
 .theme-dark button.w-full:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .border-dashed:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .bg-\[\#f4f5f7\]:not(.storefront-canvas):not(.storefront-canvas *) {
-    background-color: #1e1e1e !important;
-    color: #ffffff !important;
+    background-color: var(--ui-surface) !important;
+    color: var(--ui-text) !important;
 }
 
 /* Border overrides */
@@ -185,7 +247,7 @@ body {
 .theme-dark .border-l:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .border-r:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .border-zinc-100\/85:not(.storefront-canvas):not(.storefront-canvas *) {
-    border-color: #3e3e3e !important;
+    border-color: var(--ui-border-strong) !important;
 }
 
 /* Text color overrides */
@@ -195,18 +257,18 @@ body {
 .theme-dark .text-zinc-700:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .text-zinc-600:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .text-gray-900:not(.storefront-canvas):not(.storefront-canvas *) {
-    color: #e3e3e3 !important;
+    color: var(--ui-text) !important;
 }
 
 .theme-dark .text-zinc-500:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .text-zinc-400:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .text-gray-500:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .text-gray-400:not(.storefront-canvas):not(.storefront-canvas *) {
-    color: #b3b3b3 !important;
+    color: var(--ui-text-muted) !important;
 }
 
 .theme-dark .text-zinc-300:not(.storefront-canvas):not(.storefront-canvas *) {
-    color: #8c8c8c !important;
+    color: #8e96a7 !important;
 }
 
 /* theme accents */
@@ -214,17 +276,17 @@ body {
 .theme-dark .text-blue-600:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .hover\:text-blue-600:hover:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark [data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
-    color: #0c8ce9 !important;
+    color: var(--ui-accent) !important;
 }
 
 .theme-dark [data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
-    border-color: #0c8ce9 !important;
+    border-color: var(--ui-accent) !important;
 }
 
 /* Custom indicator for Radix Tabs active state */
 .theme-dark button[data-state=active]:not(.storefront-canvas):not(.storefront-canvas *) {
-    border-bottom-color: #0c8ce9 !important;
-    color: #ffffff !important;
+    border-bottom-color: var(--ui-accent) !important;
+    color: var(--ui-text) !important;
 }
 
 /* Hover background overrides */
@@ -237,7 +299,7 @@ body {
 .theme-dark .hover\:bg-gray-200:hover:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .hover\:bg-red-50:hover:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .hover\:bg-red-50\/50:hover:not(.storefront-canvas):not(.storefront-canvas *) {
-    background-color: #3c3c3c !important;
+    background-color: var(--ui-accent-soft) !important;
 }
 
 /* Hover text overrides */
@@ -246,14 +308,14 @@ body {
 .theme-dark .hover\:text-zinc-950:hover:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .group:hover .text-zinc-800:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark .group:hover .text-zinc-750:not(.storefront-canvas):not(.storefront-canvas *) {
-    color: #ffffff !important;
+    color: var(--ui-text) !important;
 }
 
 /* Scroll area background */
 .theme-dark [data-radix-scroll-area-viewport]:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark [style*="overflow: scroll"]:not(.storefront-canvas):not(.storefront-canvas *),
 .theme-dark [style*="overflow: auto"]:not(.storefront-canvas):not(.storefront-canvas *) {
-    background-color: #2c2c2c !important;
+    background-color: var(--ui-surface-strong) !important;
 }
 
 /* Dropdown menu and Radix select content portals globally in the editor page */
