@@ -15,6 +15,7 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
     const dispatch = useDispatch();
     const selectedNodeId = useSelector((state: RootState) => state.editor.selectedNodeId);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState<{
         rect: DOMRect;
         width: number;
@@ -91,10 +92,14 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
         dispatch(selectNode(schema.id));
     };
 
-    // Style cleanup: remove custom outline, outline is handled by the maroon portal overlay
+    // Style cleanup: outline is handled locally on hover, and via portal on selection
     const style: React.CSSProperties = {
         ...(parsed.style || {}),
         cursor: "pointer",
+        outline: isSelected
+            ? undefined
+            : (isHovered ? "1px dashed rgba(184, 0, 76, 0.5)" : undefined),
+        outlineOffset: "-1px",
     };
 
     // Make sure event handlers intercept normal navigation/submits in editing sandbox
@@ -124,6 +129,14 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
             ref={wrapperRef}
             style={{ display: "contents" }}
             onClick={handleClick}
+            onMouseEnter={(e) => {
+                e.stopPropagation();
+                setIsHovered(true);
+            }}
+            onMouseLeave={(e) => {
+                e.stopPropagation();
+                setIsHovered(false);
+            }}
         >
             {contentElement}
             {isSelected && selectedInfo && typeof window !== "undefined" && createPortal(
@@ -135,7 +148,7 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
                         width: selectedInfo.rect.width,
                         height: selectedInfo.rect.height,
                         pointerEvents: "none",
-                        border: "2px solid #800000",
+                        border: "2px solid #b8004c",
                         zIndex: 99999,
                         boxSizing: "border-box",
                     }}
@@ -145,7 +158,7 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
                             position: "absolute",
                             left: "0px",
                             ...(badgeOnTop ? { top: "-24px" } : { bottom: "-24px" }),
-                            backgroundColor: "#800000",
+                            backgroundColor: "#b8004c",
                             color: "#ffffff",
                             fontSize: "10px",
                             fontFamily: "monospace",
