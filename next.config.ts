@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'pub-377e27553b6d484ca091c41cacb6c8e7.r2.dev',
             },
+            {
+                protocol: 'https',
+                hostname: 'via.placeholder.com',
+            },
         ]
     }
 };

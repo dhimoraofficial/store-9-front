@@ -1,0 +1,733 @@
+[
+    {
+        "id": "hero_grid_section_root",
+        "type": "container_block",
+        "label": "Hero Section Grid Wrapper",
+        "settings": {
+            "direction": "row",
+            "width": "full",
+            "maxWidth": "var(--container-max-width)",
+            "mxAuto": "true",
+            "align": "stretch",
+            "justify": "between",
+            "gap": "medium",
+            "padding": "medium",
+            "backgroundColor": "transparent",
+            "display": "flex",
+            "hoverEffect": "none"
+        },
+        "children": [
+            {
+                "id": "box_block_shsj3d",
+                "type": "box_block",
+                "settings": {
+                    "width": "flex-grow"
+                },
+                "children": [
+                    {
+                        "id": "hero_left_carousel_column",
+                        "type": "hero_carousel_block",
+                        "label": "Primary Slide Showcase",
+                        "settings": {
+                            "autoplaySpeed": "4000",
+                            "showArrows": "true",
+                            "showDots": "true",
+                            "width": "flex-grow",
+                            "slides": [
+                                {
+                                    "title": "",
+                                    "subtitle": "",
+                                    "badgeText": "",
+                                    "bgImage": "",
+                                    "primaryCtaText": "",
+                                    "primaryCtaUrl": "",
+                                    "secondaryCtaText": "",
+                                    "secondaryCtaUrl": ""
+                                }
+                            ]
+                        },
+                        "children": [
+                            {
+  "id": "hero_slide_1",
+  "type": "map",
+  "settings": {
+    "title": "Competitive Gaming Gear.",
+    "subtitle": "Discover pro-grade mechanical keyboards, ultra-light mice, and immersive spatial headsets engineered for tournament execution.",
+    "badgeText": "APEX PERFORMANCE",
+    "bgImage": "https://picsum.photos/800x450?text=Hero+Gaming+Setup",
+    "primaryCtaText": "Gear Up",
+    "primaryCtaUrl": "/categories/gaming-gear",
+    "secondaryCtaText": "",
+    "secondaryCtaUrl": ""
+  }
+                        }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "hero_right_banner_column",
+                "type": "box_block",
+                "label": "Secondary Stacked Column",
+                "settings": {
+                    "direction": "column",
+                    "width": "2",
+                    "align": "stretch",
+                    "justify": "start",
+                    "gap": "medium",
+                    "padding": "none",
+                    "backgroundColor": "transparent",
+                    "display": "flex",
+                    "hoverEffect": "none"
+                },
+                "children": [
+                    {
+                        "id": "right_banner_top_mobile",
+                        "type": "hero_banner_block",
+                        "label": "Top Mobile Card",
+                        "settings": {
+                            "title": "Mobile Excellence",
+                            "subtitle": "DISCOVER THE LATEST FLAGSHIPS TODAY",
+                            "badgeText": "SHOP FLAGSHIPS",
+                            "bgImage": "https://picsum.photos/400x180?text=Mobile+Excellence",
+                            "primaryCtaText": "",
+                            "primaryCtaUrl": "/categories/smartphones",
+                            "secondaryCtaText": "",
+                            "secondaryCtaUrl": "",
+                            "height": "180px"
+                        }
+                    },
+                    {
+                        "id": "right_banner_bottom_audio",
+                        "type": "hero_banner_block",
+                        "label": "Bottom Audio Card",
+                        "settings": {
+                            "title": "Audio Gear",
+                            "subtitle": "PREMIUM NOISE-CANCELING HEADPHONES & EARBUDS",
+                            "badgeText": "IMMERSIVE SOUND",
+                            "bgImage": "https://picsum.photos/400x180?text=Audio+Gear",
+                            "primaryCtaText": "",
+                            "primaryCtaUrl": "/categories/audio",
+                            "secondaryCtaText": "",
+                            "secondaryCtaUrl": "",
+                            "height": "180px"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "category_section_root",
+        "type": "container_block",
+        "label": "Shop By Category Section Wrapper",
+        "settings": {
+            "direction": "column",
+            "width": "full",
+            "maxWidth": "var(--container-max-width)",
+            "mxAuto": "true",
+            "align": "stretch",
+            "justify": "start",
+            "gap": "large",
+            "padding": "medium",
+            "backgroundColor": "transparent",
+            "display": "flex",
+            "hoverEffect": "none"
+        },
+        "children": [
+            {
+                "id": "category_section_header",
+                "type": "box_block",
+                "label": "Section Center Header",
+                "settings": {
+                    "direction": "row",
+                    "width": "full",
+                    "align": "center",
+                    "justify": "center",
+                    "gap": "none",
+                    "padding": "none",
+                    "backgroundColor": "transparent",
+                    "display": "flex",
+                    "hoverEffect": "none"
+                },
+                "children": [
+                    {
+                        "id": "category_section_title",
+                        "type": "rich_text_block",
+                        "settings": {
+                            "content": "Shop by Category",
+                            "variant": "h6",
+                            "color": "primary",
+                            "transform": "none",
+                            "weight": "700",
+                            "lineHeight": "tight",
+                            "letterSpacing": "normal"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "category_cards_grid_track",
+                "type": "box_block",
+                "label": "Category Grid Track",
+                "settings": {
+                    "direction": "row",
+                    "width": "full",
+                    "align": "stretch",
+                    "justify": "start",
+                    "gap": "medium",
+                    "padding": "none",
+                    "backgroundColor": "transparent",
+                    "display": "grid",
+                    "gridColumns": "6",
+                    "hoverEffect": "none"
+                },
+                "children": [
+                    {
+                        "id": "cat_card_laptops",
+                        "type": "box_block",
+                        "label": "Laptops Category Card",
+                        "settings": {
+                            "direction": "column",
+                            "width": "auto",
+                            "align": "center",
+                            "justify": "center",
+                            "gap": "small",
+                            "padding": "medium",
+                            "backgroundColor": "white",
+                            "display": "flex",
+                            "hoverEffect": "shadow-raise"
+                        },
+                        "children": [
+                            {
+                                "id": "cat_img_laptops",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/150?text=Laptops",
+                                    "alt": "High-performance business and gaming laptops catalog",
+                                    "objectFit": "contain",
+                                    "aspectRatio": "square"
+                                }
+                            },
+                            {
+                                "id": "cat_title_laptops",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "Laptops",
+                                    "variant": "body",
+                                    "color": "primary",
+                                    "transform": "none",
+                                    "weight": "700",
+                                    "lineHeight": "snug",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "cat_count_laptops",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "120+ PRODUCTS",
+                                    "variant": "caption",
+                                    "color": "muted",
+                                    "transform": "uppercase",
+                                    "weight": "500",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "cat_card_smartphones",
+                        "type": "box_block",
+                        "label": "Smartphones Category Card",
+                        "settings": {
+                            "direction": "column",
+                            "width": "auto",
+                            "align": "center",
+                            "justify": "center",
+                            "gap": "small",
+                            "padding": "medium",
+                            "backgroundColor": "white",
+                            "display": "flex",
+                            "hoverEffect": "shadow-raise"
+                        },
+                        "children": [
+                            {
+                                "id": "cat_img_smartphones",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/150?text=Smartphones",
+                                    "alt": "Flagship and mid-range mobile smartphones devices",
+                                    "objectFit": "contain",
+                                    "aspectRatio": "square"
+                                }
+                            },
+                            {
+                                "id": "cat_title_smartphones",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "Smartphones",
+                                    "variant": "body",
+                                    "color": "primary",
+                                    "transform": "none",
+                                    "weight": "700",
+                                    "lineHeight": "snug",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "cat_count_smartphones",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "85+ PRODUCTS",
+                                    "variant": "caption",
+                                    "color": "muted",
+                                    "transform": "uppercase",
+                                    "weight": "500",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "cat_card_audio",
+                        "type": "box_block",
+                        "label": "Audio Category Card",
+                        "settings": {
+                            "direction": "column",
+                            "width": "auto",
+                            "align": "center",
+                            "justify": "center",
+                            "gap": "small",
+                            "padding": "medium",
+                            "backgroundColor": "white",
+                            "display": "flex",
+                            "hoverEffect": "shadow-raise"
+                        },
+                        "children": [
+                            {
+                                "id": "cat_img_audio",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/150?text=Audio",
+                                    "alt": "Noise canceling headphones and wireless audio gear",
+                                    "objectFit": "contain",
+                                    "aspectRatio": "square"
+                                }
+                            },
+                            {
+                                "id": "cat_title_audio",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "Audio",
+                                    "variant": "body",
+                                    "color": "primary",
+                                    "transform": "none",
+                                    "weight": "700",
+                                    "lineHeight": "snug",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "cat_count_audio",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "60+ PRODUCTS",
+                                    "variant": "caption",
+                                    "color": "muted",
+                                    "transform": "uppercase",
+                                    "weight": "500",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "cat_card_wearables",
+                        "type": "box_block",
+                        "label": "Wearables Category Card",
+                        "settings": {
+                            "direction": "column",
+                            "width": "auto",
+                            "align": "center",
+                            "justify": "center",
+                            "gap": "small",
+                            "padding": "medium",
+                            "backgroundColor": "white",
+                            "display": "flex",
+                            "hoverEffect": "shadow-raise"
+                        },
+                        "children": [
+                            {
+                                "id": "cat_img_wearables",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/150?text=Wearables",
+                                    "alt": "Smartwatches, fitness rings, and wearable displays",
+                                    "objectFit": "contain",
+                                    "aspectRatio": "square"
+                                }
+                            },
+                            {
+                                "id": "cat_title_wearables",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "Wearables",
+                                    "variant": "body",
+                                    "color": "primary",
+                                    "transform": "none",
+                                    "weight": "700",
+                                    "lineHeight": "snug",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "cat_count_wearables",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "45+ PRODUCTS",
+                                    "variant": "caption",
+                                    "color": "muted",
+                                    "transform": "uppercase",
+                                    "weight": "500",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "cat_card_pc_parts",
+                        "type": "box_block",
+                        "label": "PC Parts Category Card",
+                        "settings": {
+                            "direction": "column",
+                            "width": "auto",
+                            "align": "center",
+                            "justify": "center",
+                            "gap": "small",
+                            "padding": "medium",
+                            "backgroundColor": "white",
+                            "display": "flex",
+                            "hoverEffect": "shadow-raise"
+                        },
+                        "children": [
+                            {
+                                "id": "cat_img_pc_parts",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/150?text=PC+Parts",
+                                    "alt": "Desktop core components, GPUs, motherboards, power gear",
+                                    "objectFit": "contain",
+                                    "aspectRatio": "square"
+                                }
+                            },
+                            {
+                                "id": "cat_title_pc_parts",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "PC Parts",
+                                    "variant": "body",
+                                    "color": "primary",
+                                    "transform": "none",
+                                    "weight": "700",
+                                    "lineHeight": "snug",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "cat_count_pc_parts",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "200+ PRODUCTS",
+                                    "variant": "caption",
+                                    "color": "muted",
+                                    "transform": "uppercase",
+                                    "weight": "500",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "cat_card_gaming",
+                        "type": "box_block",
+                        "label": "Gaming Category Card",
+                        "settings": {
+                            "direction": "column",
+                            "width": "auto",
+                            "align": "center",
+                            "justify": "center",
+                            "gap": "small",
+                            "padding": "medium",
+                            "backgroundColor": "white",
+                            "display": "flex",
+                            "hoverEffect": "shadow-raise"
+                        },
+                        "children": [
+                            {
+                                "id": "cat_img_gaming",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/150?text=Gaming",
+                                    "alt": "Gaming dedicated home consoles, handhelds, peripherals",
+                                    "objectFit": "contain",
+                                    "aspectRatio": "square"
+                                }
+                            },
+                            {
+                                "id": "cat_title_gaming",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "Gaming",
+                                    "variant": "body",
+                                    "color": "primary",
+                                    "transform": "none",
+                                    "weight": "700",
+                                    "lineHeight": "snug",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "cat_count_gaming",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "55+ PRODUCTS",
+                                    "variant": "caption",
+                                    "color": "muted",
+                                    "transform": "uppercase",
+                                    "weight": "500",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "promo_banners_section_root",
+        "type": "container_block",
+        "label": "Promotional Split Banners Section",
+        "settings": {
+            "direction": "row",
+            "width": "full",
+            "maxWidth": "var(--container-max-width)",
+            "mxAuto": "true",
+            "align": "stretch",
+            "justify": "between",
+            "gap": "medium",
+            "padding": "medium",
+            "backgroundColor": "transparent",
+            "display": "grid",
+            "gridColumns": "2",
+            "hoverEffect": "none"
+        },
+        "children": [
+            {
+                "id": "promo_card_mega_sound",
+                "type": "box_block",
+                "label": "Mega Sound Promotional Card",
+                "settings": {
+                    "direction": "column",
+                    "width": "full",
+                    "align": "start",
+                    "justify": "between",
+                    "gap": "large",
+                    "padding": "large",
+                    "backgroundColor": "#171717",
+                    "borderRadius": "12px",
+                    "display": "flex",
+                    "hoverEffect": "none"
+                },
+                "children": [
+                    {
+                        "id": "mega_sound_text_group",
+                        "type": "box_block",
+                        "label": "Text Layout Header",
+                        "settings": {
+                            "direction": "column",
+                            "align": "start",
+                            "justify": "start",
+                            "gap": "small",
+                            "display": "flex"
+                        },
+                        "children": [
+                            {
+                                "id": "mega_sound_title",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "MEGA SOUND",
+                                    "variant": "h4",
+                                    "color": "#ffffff",
+                                    "transform": "uppercase",
+                                    "weight": "900",
+                                    "fontStyle": "italic",
+                                    "lineHeight": "none",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "mega_sound_subtitle",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "PURE AUDIO PERFORMANCE",
+                                    "variant": "caption",
+                                    "color": "#7a8296",
+                                    "transform": "uppercase",
+                                    "weight": "600",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "mega_sound_footer_group",
+                        "type": "box_block",
+                        "label": "Action and Asset Row",
+                        "settings": {
+                            "direction": "row",
+                            "align": "end",
+                            "justify": "between",
+                            "width": "full",
+                            "display": "flex"
+                        },
+                        "children": [
+                            {
+                                "id": "mega_sound_cta_pill",
+                                "type": "action_pill_block",
+                                "settings": {
+                                    "buttonText": "BUY NOW",
+                                    "buttonBg": "#ffffff",
+                                    "buttonColor": "#000000",
+                                    "badgeText": "Rs. 4,499",
+                                    "badgeColor": "#ffffff",
+                                    "wrapperBorder": "1px solid #333333",
+                                    "wrapperBg": "rgba(0, 0, 0, 0.4)",
+                                    "url": "/products/mega-sound-speaker"
+                                }
+                            },
+                            {
+                                "id": "mega_sound_product_image",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/180x120?text=Premium+Speaker",
+                                    "alt": "Premium Speaker Product Silhouette",
+                                    "objectFit": "contain",
+                                    "width": "140px",
+                                    "aspectRatio": "auto"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "promo_card_marvel_series",
+                "type": "box_block",
+                "label": "Marvel Series Promotional Card",
+                "settings": {
+                    "direction": "column",
+                    "width": "full",
+                    "align": "start",
+                    "justify": "between",
+                    "gap": "large",
+                    "padding": "large",
+                    "backgroundColor": "#050b14",
+                    "borderRadius": "12px",
+                    "display": "flex",
+                    "hoverEffect": "none"
+                },
+                "children": [
+                    {
+                        "id": "marvel_series_text_group",
+                        "type": "box_block",
+                        "label": "Text Layout Header",
+                        "settings": {
+                            "direction": "column",
+                            "align": "start",
+                            "justify": "start",
+                            "gap": "small",
+                            "display": "flex"
+                        },
+                        "children": [
+                            {
+                                "id": "marvel_series_title",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "MARVEL SERIES",
+                                    "variant": "h4",
+                                    "color": "#ffffff",
+                                    "transform": "uppercase",
+                                    "weight": "900",
+                                    "fontStyle": "italic",
+                                    "lineHeight": "none",
+                                    "letterSpacing": "normal"
+                                }
+                            },
+                            {
+                                "id": "marvel_series_subtitle",
+                                "type": "rich_text_block",
+                                "settings": {
+                                    "content": "IMPACT REDEFINED",
+                                    "variant": "caption",
+                                    "color": "#42526e",
+                                    "transform": "uppercase",
+                                    "weight": "600",
+                                    "lineHeight": "normal",
+                                    "letterSpacing": "wider"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "marvel_series_footer_group",
+                        "type": "box_block",
+                        "label": "Action and Asset Row",
+                        "settings": {
+                            "direction": "row",
+                            "align": "end",
+                            "justify": "between",
+                            "width": "full",
+                            "display": "flex"
+                        },
+                        "children": [
+                            {
+                                "id": "marvel_series_cta_pill",
+                                "type": "action_pill_block",
+                                "settings": {
+                                    "buttonText": "BUY NOW",
+                                    "buttonBg": "#0052cc",
+                                    "buttonColor": "#ffffff",
+                                    "badgeText": "Rs. 3,199",
+                                    "badgeColor": "#ffffff",
+                                    "wrapperBorder": "1px solid #1c293a",
+                                    "wrapperBg": "rgba(0, 0, 0, 0.4)",
+                                    "url": "/products/marvel-series-speaker"
+                                }
+                            },
+                            {
+                                "id": "marvel_series_product_image",
+                                "type": "image_block",
+                                "settings": {
+                                    "src": "https://picsum.photos/180x120?text=Marvel+Speaker",
+                                    "alt": "Marvel Speaker Product Silhouette",
+                                    "objectFit": "contain",
+                                    "width": "140px",
+                                    "aspectRatio": "auto"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
