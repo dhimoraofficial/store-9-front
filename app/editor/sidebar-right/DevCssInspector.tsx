@@ -15,15 +15,23 @@ interface DevCssInspectorProps {
 const COMMON_CSS_PROPERTIES = [
     // Spacing & Box Model
     { name: "padding", desc: "Spacing inside element border" },
+    { name: "padding-x", desc: "Horizontal padding spacing (left + right)" },
+    { name: "padding-y", desc: "Vertical padding spacing (top + bottom)" },
     { name: "padding-left", desc: "Left padding spacing" },
     { name: "padding-right", desc: "Right padding spacing" },
     { name: "padding-top", desc: "Top padding spacing" },
     { name: "padding-bottom", desc: "Bottom padding spacing" },
+    { name: "padding-inline", desc: "Horizontal padding spacing (logical inline)" },
+    { name: "padding-block", desc: "Vertical padding spacing (logical block)" },
     { name: "margin", desc: "Spacing outside element border" },
+    { name: "margin-x", desc: "Horizontal margin spacing (left + right)" },
+    { name: "margin-y", desc: "Vertical margin spacing (top + bottom)" },
     { name: "margin-left", desc: "Left margin spacing" },
     { name: "margin-right", desc: "Right margin spacing" },
     { name: "margin-top", desc: "Top margin spacing" },
     { name: "margin-bottom", desc: "Bottom margin spacing" },
+    { name: "margin-inline", desc: "Horizontal margin spacing (logical inline)" },
+    { name: "margin-block", desc: "Vertical margin spacing (logical block)" },
     
     // Sizing
     { name: "width", desc: "Width of element" },
