@@ -382,12 +382,12 @@ export const editorSlice = createSlice({
             if (dragId === dropId) return;
 
             // 1. Find the dragged node and remove it from its current position
-            let draggedNode: ComponentSchema | null = null;
+            const result1 = { draggedNode: null as ComponentSchema | null };
             
             const removeNode = (nodes: ComponentSchema[]): boolean => {
                 for (let i = 0; i < nodes.length; i++) {
                     if (nodes[i].id === dragId) {
-                        draggedNode = nodes[i];
+                        result1.draggedNode = nodes[i];
                         nodes.splice(i, 1);
                         return true;
                     }
@@ -404,7 +404,8 @@ export const editorSlice = createSlice({
             removeNode(state.schemas.whatsAppButton);
             removeNode(state.schemas.main);
 
-            if (!draggedNode) return;
+            if (!result1.draggedNode) return;
+            const draggedNode = result1.draggedNode;
 
             // 2. Insert the draggedNode into the new position relative to dropId
             const insertNode = (nodes: ComponentSchema[]): boolean => {
@@ -441,11 +442,11 @@ export const editorSlice = createSlice({
             const { dragId, parentId, slotId } = action.payload;
 
             // 1. Remove dragged node
-            let draggedNode: ComponentSchema | null = null;
+            const result2 = { draggedNode: null as ComponentSchema | null };
             const removeNode = (nodes: ComponentSchema[]): boolean => {
                 for (let i = 0; i < nodes.length; i++) {
                     if (nodes[i].id === dragId) {
-                        draggedNode = nodes[i];
+                        result2.draggedNode = nodes[i];
                         nodes.splice(i, 1);
                         return true;
                     }
@@ -461,7 +462,8 @@ export const editorSlice = createSlice({
             removeNode(state.schemas.whatsAppButton);
             removeNode(state.schemas.main);
 
-            if (!draggedNode) return;
+            if (!result2.draggedNode) return;
+            const draggedNode = result2.draggedNode;
 
             // 2. Update slot setting
             if (!draggedNode.settings) draggedNode.settings = {};
@@ -500,11 +502,11 @@ export const editorSlice = createSlice({
             const { dragId, section } = action.payload;
 
             // 1. Remove dragged node
-            let draggedNode: ComponentSchema | null = null;
+            const result3 = { draggedNode: null as ComponentSchema | null };
             const removeNode = (nodes: ComponentSchema[]): boolean => {
                 for (let i = 0; i < nodes.length; i++) {
                     if (nodes[i].id === dragId) {
-                        draggedNode = nodes[i];
+                        result3.draggedNode = nodes[i];
                         nodes.splice(i, 1);
                         return true;
                     }
@@ -520,7 +522,8 @@ export const editorSlice = createSlice({
             removeNode(state.schemas.whatsAppButton);
             removeNode(state.schemas.main);
 
-            if (!draggedNode) return;
+            if (!result3.draggedNode) return;
+            const draggedNode = result3.draggedNode;
 
             // Clear any slot settings
             if (draggedNode.settings) {

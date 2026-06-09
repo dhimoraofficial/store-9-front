@@ -43,6 +43,7 @@ function normalizeNodeSettings(settings: Record<string, any>): Record<string, an
 
         // Validate the value against the global token's config regex
         const tokenCfg = ComponentGlobalSchemaSettingsMap[tokenKey];
+        if (!tokenCfg) continue;
         const configs = Array.isArray(tokenCfg) ? tokenCfg : [tokenCfg];
         const passes = configs.some(c => valdiateComponentSetting(c, value));
         if (!passes) continue;
@@ -163,8 +164,8 @@ export function getParsedSettings(type: BaseTypes, settings: ComponentSchemaSett
     let parsedSettings: ComponentSchemaSettings = parseGlobalComponentSettings(settings) as ComponentSchemaSettings;
     parsedSettings = parseGenericComponentSettings(type, parsedSettings);
 
-    const entry = ComponentAllSchemaSettingsMap[type];
-    if (entry && "parse" in entry && typeof entry.parse === "function") {
+    const entry = ComponentAllSchemaSettingsMap[type] as any;
+    if (entry && typeof entry.parse === "function") {
         // Snapshot the style object accumulated by global + generic parsers.
         // Component-specific parsers that start with `const parsed: any = {}`
         // will silently drop it — we merge it back after so global tokens

@@ -287,7 +287,7 @@ export function syncCssEditToSettings(cssText: string, currentSettings: Record<s
         if (["pX", "pY", "mX", "mY"].includes(tokenKey)) {
             // Shorthands are deleted if both parts are missing
             const configs = Array.isArray(cfg) ? cfg : [cfg];
-            const hasAnyPart = configs.some(c => c.as && parsedStyle[c.as] !== undefined);
+            const hasAnyPart = configs.some(c => c?.as && parsedStyle[c.as] !== undefined);
             if (!hasAnyPart && parsedPaddingX === null && parsedPaddingY === null && parsedMarginX === null && parsedMarginY === null) {
                 delete updatedSettings[tokenKey];
             }
