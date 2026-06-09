@@ -9,9 +9,11 @@ import { Eye, Edit2, Sparkles, Plus, Search } from "lucide-react";
 interface DevCssInspectorProps {
     selectedNode: ComponentSchema;
     onUpdateSetting: (settingKey: string, val: any, settingConfig: any) => void;
+    styleSettings?: [string, any][];
 }
 
 const COMMON_CSS_PROPERTIES = [
+    // Spacing & Box Model
     { name: "padding", desc: "Spacing inside element border" },
     { name: "padding-left", desc: "Left padding spacing" },
     { name: "padding-right", desc: "Right padding spacing" },
@@ -22,38 +24,135 @@ const COMMON_CSS_PROPERTIES = [
     { name: "margin-right", desc: "Right margin spacing" },
     { name: "margin-top", desc: "Top margin spacing" },
     { name: "margin-bottom", desc: "Bottom margin spacing" },
+    
+    // Sizing
     { name: "width", desc: "Width of element" },
     { name: "height", desc: "Height of element" },
     { name: "max-width", desc: "Maximum width limit" },
     { name: "max-height", desc: "Maximum height limit" },
-    { name: "color", desc: "Text color" },
-    { name: "background-color", desc: "Background color" },
-    { name: "background-image", desc: "Background image URL/gradient" },
-    { name: "font-size", desc: "Size of the text font" },
-    { name: "font-weight", desc: "Weight (thickness) of the font" },
-    { name: "border", desc: "Border style, width, and color" },
-    { name: "border-radius", desc: "Roundness of borders" },
-    { name: "box-shadow", desc: "Shadow effect around element" },
-    { name: "display", desc: "Layout display type (flex, block, inline)" },
-    { name: "justify-content", desc: "Flexbox horizontal alignment" },
-    { name: "align-items", desc: "Flexbox vertical alignment" },
+    { name: "min-width", desc: "Minimum width limit" },
+    { name: "min-height", desc: "Minimum height limit" },
+    { name: "box-sizing", desc: "Include padding/border in width/height (border-box)" },
+
+    // Display & Layout
+    { name: "display", desc: "Layout behavior (flex, grid, block, inline, none)" },
+    { name: "position", desc: "Positioning method (relative, absolute, fixed, sticky)" },
+    { name: "top", desc: "Offset from top edge" },
+    { name: "bottom", desc: "Offset from bottom edge" },
+    { name: "left", desc: "Offset from left edge" },
+    { name: "right", desc: "Offset from right edge" },
+    { name: "z-index", desc: "Stacking order of elements" },
+    { name: "overflow", desc: "Clip or scroll content overflow" },
+    { name: "overflow-x", desc: "Horizontal overflow behavior" },
+    { name: "overflow-y", desc: "Vertical overflow behavior" },
+    { name: "visibility", desc: "Show or hide element without layout removal" },
+
+    // Flexbox
+    { name: "flex-direction", desc: "Direction of flex items (row, column)" },
+    { name: "flex-wrap", desc: "Wrap flex items onto new lines" },
+    { name: "flex", desc: "Shorthand for grow, shrink, and basis" },
+    { name: "flex-grow", desc: "Grow factor of flex item" },
+    { name: "flex-shrink", desc: "Shrink factor of flex item" },
+    { name: "flex-basis", desc: "Initial size of flex item" },
     { name: "gap", desc: "Spacing between grid/flex items" },
-    { name: "text-align", desc: "Alignment of inline text" },
-    { name: "line-height", desc: "Vertical spacing between text lines" },
-    { name: "opacity", desc: "Transparency of element" },
-    { name: "cursor", desc: "Mouse pointer type on hover" },
-    { name: "transition", desc: "Transition animation details" }
+    { name: "row-gap", desc: "Spacing between flex/grid rows" },
+    { name: "column-gap", desc: "Spacing between flex/grid columns" },
+
+    // Grid
+    { name: "grid-template-columns", desc: "Column structure of grid layout" },
+    { name: "grid-template-rows", desc: "Row structure of grid layout" },
+    { name: "grid-column", desc: "Grid column start/end span" },
+    { name: "grid-row", desc: "Grid row start/end span" },
+
+    // Alignment
+    { name: "justify-content", desc: "Align items along main axis (flex-start, center, space-between)" },
+    { name: "align-items", desc: "Align items along cross axis (center, flex-end, stretch)" },
+    { name: "align-self", desc: "Override align-items for a single item" },
+    { name: "justify-items", desc: "Justify content inside grid cells" },
+    { name: "justify-self", desc: "Override justify-items for a single cell" },
+    { name: "place-items", desc: "Shorthand for align-items and justify-items" },
+
+    // Typography
+    { name: "color", desc: "Text color" },
+    { name: "font-family", desc: "Font face stack (sans-serif, system-ui)" },
+    { name: "font-size", desc: "Size of text font" },
+    { name: "font-weight", desc: "Font weight/thickness (bold, 400, 500)" },
+    { name: "font-style", desc: "Style of font (italic, normal)" },
+    { name: "line-height", desc: "Spacing between text lines" },
+    { name: "text-align", desc: "Horizontal text alignment (left, center, right, justify)" },
+    { name: "text-transform", desc: "Case capitalization (uppercase, lowercase, capitalize)" },
+    { name: "text-decoration", desc: "Decorations like underline or line-through" },
+    { name: "letter-spacing", desc: "Spacing between characters" },
+    { name: "white-space", desc: "Wrap behavior (nowrap, pre-wrap)" },
+    { name: "text-overflow", desc: "Truncate overflow text (ellipsis)" },
+
+    // Background & Borders
+    { name: "background-color", desc: "Background color value" },
+    { name: "background-image", desc: "Background image URL or gradient" },
+    { name: "background-size", desc: "Background scaling (cover, contain)" },
+    { name: "background-position", desc: "Background focal placement (center, top left)" },
+    { name: "background-repeat", desc: "Background tiling (repeat, no-repeat)" },
+    { name: "border", desc: "Shorthand for border width, style, and color" },
+    { name: "border-radius", desc: "Rounded corners (px, %, rem)" },
+    { name: "border-width", desc: "Width of element border" },
+    { name: "border-style", desc: "Style of border (solid, dashed, none)" },
+    { name: "border-color", desc: "Color of border" },
+    { name: "border-top", desc: "Top border properties" },
+    { name: "border-bottom", desc: "Bottom border properties" },
+    { name: "border-left", desc: "Left border properties" },
+    { name: "border-right", desc: "Right border properties" },
+    { name: "outline", desc: "Outline focus border outside element edge" },
+
+    // Effects & Animations
+    { name: "box-shadow", desc: "Drop shadow effect around element border" },
+    { name: "opacity", desc: "Opacity transparency fraction (0 to 1)" },
+    { name: "transition", desc: "Animation speed and curve curves (all 0.2s ease)" },
+    { name: "transform", desc: "Rotate, scale, skew, or translate layout" },
+    { name: "transform-origin", desc: "Origin anchor point for transforms" },
+    { name: "filter", desc: "Visual effects (blur, brightness, drop-shadow)" },
+    { name: "backdrop-filter", desc: "Frosted glass filter styling for behind the element" },
+    { name: "animation", desc: "Keyframe animation assignment" },
+
+    // Interactivity
+    { name: "cursor", desc: "Pointer indicator style on hover (pointer, default)" },
+    { name: "user-select", desc: "Allow or prevent text highlight select (none)" },
+    { name: "pointer-events", desc: "Block or capture mouse hover clicks (none, auto)" },
+    { name: "will-change", desc: "Inform browser of upcoming animations for GPU performance" }
+];
+
+// Design System / global.css Custom properties to suggest inside var(--...) values
+const DESIGN_SYSTEM_VARIABLES = [
+    { name: "--ui-accent", desc: "Primary Brand Accent Color (Light Blue / Purple)" },
+    { name: "--ui-accent-2", desc: "Secondary Brand Accent Color (Teal / Mint)" },
+    { name: "--ui-text", desc: "Main Text Color" },
+    { name: "--ui-text-muted", desc: "Muted Helper Text Color" },
+    { name: "--ui-app-bg", desc: "Main Application Background Color" },
+    { name: "--ui-surface", desc: "Translucent Surface Background" },
+    { name: "--ui-surface-strong", desc: "Solid Box Surface Background" },
+    { name: "--ui-border", desc: "Soft border divider color" },
+    { name: "--ui-border-strong", desc: "High contrast border divider color" },
+    { name: "--border-radius-large", desc: "Large Border Radius (1rem)" },
+    { name: "--border-radius-base", desc: "Base Border Radius (0.75rem)" },
+    { name: "--btn-radius", desc: "Button Border Radius (0.65rem)" },
 ];
 
 export default function DevCssInspector({
     selectedNode,
-    onUpdateSetting
+    onUpdateSetting,
+    styleSettings = []
 }: DevCssInspectorProps) {
     const [cssText, setCssText] = useState("");
     const [matchedRules, setMatchedRules] = useState<{ selector: string; cssText: string }[]>([]);
     
     // Autocomplete State (as-you-type suggestions)
-    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [suggestions, setSuggestions] = useState<{
+        name: string;
+        isValue: boolean;
+        isVar?: boolean;
+        desc?: string;
+        isSchema?: boolean;
+        parentProp?: string;
+    }[]>([]);
     const [activeSuggestionIdx, setActiveSuggestionIdx] = useState(0);
     const [showAutocomplete, setShowAutocomplete] = useState(false);
     
@@ -65,6 +164,80 @@ export default function DevCssInspector({
     const dropdownRef = useRef<HTMLDivElement>(null);
     const autocompleteRef = useRef<HTMLDivElement>(null);
     const lastNodeIdRef = useRef(selectedNode.id);
+
+    // 1. Extract schema properties from styleSettings prop
+    const schemaProperties = React.useMemo(() => {
+        const list: { name: string; desc: string; options?: string[]; config: any; key: string }[] = [];
+        
+        for (const [key, cfg] of styleSettings) {
+            const configs = Array.isArray(cfg) ? cfg : [cfg];
+            for (const config of configs) {
+                if (config?.as) {
+                    const kebabName = config.as.replace(/([A-Z])/g, "-$1").toLowerCase();
+                    const options = config.opt || [];
+                    const optDesc = options.length > 0 ? ` (Options: ${options.join(", ")})` : "";
+                    
+                    list.push({
+                        name: kebabName,
+                        desc: `${config.tp === "prop" ? "Component Prop" : "Style Token"}: ${key}${optDesc}`,
+                        options: options.length > 0 ? options : undefined,
+                        config,
+                        key
+                    });
+                }
+            }
+        }
+        return list;
+    }, [styleSettings]);
+
+    // 2. Extract currently applied style properties from selectedNode.settings.style
+    const appliedProperties = React.useMemo(() => {
+        const list: { name: string; desc: string }[] = [];
+        const style = selectedNode.settings?.style || {};
+        
+        for (const [key, value] of Object.entries(style)) {
+            // Convert camelCase to kebab-case
+            const kebabName = key.replace(/([A-Z])/g, "-$1").toLowerCase();
+            list.push({
+                name: kebabName,
+                desc: `Currently Applied Value: ${value}`
+            });
+        }
+        return list;
+    }, [selectedNode.settings?.style]);
+
+    // 3. Combine default CSS properties, schema properties, and currently applied custom properties
+    const combinedProperties = React.useMemo(() => {
+        const map = new Map<string, { name: string; desc: string; options?: string[]; isSchema?: boolean }>();
+        
+        // Load common defaults
+        for (const prop of COMMON_CSS_PROPERTIES) {
+            map.set(prop.name, { ...prop });
+        }
+        
+        // Merge active schema configs (overriding defaults if matched)
+        for (const prop of schemaProperties) {
+            map.set(prop.name, {
+                name: prop.name,
+                desc: prop.desc,
+                options: prop.options,
+                isSchema: true
+            });
+        }
+
+        // Merge currently applied custom styles (overriding metadata if matched)
+        for (const prop of appliedProperties) {
+            const existing = map.get(prop.name);
+            map.set(prop.name, {
+                name: prop.name,
+                desc: existing ? `${existing.desc} | ${prop.desc}` : prop.desc,
+                options: existing?.options,
+                isSchema: existing?.isSchema
+            });
+        }
+        
+        return Array.from(map.values());
+    }, [schemaProperties, appliedProperties]);
 
     // Synchronize CSS text from all resolved/computed settings
     useEffect(() => {
@@ -138,7 +311,7 @@ export default function DevCssInspector({
                 setActiveSuggestionIdx(prev => (prev - 1 + suggestions.length) % suggestions.length);
             } else if (e.key === "Enter" || e.key === "Tab") {
                 e.preventDefault();
-                completeProperty(suggestions[activeSuggestionIdx]);
+                handleSelectSuggestion(suggestions[activeSuggestionIdx]);
             } else if (e.key === "Escape") {
                 e.preventDefault();
                 setShowAutocomplete(false);
@@ -160,18 +333,82 @@ export default function DevCssInspector({
         const lines = textBeforeCursor.split("\n");
         const currentLine = lines[lines.length - 1] || "";
 
-        // Only trigger suggestions if we are typing a CSS property (before a colon)
-        if (!currentLine.includes(":")) {
+        // Case A: Autocompleting a value (contains a colon)
+        if (currentLine.includes(":")) {
+            const parts = currentLine.split(":");
+            const propPart = parts[0].trim();
+            const valuePart = parts[1] || "";
+
+            // Don't show options if a semicolon is already appended
+            if (valuePart.includes(";")) {
+                setShowAutocomplete(false);
+                return;
+            }
+
+            // A.1: Check if typing a CSS Custom Variable wrapper: var(--...
+            const varMatch = valuePart.match(/var\((--[\w-]*)$/);
+            if (varMatch) {
+                const varPrefix = varMatch[1];
+                const matchedVars = DESIGN_SYSTEM_VARIABLES.filter(
+                    v => v.name.startsWith(varPrefix) && v.name !== varPrefix
+                );
+
+                if (matchedVars.length > 0) {
+                    setSuggestions(matchedVars.map(v => ({
+                        name: v.name,
+                        isValue: true,
+                        isVar: true,
+                        desc: v.desc,
+                        isSchema: false
+                    })));
+                    setActiveSuggestionIdx(0);
+                    setShowAutocomplete(true);
+                    return;
+                }
+            }
+
+            // A.2: Otherwise suggest standard schema values if configured
+            const camelProp = propPart.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+            const matchedSchema = schemaProperties.find(
+                p => p.name === propPart || p.name.replace(/-([a-z])/g, (_, char) => char.toUpperCase()) === camelProp
+            );
+
+            if (matchedSchema && matchedSchema.options) {
+                const valPrefix = valuePart.trim();
+                const matchedOptions = matchedSchema.options.filter(
+                    opt => opt.toLowerCase().startsWith(valPrefix.toLowerCase()) && opt !== valPrefix
+                );
+
+                if (matchedOptions.length > 0) {
+                    setSuggestions(matchedOptions.map(opt => ({
+                        name: opt,
+                        isValue: true,
+                        parentProp: matchedSchema.name,
+                        isSchema: true
+                    })));
+                    setActiveSuggestionIdx(0);
+                    setShowAutocomplete(true);
+                    return;
+                }
+            }
+        } 
+        // Case B: Autocompleting a CSS property (no colon typed yet)
+        else {
             const prefixMatch = currentLine.match(/([\w-]+)$/);
             const prefix = prefixMatch ? prefixMatch[1] : "";
             
             if (prefix.length >= 1) {
-                const matches = COMMON_CSS_PROPERTIES.filter(
+                const matches = combinedProperties.filter(
                     p => p.name.startsWith(prefix) && p.name !== prefix
-                ).map(p => p.name);
+                );
                 
                 if (matches.length > 0) {
-                    setSuggestions(matches);
+                    setSuggestions(matches.map(p => ({
+                        name: p.name,
+                        isValue: false,
+                        desc: p.desc,
+                        isSchema: p.isSchema
+                    })));
                     setActiveSuggestionIdx(0);
                     setShowAutocomplete(true);
                     return;
@@ -181,36 +418,79 @@ export default function DevCssInspector({
         setShowAutocomplete(false);
     };
 
-    // Completes the typed property with the selected auto-completion choice
-    const completeProperty = (propName: string) => {
+    // Completes selection (either property name or value option)
+    const handleSelectSuggestion = (suggestion: {
+        name: string;
+        isValue: boolean;
+        isVar?: boolean;
+        parentProp?: string;
+    }) => {
         const textarea = textareaRef.current;
         if (!textarea) return;
 
         const start = textarea.selectionStart;
         const text = textarea.value;
 
-        // Find the prefix that we are replacing
         const textBeforeCursor = text.substring(0, start);
         const lines = textBeforeCursor.split("\n");
         const currentLine = lines[lines.length - 1] || "";
-        const prefixMatch = currentLine.match(/([\w-]+)$/);
-        const prefix = prefixMatch ? prefixMatch[1] : "";
-
-        const beforePrefix = textBeforeCursor.substring(0, textBeforeCursor.length - prefix.length);
+        const beforeLine = textBeforeCursor.substring(0, textBeforeCursor.length - currentLine.length);
         const afterCursor = text.substring(start);
 
-        const insertText = `${propName}: `;
-        const newText = beforePrefix + insertText + ";" + afterCursor;
-        const newCursorPos = beforePrefix.length + insertText.length;
+        let newLine = currentLine;
+        let newCursorPos = start;
 
-        setCssText(newText);
+        if (suggestion.isValue) {
+            // Completing a value
+            const parts = currentLine.split(":");
+            const propPart = parts[0];
+            const valuePart = parts[1] || "";
+            
+            let completedValue = suggestion.name;
+            if (suggestion.isVar) {
+                // Find where var(-- started and replace it with var(--variable-name)
+                const varStartIdx = valuePart.lastIndexOf("var(");
+                if (varStartIdx !== -1) {
+                    completedValue = valuePart.substring(0, varStartIdx) + `var(${suggestion.name})`;
+                }
+            }
+
+            const hasSemicolon = afterCursor.trim().startsWith(";");
+            const suffix = hasSemicolon ? "" : ";";
+            
+            newLine = `${propPart}: ${completedValue.trim()}${suffix}`;
+            newCursorPos = beforeLine.length + newLine.length;
+            
+            const adjustedAfter = hasSemicolon 
+                ? afterCursor.substring(afterCursor.indexOf(";") + 1)
+                : afterCursor;
+                
+            const newText = beforeLine + newLine + adjustedAfter;
+            setCssText(newText);
+            
+            // Sync to settings
+            const updatedSettings = syncCssEditToSettings(newText, selectedNode.settings || {});
+            onUpdateSetting("_entire_settings_", updatedSettings, null);
+        } else {
+            // Completing a property name
+            const prefixMatch = currentLine.match(/([\w-]+)$/);
+            const prefix = prefixMatch ? prefixMatch[1] : "";
+            const beforePrefix = currentLine.substring(0, currentLine.length - prefix.length);
+            
+            newLine = `${beforePrefix}${suggestion.name}: `;
+            newCursorPos = beforeLine.length + newLine.length;
+            
+            const newText = beforeLine + newLine + ";" + afterCursor;
+            setCssText(newText);
+            
+            // Sync to settings
+            const updatedSettings = syncCssEditToSettings(newText, selectedNode.settings || {});
+            onUpdateSetting("_entire_settings_", updatedSettings, null);
+        }
+
         setShowAutocomplete(false);
 
-        // Update settings
-        const updatedSettings = syncCssEditToSettings(newText, selectedNode.settings || {});
-        onUpdateSetting("_entire_settings_", updatedSettings, null);
-
-        // Focus back to input and place cursor right before semicolon
+        // Return focus and restore cursor position
         setTimeout(() => {
             textarea.focus();
             textarea.setSelectionRange(newCursorPos, newCursorPos);
@@ -280,7 +560,7 @@ export default function DevCssInspector({
         }, 50);
     };
 
-    const filteredProperties = COMMON_CSS_PROPERTIES.filter(prop =>
+    const filteredProperties = combinedProperties.filter(prop =>
         prop.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         prop.desc.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -340,14 +620,21 @@ export default function DevCssInspector({
                                                 <button
                                                     key={prop.name}
                                                     onClick={() => insertProperty(prop.name)}
-                                                    className="w-full text-left px-3 py-2 hover:bg-zinc-900 text-zinc-300 hover:text-white transition-colors flex flex-col gap-0.5 cursor-pointer outline-none"
+                                                    className="w-full text-left px-3 py-2 hover:bg-zinc-900 text-zinc-300 hover:text-white transition-colors flex items-center justify-between cursor-pointer outline-none"
                                                 >
-                                                    <span className="text-[11px] font-mono font-bold text-[#89ddff]">
-                                                        {prop.name}
-                                                    </span>
-                                                    <span className="text-[9px] text-zinc-500 truncate">
-                                                        {prop.desc}
-                                                    </span>
+                                                    <div className="flex flex-col gap-0.5 min-w-0">
+                                                        <span className="text-[11px] font-mono font-bold text-[#89ddff]">
+                                                            {prop.name}
+                                                        </span>
+                                                        <span className="text-[9px] text-zinc-500 truncate">
+                                                            {prop.desc}
+                                                        </span>
+                                                    </div>
+                                                    {prop.isSchema && (
+                                                        <span className="text-[7.5px] bg-[#c792ea]/20 text-[#c792ea] border border-[#c792ea]/30 rounded px-1 shrink-0 scale-90">
+                                                            Schema
+                                                        </span>
+                                                    )}
                                                 </button>
                                             ))
                                         )}
@@ -376,22 +663,38 @@ export default function DevCssInspector({
                     {showAutocomplete && suggestions.length > 0 && (
                         <div
                             ref={autocompleteRef}
-                            className="absolute left-3 bottom-3 w-52 rounded-md border border-zinc-800 bg-zinc-950 shadow-2xl z-50 divide-y divide-zinc-900/50 max-h-36 overflow-y-auto select-none font-mono text-[10px]"
+                            className="absolute left-3 bottom-3 w-56 rounded-md border border-zinc-800 bg-zinc-950 shadow-2xl z-50 divide-y divide-zinc-900/50 max-h-40 overflow-y-auto select-none font-mono text-[10px]"
                         >
-                            {suggestions.map((name, idx) => (
+                            {suggestions.map((item, idx) => (
                                 <div
-                                    key={name}
+                                    key={`${item.name}-${idx}`}
                                     className={`px-2.5 py-1.5 cursor-pointer flex items-center justify-between transition-colors ${
                                         idx === activeSuggestionIdx ? "bg-zinc-900 text-white" : "text-zinc-400"
                                     }`}
-                                    onClick={() => completeProperty(name)}
+                                    onClick={() => handleSelectSuggestion(item)}
                                 >
-                                    <span className="text-[#89ddff] font-bold">{name}</span>
-                                    {idx === activeSuggestionIdx && (
-                                        <span className="text-[8px] bg-zinc-800 text-zinc-500 border border-zinc-700 rounded px-1 shrink-0 scale-90">
-                                            Tab
+                                    <div className="flex flex-col gap-0.5">
+                                        <span className={`${item.isValue ? "text-[#f78c6c]" : "text-[#89ddff]"} font-bold`}>
+                                            {item.name}
                                         </span>
-                                    )}
+                                        {item.desc && (
+                                            <span className="text-[8px] text-zinc-600 truncate max-w-[160px]">
+                                                {item.desc}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                        {item.isSchema && (
+                                            <span className="text-[7.5px] bg-[#c792ea]/20 text-[#c792ea] border border-[#c792ea]/30 rounded px-1 scale-90">
+                                                Schema
+                                            </span>
+                                        )}
+                                        {idx === activeSuggestionIdx && (
+                                            <span className="text-[8px] bg-zinc-800 text-zinc-500 border border-zinc-700 rounded px-1 scale-90">
+                                                Tab
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>

@@ -144,6 +144,7 @@ export default function ComponentStyles({
                 <DevCssInspector
                     selectedNode={selectedNode}
                     onUpdateSetting={onUpdateSetting}
+                    styleSettings={styleSettings}
                 />
             ) : (
                 <div className="divide-y divide-zinc-100 overflow-y-auto flex-1">
