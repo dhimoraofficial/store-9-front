@@ -1,4 +1,4 @@
-import { ComponentAllSchemaSettingsMap } from ".";
+import { ComponentAllSchemaSettingsMap } from "./index";
 import { ComponentGlobalSchemaSettingsMap, ComponentSchemaSettings, parseGlobalStyle, valdiateComponentSetting } from "./core";
 import { BaseTypes } from "./type";
 import { ComponentSchema } from "@/application/runtime/builder/type";

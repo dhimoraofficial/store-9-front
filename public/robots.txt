@@ -151,4 +151,4 @@ Disallow: /wc-ajax
 Disallow: /add-to-cart
 Disallow: /add-to-compare
 
-Sitemap: https://computerdurbar.com/sitemap.xml
+Sitemap: https://amb-infosys.com/sitemap.xml
