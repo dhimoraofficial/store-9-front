@@ -21,6 +21,7 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
         width: number;
         height: number;
     } | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const isSelected = selectedNodeId === schema?.id;
 
@@ -75,6 +76,30 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
             active = false;
         };
     }, [isSelected, schema.id]);
+
+    // Track if any dialog/modal is open in the editor (to hide selection outlines)
+    useEffect(() => {
+        if (!isSelected) return;
+
+        const checkDialog = () => {
+            const hasDialog = !!document.querySelector('[role="dialog"], [data-state="open"].fixed');
+            setIsDialogOpen(hasDialog);
+        };
+
+        // Check initially
+        checkDialog();
+
+        // Setup observer to watch for dialog additions/removals on body
+        const observer = new MutationObserver(checkDialog);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["data-state", "role"]
+        });
+
+        return () => observer.disconnect();
+    }, [isSelected]);
 
     // Conditional returns AFTER all hooks
     if (!schema) return null;
@@ -140,7 +165,7 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
             }}
         >
             {contentElement}
-            {isSelected && selectedInfo && typeof window !== "undefined" && createPortal(
+            {isSelected && selectedInfo && !isDialogOpen && typeof window !== "undefined" && createPortal(
                 <div
                     style={{
                         position: "fixed",
