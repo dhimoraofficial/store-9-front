@@ -127,6 +127,7 @@ export function EditorPreviewBuilderContent({ schema }: { schema: ComponentSchem
     return (
         <div
             ref={wrapperRef}
+            data-node-id={schema.id}
             style={{ display: "contents" }}
             onClick={handleClick}
             onMouseEnter={(e) => {

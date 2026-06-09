@@ -28,6 +28,7 @@ interface SidebarRightProps {
     onUpdateAction?: (id: string, action: any | null) => void;
     onDeleteNode?: (id: string) => void;
     onSelectNode?: (id: string | null) => void;
+    schemaVersion?: number;
 }
 
 const TAB_STYLES = "flex-1 flex items-center justify-center gap-1.5 text-[11px] font-bold text-zinc-400 py-2.5 border-b-2 border-transparent data-[state=active]:border-zinc-900 data-[state=active]:text-zinc-900 hover:text-zinc-600 outline-none transition-all cursor-pointer";
@@ -47,6 +48,7 @@ export default function SidebarRight({
     onUpdateAction,
     onDeleteNode,
     onSelectNode,
+    schemaVersion = 0,
 }: SidebarRightProps) {
     const rawIcon = (componentSettingsMap[selectedNode?.type!] as any)?.icon;
     const IconComponent = (rawIcon && (LUCIDE_ICONS_MAP as any)[rawIcon]) || Component;
@@ -134,7 +136,8 @@ export default function SidebarRight({
             {/* Content Switcher */}
             {selectedNode ? (
                 /* ─── Selected Node Tabs Layout ─── */
-                <Tabs.Root defaultValue="settings" className="flex-1 flex flex-col overflow-hidden h-full bg-white">
+            <Tabs.Root key={`${selectedNode.id}_v${schemaVersion ?? 0}`} defaultValue="settings" className="flex-1 flex flex-col overflow-hidden h-full bg-white">
+
                     <Tabs.List className="flex border-b border-zinc-100 shrink-0 bg-white px-1">
                         <Tabs.Trigger value="settings" className={TAB_STYLES}>
                             <Settings className="w-3 h-3" />

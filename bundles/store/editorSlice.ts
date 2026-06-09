@@ -30,6 +30,9 @@ export interface EditorState {
         past: SchemasSnapshot[];
         future: SchemasSnapshot[];
     };
+    // Bumped on every setSchemas dispatch so the sidebar can key off it
+    // and remount even when the selected node ID hasn't changed.
+    schemaVersion: number;
 }
 
 const initialState: EditorState = {
@@ -51,6 +54,7 @@ const initialState: EditorState = {
         past: [],
         future: [],
     },
+    schemaVersion: 0,
 };
 
 // Snapshot current schemas into history.past before a mutation
@@ -160,18 +164,21 @@ export const editorSlice = createSlice({
             state.schemas = { ...state.schemas, ...action.payload };
             state.history.past = [];
             state.history.future = [];
+            state.schemaVersion += 1;
         },
         undo: (state) => {
             if (state.history.past.length === 0) return;
             const previous = state.history.past.pop()!;
             state.history.future.unshift(JSON.parse(JSON.stringify(state.schemas)));
             state.schemas = previous;
+            state.schemaVersion += 1;
         },
         redo: (state) => {
             if (state.history.future.length === 0) return;
             const next = state.history.future.shift()!;
             state.history.past.push(JSON.parse(JSON.stringify(state.schemas)));
             state.schemas = next;
+            state.schemaVersion += 1;
         },
         // Takes a snapshot of current schemas without any mutation.
         // Used to checkpoint before a debounced text burst begins.

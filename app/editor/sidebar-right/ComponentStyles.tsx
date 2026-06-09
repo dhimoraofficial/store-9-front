@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { ComponentSchema } from "@/application/runtime/builder/type";
+import DevCssInspector from "./DevCssInspector";
 
 interface ComponentStylesProps {
     selectedNode: ComponentSchema;
@@ -26,17 +27,43 @@ export default function ComponentStyles({
     validationErrors,
     onUpdateSetting,
 }: ComponentStylesProps) {
+    const [isDevMode, setIsDevMode] = useState(false);
     const entry = componentSettingsMap?.[selectedNode.type];
     const settings = entry ? (entry.settings || (entry.name ? null : entry)) : null;
 
+    // tp:"style" → raw CSS tokens (p, pX, w, etc.)
+    // tp:"prop" + group:"style" → component visual props (padding:"medium", backgroundColor, etc.)
+    // Both should appear in the Style tab so the user can see ALL applied styling.
     const styleSettings = settings
-        ? Object.entries(settings).filter(([_, config]: [string, any]) => config.tp === "style")
+        ? Object.entries(settings).filter(([_, config]: [string, any]) =>
+            config.tp === "style" ||
+            (config.tp === "prop" && config.group === "style")
+        )
         : [];
+
+    const getSettingValue = (settingKey: string, config: any): string => {
+        const activeConfig = Array.isArray(config) ? config[0] : config;
+        const cssAlias = activeConfig?.as;
+
+        // 1. Token key — the canonical format written by the editor and normalizer
+        //    e.g. settings.pL = "1rem", settings.mw = "var(...)"
+        const raw = selectedNode.settings?.[settingKey];
+        if (raw !== undefined && raw !== null && raw !== "") return String(raw);
+
+        // 2. Pre-parsed style object — covers schemas that were saved with style
+        //    already flattened (e.g. settings.style.paddingLeft = "1rem")
+        if (cssAlias && selectedNode.settings?.style) {
+            const styleVal = (selectedNode.settings.style as any)?.[cssAlias];
+            if (styleVal !== undefined && styleVal !== null && styleVal !== "") return String(styleVal);
+        }
+
+        return "";
+    };
 
     const renderInput = (label: string, settingKey: string, config: any) => {
         if (!config) return null;
         const activeConfig = Array.isArray(config) ? config[0] : config;
-        const currentVal = selectedNode.settings?.[settingKey] ?? "";
+        const currentVal = getSettingValue(settingKey, config);
         const hasError = !!validationErrors[settingKey];
         const hasOptions = activeConfig?.opt && activeConfig.opt.length > 0;
 
@@ -95,92 +122,117 @@ export default function ComponentStyles({
     };
 
     return (
-        <div className="font-sans divide-y divide-zinc-100">
-
-            {/* ─── Padding ─── */}
-            <div className="px-4 py-3.5 space-y-2.5">
-                <SectionLabel>Padding</SectionLabel>
-                <div className="space-y-2">
-                    {renderInput("All sides", "p", componentSettingsMap.common?.p)}
-                    <div className="grid grid-cols-2 gap-2">
-                        {renderInput("Horizontal (X)", "pX", componentSettingsMap.common?.pX)}
-                        {renderInput("Vertical (Y)", "pY", componentSettingsMap.common?.pY)}
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                        {renderInput("Top", "pT", componentSettingsMap.common?.pT)}
-                        {renderInput("Bottom", "pB", componentSettingsMap.common?.pB)}
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                        {renderInput("Left", "pL", componentSettingsMap.common?.pL)}
-                        {renderInput("Right", "pR", componentSettingsMap.common?.pR)}
-                    </div>
-                </div>
+        <div className="font-sans divide-y divide-zinc-100 flex flex-col h-full bg-white">
+            {/* Mode Switcher Header */}
+            <div className="px-4 py-3 flex items-center justify-between bg-zinc-50/50 border-b border-zinc-200/50 select-none shrink-0">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                    Style Mode
+                </span>
+                <button
+                    onClick={() => setIsDevMode(!isDevMode)}
+                    className={`px-2.5 py-1.5 rounded-md text-[10px] font-bold tracking-wider uppercase transition-all shadow-sm border cursor-pointer select-none outline-none ${
+                        isDevMode
+                            ? "bg-zinc-900 border-zinc-950 text-white hover:bg-zinc-800"
+                            : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                    }`}
+                >
+                    {isDevMode ? "Dev CSS Mode" : "Visual Editor"}
+                </button>
             </div>
 
-            {/* ─── Margin ─── */}
-            <div className="px-4 py-3.5 space-y-2.5">
-                <SectionLabel>Margin</SectionLabel>
-                <div className="space-y-2">
-                    {renderInput("All sides", "m", componentSettingsMap.common?.m)}
-                    <div className="grid grid-cols-2 gap-2">
-                        {renderInput("Horizontal (X)", "mX", componentSettingsMap.common?.mX)}
-                        {renderInput("Vertical (Y)", "mY", componentSettingsMap.common?.mY)}
+            {isDevMode ? (
+                <DevCssInspector
+                    selectedNode={selectedNode}
+                    onUpdateSetting={onUpdateSetting}
+                />
+            ) : (
+                <div className="divide-y divide-zinc-100 overflow-y-auto flex-1">
+                    {/* ─── Padding ─── */}
+                    <div className="px-4 py-3.5 space-y-2.5">
+                        <SectionLabel>Padding</SectionLabel>
+                        <div className="space-y-2">
+                            {renderInput("All sides", "p", componentSettingsMap.common?.p)}
+                            <div className="grid grid-cols-2 gap-2">
+                                {renderInput("Horizontal (X)", "pX", componentSettingsMap.common?.pX)}
+                                {renderInput("Vertical (Y)", "pY", componentSettingsMap.common?.pY)}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {renderInput("Top", "pT", componentSettingsMap.common?.pT)}
+                                {renderInput("Bottom", "pB", componentSettingsMap.common?.pB)}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {renderInput("Left", "pL", componentSettingsMap.common?.pL)}
+                                {renderInput("Right", "pR", componentSettingsMap.common?.pR)}
+                            </div>
+                        </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                        {renderInput("Top", "mT", componentSettingsMap.common?.mT)}
-                        {renderInput("Bottom", "mB", componentSettingsMap.common?.mB)}
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                        {renderInput("Left", "mL", componentSettingsMap.common?.mL)}
-                        {renderInput("Right", "mR", componentSettingsMap.common?.mR)}
-                    </div>
-                </div>
-            </div>
 
-            {/* ─── Sizing ─── */}
-            <div className="px-4 py-3.5 space-y-2.5">
-                <SectionLabel>Sizing</SectionLabel>
-                <div className="grid grid-cols-2 gap-2">
-                    {renderInput("Width", "w", componentSettingsMap.common?.w)}
-                    {renderInput("Height", "h", componentSettingsMap.common?.h)}
-                    {renderInput("Max Width", "mw", componentSettingsMap.common?.mw)}
-                    {renderInput("Max Height", "mh", componentSettingsMap.common?.mh)}
-                </div>
-            </div>
+                    {/* ─── Margin ─── */}
+                    <div className="px-4 py-3.5 space-y-2.5">
+                        <SectionLabel>Margin</SectionLabel>
+                        <div className="space-y-2">
+                            {renderInput("All sides", "m", componentSettingsMap.common?.m)}
+                            <div className="grid grid-cols-2 gap-2">
+                                {renderInput("Horizontal (X)", "mX", componentSettingsMap.common?.mX)}
+                                {renderInput("Vertical (Y)", "mY", componentSettingsMap.common?.mY)}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {renderInput("Top", "mT", componentSettingsMap.common?.mT)}
+                                {renderInput("Bottom", "mB", componentSettingsMap.common?.mB)}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {renderInput("Left", "mL", componentSettingsMap.common?.mL)}
+                                {renderInput("Right", "mR", componentSettingsMap.common?.mR)}
+                            </div>
+                        </div>
+                    </div>
 
-            {/* ─── Element-specific style props ─── */}
-            {styleSettings.length > 0 && (
-                <div className="px-4 py-3.5 space-y-2.5">
-                    <SectionLabel>Element Styling</SectionLabel>
-                    <div className="space-y-2">
-                        {styleSettings.map(([key, config]: [string, any]) =>
-                            renderInput(key.replace(/-/g, " "), key, config)
-                        )}
+                    {/* ─── Sizing ─── */}
+                    <div className="px-4 py-3.5 space-y-2.5">
+                        <SectionLabel>Sizing</SectionLabel>
+                        <div className="grid grid-cols-2 gap-2">
+                            {renderInput("Width", "w", componentSettingsMap.common?.w)}
+                            {renderInput("Height", "h", componentSettingsMap.common?.h)}
+                            {renderInput("Max Width", "mw", componentSettingsMap.common?.mw)}
+                            {renderInput("Max Height", "mh", componentSettingsMap.common?.mh)}
+                        </div>
+                    </div>
+
+                    {/* ─── Element-specific style props ─── */}
+                    {styleSettings.length > 0 && (
+                        <div className="px-4 py-3.5 space-y-2.5">
+                            <SectionLabel>Element Styling</SectionLabel>
+                            <div className="space-y-2">
+                                {styleSettings.map(([key, config]: [string, any]) =>
+                                    renderInput(key.replace(/-/g, " "), key, config)
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ─── Custom CSS ─── */}
+                    <div className="px-4 py-3.5 space-y-2">
+                        <SectionLabel>Custom CSS</SectionLabel>
+                        <div className="rounded-md overflow-hidden border border-zinc-200 bg-[#0d0f14]">
+                            <div className="flex items-center justify-between px-3 py-2 bg-[#12141b] border-b border-white/5 select-none">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-zinc-600" />
+                                    <span className="text-[10px] font-mono text-zinc-500">custom_css</span>
+                                </div>
+                                <span className="text-[9px] font-mono text-zinc-700 uppercase tracking-widest">CSS</span>
+                            </div>
+                            <textarea
+                                rows={4}
+                                placeholder="/* e.g. font-weight: 700; */"
+                                value={selectedNode.settings?.customCss || ""}
+                                onChange={(e) => onUpdateSetting("customCss", e.target.value, { tp: "style", as: "customCss" })}
+                                className="w-full bg-transparent p-3 text-[11.5px] outline-none resize-none text-[#89ddff] placeholder:text-zinc-700"
+                                style={{ fontFamily: "ui-monospace, 'Cascadia Code', monospace" }}
+                            />
+                        </div>
                     </div>
                 </div>
             )}
-
-            {/* ─── Custom CSS ─── */}
-            <div className="px-4 py-3.5 space-y-2">
-                <SectionLabel>Custom CSS</SectionLabel>
-                <div className="rounded-md overflow-hidden border border-zinc-200 bg-[#0d0f14]">
-                    <div className="flex items-center justify-between px-3 py-2 bg-[#12141b] border-b border-white/5 select-none">
-                        <div className="flex items-center gap-1.5">
-                            <span className="w-2 h-2 rounded-full bg-zinc-600" />
-                            <span className="text-[10px] font-mono text-zinc-500">custom_css</span>
-                        </div>
-                        <span className="text-[9px] font-mono text-zinc-700 uppercase tracking-widest">CSS</span>
-                    </div>
-                    <textarea
-                        rows={4}
-                        placeholder="/* e.g. font-weight: 700; */"
-                        value={selectedNode.settings?.customCss || ""}
-                        onChange={(e) => onUpdateSetting("customCss", e.target.value, { tp: "style", as: "customCss" })}
-                        className="w-full bg-transparent p-3 text-[11.5px] outline-none resize-none text-[#89ddff] placeholder:text-zinc-700"
-                        style={{ fontFamily: "ui-monospace, 'Cascadia Code', monospace" }}
-                    />
-                </div>
-            </div>
         </div>
     );
 }

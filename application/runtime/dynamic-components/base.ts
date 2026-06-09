@@ -1,6 +1,71 @@
 import { ComponentAllSchemaSettingsMap } from ".";
 import { ComponentGlobalSchemaSettingsMap, ComponentSchemaSettings, parseGlobalStyle, valdiateComponentSetting } from "./core";
 import { BaseTypes } from "./type";
+import { ComponentSchema } from "@/application/runtime/builder/type";
+
+// ---------------------------------------------------------------------------
+// Reverse-lookup map: CSS property name → canonical token key
+// Built once from ComponentGlobalSchemaSettingsMap.
+// e.g. "paddingLeft" → "pL",  "maxWidth" → "mw",  "padding" → "p"
+// ---------------------------------------------------------------------------
+const cssAliasToTokenKey: Record<string, string> = (() => {
+    const map: Record<string, string> = {};
+    for (const [tokenKey, cfg] of Object.entries(ComponentGlobalSchemaSettingsMap)) {
+        const configs = Array.isArray(cfg) ? cfg : [cfg];
+        for (const c of configs) {
+            if (c?.as && !map[c.as]) {
+                map[c.as] = tokenKey; // first mapping wins (e.g. paddingLeft → pL, not pX)
+            }
+        }
+    }
+    return map;
+})();
+
+// ---------------------------------------------------------------------------
+// Normalize a single node's settings object.
+// Any key that is a CSS alias (e.g. "maxWidth") AND whose value validates
+// against the corresponding global token's regex is rewritten to the token key
+// (e.g. "mw").  The original CSS-name key is removed to avoid duplication.
+// Keys that are already token keys (e.g. "pX") are left untouched.
+// ---------------------------------------------------------------------------
+function normalizeNodeSettings(settings: Record<string, any>): Record<string, any> {
+    const normalized: Record<string, any> = { ...settings };
+
+    for (const [key, value] of Object.entries(settings)) {
+        // Already a known token key → skip
+        if (ComponentGlobalSchemaSettingsMap[key]) continue;
+
+        const tokenKey = cssAliasToTokenKey[key];
+        if (!tokenKey) continue; // not a known CSS alias → skip
+
+        // Only promote if the token key isn't already set in the manifest
+        if (normalized[tokenKey] !== undefined) continue;
+
+        // Validate the value against the global token's config regex
+        const tokenCfg = ComponentGlobalSchemaSettingsMap[tokenKey];
+        const configs = Array.isArray(tokenCfg) ? tokenCfg : [tokenCfg];
+        const passes = configs.some(c => valdiateComponentSetting(c, value));
+        if (!passes) continue;
+
+        // Promote: write the token key, remove the CSS alias key
+        normalized[tokenKey] = value;
+        delete normalized[key];
+    }
+
+    return normalized;
+}
+
+// ---------------------------------------------------------------------------
+// Recursively walk a ComponentSchema tree and normalize every node's settings.
+// Call this once after loading a manifest — before dispatching setSchemas.
+// ---------------------------------------------------------------------------
+export function normalizeSchemaSettings(nodes: ComponentSchema[]): ComponentSchema[] {
+    return nodes.map(node => ({
+        ...node,
+        settings: node.settings ? normalizeNodeSettings(node.settings) : node.settings,
+        children: node.children ? normalizeSchemaSettings(node.children) : node.children,
+    }));
+}
 
 
 // settings parser for button, like button-type, onCLick
@@ -100,7 +165,21 @@ export function getParsedSettings(type: BaseTypes, settings: ComponentSchemaSett
 
     const entry = ComponentAllSchemaSettingsMap[type];
     if (entry && "parse" in entry && typeof entry.parse === "function") {
+        // Snapshot the style object accumulated by global + generic parsers.
+        // Component-specific parsers that start with `const parsed: any = {}`
+        // will silently drop it — we merge it back after so global tokens
+        // (pL → paddingLeft, mL → marginLeft, etc.) always survive.
+        const preservedStyle = parsedSettings.style ? { ...parsedSettings.style as any } : undefined;
+
         parsedSettings = entry.parse(type, parsedSettings);
+
+        // Re-apply preserved style, letting the component's own style (if any) win
+        if (preservedStyle) {
+            parsedSettings.style = {
+                ...preservedStyle,
+                ...((parsedSettings.style as any) || {}),
+            };
+        }
     }
 
     return parsedSettings;

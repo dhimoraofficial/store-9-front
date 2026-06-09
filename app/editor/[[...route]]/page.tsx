@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CanvasViewport from "../CanvasViewport";
 
 import EditorPreviewBuilder from "@/application/runtime/builder/EditorPreviewBuilder";
+import { normalizeSchemaSettings } from "@/application/runtime/dynamic-components/base";
 import { RootState } from "@/bundles/store";
 import EditorHeader, { ViewportMode } from "../EditorHeader";
 import SidebarLeft from "../sidebar-left";
@@ -61,7 +62,7 @@ const findNodeInTree = (nodes: ComponentSchema[], id: string): ComponentSchema |
 function ThemeEditorWorkspace() {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { schemas, theme, selectedNodeId, status, tenantInfo } = useSelector(
+    const { schemas, theme, selectedNodeId, status, tenantInfo, schemaVersion } = useSelector(
         (state: RootState) => state.editor
     );
     const canUndo = useSelector((state: RootState) => state.editor.history.past.length > 0);
@@ -263,7 +264,13 @@ function ThemeEditorWorkspace() {
 
                 if (res.pageLayout) loadedSchemas.main = res.pageLayout._c || [];
 
-                dispatch(setSchemas(loadedSchemas));
+                dispatch(setSchemas({
+                    announcement: normalizeSchemaSettings(loadedSchemas.announcement),
+                    navbar:       normalizeSchemaSettings(loadedSchemas.navbar),
+                    footer:       normalizeSchemaSettings(loadedSchemas.footer),
+                    whatsAppButton: normalizeSchemaSettings(loadedSchemas.whatsAppButton),
+                    main:         normalizeSchemaSettings(loadedSchemas.main),
+                }));
                 setPageRouteInfo(res.pageRoute || null);
                 setAllRoutes(res.allRoutes || []);
                 if (res.theme?.config) dispatch(setTheme(res.theme.config));
@@ -436,11 +443,16 @@ function ThemeEditorWorkspace() {
         else delete newErrors[settingKey];
         setValidationErrors(newErrors);
 
-        const settings = { ...(selectedNode.settings || {}) };
-        if (val === "" || (Array.isArray(val) && val.length === 0)) {
-            delete settings[settingKey];
+        let settings: Record<string, any>;
+        if (settingKey === "_entire_settings_") {
+            settings = { ...val };
         } else {
-            settings[settingKey] = val;
+            settings = { ...(selectedNode.settings || {}) };
+            if (val === "" || (Array.isArray(val) && val.length === 0)) {
+                delete settings[settingKey];
+            } else {
+                settings[settingKey] = val;
+            }
         }
 
         // First keystroke of a burst: snapshot BEFORE any change so undo
@@ -598,6 +610,7 @@ function ThemeEditorWorkspace() {
                                 dispatch(selectNode(id));
                                 if (id) setIsThemeOpen(false);
                             }}
+                            schemaVersion={schemaVersion}
                         />
                     </div>
                 )}
@@ -622,7 +635,11 @@ function ThemeEditorWorkspace() {
                 currentSchema={importSection ? schemas[importSection] : null}
                 onApplySchema={(parsedSchema) => {
                     if (importSection) {
-                        dispatch(setSchemas({ [importSection]: parsedSchema } as any));
+                        dispatch(setSchemas({ [importSection]: normalizeSchemaSettings(parsedSchema) } as any));
+                        // Close the dialog. selectedNode recomputes automatically from the
+                        // updated store — if the selected node still exists in the new manifest
+                        // the sidebar updates live; if it was removed it clears itself.
+                        setShowImportPopup(false);
                     }
                 }}
             />
