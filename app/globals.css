@@ -974,3 +974,13 @@ div[data-canvas-bg="true"] > .absolute.flex.items-center:hover {
     }
 }
 
+/* Brand Marquee Infinite Scroll Animation */
+@keyframes brand-marquee {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+
+.brand-marquee-track {
+    animation: brand-marquee linear infinite;
+}
+

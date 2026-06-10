@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/application/utility";
+import Link from "next/link";
 import React from "react";
 
 interface BoxBlockProps {
@@ -15,6 +16,7 @@ interface BoxBlockProps {
     display?: "flex" | "grid";
     gridColumns?: string;
     hoverEffect?: "none" | "shadow-raise" | "scale-up" | "bg-tint";
+    href?: string;
     className?: string;
     children?: React.ReactNode;
     style?: React.CSSProperties;
@@ -32,6 +34,7 @@ export default function ClientComponent({
     display = "flex",
     gridColumns = "1",
     hoverEffect = "none",
+    href,
     className = "",
     children,
     style
@@ -113,26 +116,37 @@ export default function ClientComponent({
         ...(isCustomGridCols ? { gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` } : {}),
     };
 
+    const sharedProps = {
+        className: cn(
+            "min-w-0 transition-all duration-200",
+            display === "grid" ? "grid" : "flex",
+            display === "grid" && (gridColClasses[gridColumns] || ""),
+            display === "flex" && (direction === "row"
+                ? (wrap === "nowrap" ? "flex-row flex-nowrap" : "flex-row flex-wrap")
+                : "flex-col"),
+            widthClasses[width as keyof typeof widthClasses] || "",
+            alignClasses[align],
+            justifyClasses[justify],
+            gapClasses[gap],
+            bgClasses[backgroundColor],
+            paddingClasses[padding],
+            hoverClasses[hoverEffect],
+            href ? "cursor-pointer" : "",
+            className
+        ),
+        style: customStyle
+    };
+
+    if (href) {
+        return (
+            <Link href={href} {...sharedProps}>
+                {children}
+            </Link>
+        );
+    }
+
     return (
-        <div
-            className={cn(
-                "min-w-0 transition-all duration-200",
-                display === "grid" ? "grid" : "flex",
-                display === "grid" && (gridColClasses[gridColumns] || ""),
-                display === "flex" && (direction === "row"
-                    ? (wrap === "nowrap" ? "flex-row flex-nowrap" : "flex-row flex-wrap")
-                    : "flex-col"),
-                widthClasses[width as keyof typeof widthClasses] || "",
-                alignClasses[align],
-                justifyClasses[justify],
-                gapClasses[gap],
-                bgClasses[backgroundColor],
-                paddingClasses[padding],
-                hoverClasses[hoverEffect],
-                className
-            )}
-            style={customStyle}
-        >
+        <div {...sharedProps}>
             {children}
         </div>
     );

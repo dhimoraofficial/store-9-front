@@ -82,6 +82,22 @@ export const ComponentBoxBlockSchemaSettingsMap: ComponentGlobalSchemaSettingsMa
         name: "Padding Size",
         description: "Internal padding spacing.",
         opt: ["none", "small", "medium", "large"]
+    },
+    wrap: {
+        as: "wrap",
+        tp: "prop",
+        group: "layout",
+        name: "Flex Wrap",
+        description: "Allow children to wrap to the next line (wrap) or stay in a single row (nowrap).",
+        opt: ["wrap", "nowrap"]
+    },
+    href: {
+        as: "href",
+        tp: "prop",
+        group: "link",
+        name: "Link URL",
+        description: "When set, the entire box renders as a clickable anchor tag navigating to this URL.",
+        rgx: ".*"
     }
 };
 
@@ -120,6 +136,7 @@ export function parseBoxBlockComponentSettings(type: string, settings: any) {
     if (parsed.justify === "space-between") parsed.justify = "between";
 
     if (!parsed.direction) parsed.direction = "column";
+    if (!parsed.wrap) parsed.wrap = "wrap";
     if (!parsed.width) parsed.width = "auto";
     if (!parsed.align) parsed.align = "start";
     if (!parsed.justify) parsed.justify = "start";
@@ -129,6 +146,7 @@ export function parseBoxBlockComponentSettings(type: string, settings: any) {
     if (!parsed.display) parsed.display = "flex";
     if (!parsed.gridColumns) parsed.gridColumns = "1";
     if (!parsed.hoverEffect) parsed.hoverEffect = "none";
+    // href is optional — do not set a default, absence means render as <div>
 
     return parsed;
 }
