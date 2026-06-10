@@ -5,6 +5,7 @@ import React from "react";
 
 interface BoxBlockProps {
     direction?: "column" | "row";
+    wrap?: "wrap" | "nowrap";
     width?: "auto" | "1" | "2" | "3" | "flex-grow" | "flex-1" | "full" | string;
     align?: "start" | "center" | "end" | "stretch";
     justify?: "start" | "center" | "end" | "between";
@@ -21,6 +22,7 @@ interface BoxBlockProps {
 
 export default function ClientComponent({
     direction = "column",
+    wrap = "wrap",
     width = "auto",
     align = "start",
     justify = "start",
@@ -36,12 +38,12 @@ export default function ClientComponent({
 }: BoxBlockProps) {
     // Width mapping matching old footer width options
     const widthClasses = {
-        "auto": "lg:w-auto flex-initial lg:min-w-[150px] max-w-full",
-        "1": "lg:w-[15%] lg:flex-1 lg:min-w-[150px] max-w-full",
-        "2": "lg:w-[20%] lg:flex-[2] lg:min-w-[180px] max-w-full",
-        "3": "lg:w-[25%] lg:flex-[3] lg:min-w-[200px] max-w-full",
-        "flex-grow": "lg:w-[35%] lg:flex-grow lg:min-w-[220px] max-w-full",
-        "flex-1": "lg:w-[20%] lg:flex-1 lg:min-w-[180px] max-w-full",
+        "auto": "w-full md:w-auto md:flex-initial lg:min-w-[150px] max-w-full",
+        "1": "w-full md:w-[45%] lg:w-[15%] lg:flex-1 lg:min-w-[150px] max-w-full",
+        "2": "w-full md:w-[45%] lg:w-[20%] lg:flex-[2] lg:min-w-[180px] max-w-full",
+        "3": "w-full md:w-[45%] lg:w-[25%] lg:flex-[3] lg:min-w-[200px] max-w-full",
+        "flex-grow": "w-full md:w-[45%] lg:w-[35%] lg:flex-grow lg:min-w-[220px] max-w-full",
+        "flex-1": "w-full md:w-[45%] lg:w-[20%] lg:flex-1 lg:min-w-[180px] max-w-full",
         "full": "w-full"
     };
 
@@ -59,11 +61,23 @@ export default function ClientComponent({
         between: "justify-between"
     };
 
+    // Responsive grid columns: 1 col on mobile, 2 on tablet, N on desktop
+    // Static strings required so Tailwind includes them at build time
+    const gridColClasses: Record<string, string> = {
+        "1": "grid-cols-1",
+        "2": "grid-cols-1 md:grid-cols-2",
+        "3": "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+        "4": "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
+        "5": "grid-cols-1 md:grid-cols-3 lg:grid-cols-5",
+        "6": "grid-cols-2 md:grid-cols-3 lg:grid-cols-6",
+        "12": "grid-cols-2 md:grid-cols-6 lg:grid-cols-12",
+    };
+
     const gapClasses = {
         none: "gap-0",
-        small: "gap-2",
-        medium: "gap-4",
-        large: "gap-6"
+        small: "gap-2 md:gap-3",
+        medium: "gap-4 md:gap-5",
+        large: "gap-4 md:gap-6"
     };
 
     const bgClasses = {
@@ -91,10 +105,12 @@ export default function ClientComponent({
     };
 
     const isCustomWidth = typeof width === "string" && /^\d+(\.\d+)?rem$/.test(width);
+    const isCustomGridCols = display === "grid" && gridColumns && !gridColClasses[gridColumns];
     const customStyle = {
         ...style,
         ...(isCustomWidth ? { width: width, flex: `0 0 ${width}` } : {}),
-        ...(display === "grid" ? { gridTemplateColumns: `repeat(${gridColumns || 1}, minmax(0, 1fr))` } : {})
+        // Fallback for non-standard column counts not in the responsive lookup table
+        ...(isCustomGridCols ? { gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` } : {}),
     };
 
     return (
@@ -102,7 +118,10 @@ export default function ClientComponent({
             className={cn(
                 "min-w-0 transition-all duration-200",
                 display === "grid" ? "grid" : "flex",
-                display === "flex" && (direction === "row" ? "flex-row flex-wrap" : "flex-col"),
+                display === "grid" && (gridColClasses[gridColumns] || ""),
+                display === "flex" && (direction === "row"
+                    ? (wrap === "nowrap" ? "flex-row flex-nowrap" : "flex-row flex-wrap")
+                    : "flex-col"),
                 widthClasses[width as keyof typeof widthClasses] || "",
                 alignClasses[align],
                 justifyClasses[justify],

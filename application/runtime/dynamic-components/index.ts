@@ -17,6 +17,7 @@ import { ATextBlockComponent } from "./content/text-block";
 import { ATextCarouselComponent } from "./content/text-carousel";
 import { AFAQBlockComponent } from "./content/faq-block";
 import { ATrustSignalsBlockComponent } from "./content/trust-signals";
+import { ANavbarEcommerceComponent } from "./navbar/ecommerce";
 
 // Hero Blocks
 import { AHeroBannerBlockComponent } from "./hero/banner-block";
@@ -193,6 +194,7 @@ export const ComponentAllSchemaSettingsMap: Record<string, (ComponentRegistryEnt
     "nav_utilities_block": ANavUtilitiesBlockComponent,
     "faq_block": AFAQBlockComponent,
     "trust_signals_block": ATrustSignalsBlockComponent,
+    "navbar_ecommerce": ANavbarEcommerceComponent,
 
     "card_box": ACardBoxComponent,
     "flex_box": AFlexBoxComponent,

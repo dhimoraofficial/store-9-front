@@ -20,15 +20,15 @@ interface EcommerceNavbarProps {
     style?: React.CSSProperties;
 }
 
-// Helper to recursively find a specific component type in the children tree
-const findComponentInTree = (children: React.ReactNode, type: string): any => {
+// Helper to recursively find a specific component type or ID in the children tree
+const findComponentInTree = (children: React.ReactNode, typeOrId: string): any => {
     let found: any = null;
     React.Children.forEach(children, (child: any) => {
         if (found) return;
-        if (child?.props?.schema?.type === type) {
+        if (child?.props?.schema?.type === typeOrId || child?.props?.schema?.id === typeOrId) {
             found = child;
         } else if (child?.props?.children) {
-            found = findComponentInTree(child.props.children, type);
+            found = findComponentInTree(child.props.children, typeOrId);
         }
     });
     return found;
@@ -38,7 +38,8 @@ const findComponentInTree = (children: React.ReactNode, type: string): any => {
 const findLinksInTree = (children: React.ReactNode): any[] => {
     let links: any[] = [];
     React.Children.forEach(children, (child: any) => {
-        if (child?.props?.schema?.type === "link_block") {
+        const type = child?.props?.schema?.type;
+        if (type === "link_block" || type === "rich_text_block") {
             links.push(child);
         } else if (child?.props?.children) {
             links = [...links, ...findLinksInTree(child.props.children)];
@@ -64,7 +65,7 @@ export default function ClientComponent({
     // Locate sub-components dynamically for mobile view
     const logoBlock = findComponentInTree(children, "logo_block");
     const searchBlock = findComponentInTree(children, "search_bar_block");
-    const utilitiesBlock = findComponentInTree(children, "nav_utilities_block");
+    const utilitiesBlock = findComponentInTree(children, "nav_utilities_block") || findComponentInTree(children, "navbar_utilities");
     const mobileLinks = findLinksInTree(children);
 
     const customBgStyle = backgroundColor ? { backgroundColor } : {};
