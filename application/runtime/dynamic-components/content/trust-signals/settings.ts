@@ -1,4 +1,4 @@
-import { ComponentGlobalSchemaSettingsMapType } from "../../core";
+import { ComponentGlobalSchemaSettingsMapType, LUCIDE_ICON_NAMES } from "../../core";
 
 export const ComponentTrustSignalsSchemaSettingsMap: ComponentGlobalSchemaSettingsMapType = {
     layoutVariant: {
@@ -26,7 +26,8 @@ export const ComponentTrustSignalsSchemaSettingsMap: ComponentGlobalSchemaSettin
             {
                 as: "icon",
                 name: "Lucide Icon Name",
-                rgx: ".*"
+                opt: LUCIDE_ICON_NAMES,
+                rgx: "^[a-zA-Z0-9-]*$"
             }
         ]
     },

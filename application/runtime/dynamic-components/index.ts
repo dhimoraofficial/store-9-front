@@ -1,4 +1,4 @@
-import { ComponentGlobalSchemaSettingsMap, ComponentGlobalSchemaSettingsMapType } from "./core";
+import { ComponentGlobalSchemaSettingsMap, ComponentGlobalSchemaSettingsMapType, LUCIDE_ICON_NAMES } from "./core";
 import { ComponentRegistryEntry } from "./type";
 
 // Content Blocks
@@ -102,7 +102,30 @@ const ASvgIconComponent: ComponentRegistryEntry = {
     icon: "Layers",
     category: "content",
     desc: "Dynamic Lucide icon element.",
-    settings: {},
+    settings: {
+        "icon-name": {
+            as: "icon-name",
+            tp: "prop",
+            name: "Icon Name",
+            description: "Lucide icon name (e.g. Phone, MapPin, Menu)",
+            opt: LUCIDE_ICON_NAMES,
+            rgx: "^[a-zA-Z0-9-]*$"
+        },
+        "icon-color": {
+            as: "icon-color",
+            tp: "prop",
+            name: "Icon Color",
+            description: "Hex or CSS variable color code.",
+            rgx: ".*"
+        },
+        "icon-size": {
+            as: "icon-size",
+            tp: "prop",
+            name: "Icon Size",
+            description: "Size of the icon (e.g. 22px, 1.5rem).",
+            rgx: ".*"
+        }
+    },
     component: SvgIconComponent
 };
 

@@ -1,11 +1,12 @@
-import { ComponentGlobalSchemaSettingsMapType } from "../../core";
+import { ComponentGlobalSchemaSettingsMapType, LUCIDE_ICON_NAMES } from "../../core";
 
 export const ComponentLinkIconBlockSchemaSettingsMap: ComponentGlobalSchemaSettingsMapType = {
     icon: {
         as: "icon",
         tp: "prop",
         name: "Lucide Icon Name (e.g. Phone, HelpCircle)",
-        rgx: "^[A-Z][a-zA-Z0-9]*$"
+        opt: LUCIDE_ICON_NAMES,
+        rgx: "^[a-zA-Z0-9-]*$"
     },
     text: {
         as: "text",
