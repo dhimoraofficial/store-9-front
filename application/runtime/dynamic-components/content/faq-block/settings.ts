@@ -18,14 +18,21 @@ export const ComponentFAQBlockSchemaSettingsMap: ComponentGlobalSchemaSettingsMa
         tp: "prop",
         name: "Answer Text",
         rgx: ".*"
+    },
+    variant: {
+        as: "variant",
+        tp: "prop",
+        name: "Layout Style Variant",
+        opt: ["default", "minimal", "bordered", "soft"]
     }
 };
 
 export function parseFAQBlockComponentSettings(type: string, settings: any) {
-    const parsed: any = {};
+    const parsed = { ...settings };
     parsed.title = settings?.title ?? "";
     parsed.question = settings?.question ?? "";
     parsed.answer = settings?.answer ?? "";
+    parsed.variant = settings?.variant ?? "default";
     
     return parsed;
 }
