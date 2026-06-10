@@ -18,6 +18,7 @@ import { ATextCarouselComponent } from "./content/text-carousel";
 import { AFAQBlockComponent } from "./content/faq-block";
 import { ATrustSignalsBlockComponent } from "./content/trust-signals";
 import { ABrandMarqueeComponent } from "./content/brand-marquee";
+import { ACategoryShowcaseComponent } from "./content/category-showcase";
 import { ANavbarEcommerceComponent } from "./navbar/ecommerce";
 
 // Hero Blocks
@@ -196,6 +197,7 @@ export const ComponentAllSchemaSettingsMap: Record<string, (ComponentRegistryEnt
     "faq_block": AFAQBlockComponent,
     "trust_signals_block": ATrustSignalsBlockComponent,
     "brand_marquee_block": ABrandMarqueeComponent,
+    "category_showcase_block": ACategoryShowcaseComponent,
     "navbar_ecommerce": ANavbarEcommerceComponent,
 
     "card_box": ACardBoxComponent,

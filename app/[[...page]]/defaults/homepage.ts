@@ -738,5 +738,23 @@ export const defaultHomepageSchema: ComponentSchema[] = [
                 ]
             }
         ]
+    },
+    {
+        "id": "home-category-section",
+        "type": "category_showcase_block",
+        "settings": {
+            "eyebrow": "EXPLORE COLLECTIONS",
+            "heading": "Shop by Category",
+            "categories": [
+                { "name": "Laptops",     "href": "/category/laptops" },
+                { "name": "Gaming PCs",  "href": "/category/gaming-pcs" },
+                { "name": "Wearables",   "href": "/category/wearables" },
+                { "name": "Accessories", "href": "/category/accessories" }
+            ],
+            "circleSize": 144,
+            "circleBg": "#F3F4F6",
+            "circleBorder": "1px solid #E5E7EB",
+            "labelColor": "#10112F"
+        }
     }
 ]
