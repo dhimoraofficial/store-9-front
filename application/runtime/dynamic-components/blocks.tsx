@@ -4,6 +4,11 @@ import React, { useState, useEffect } from "react";
 import * as Lucide from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { getProductsForContainer } from "./ecommerce/product-container/data";
+import ProductCardAppDisplay, { ProductCardSkeleton } from "./product-card/Component";
+
 
 // 1. Text Block
 export function TextBlockComponent({ content, href, className, style }: any) {
@@ -348,5 +353,245 @@ export function LinkBlockComponent({ text, href, style }: any) {
         >
             {text}
         </Link>
+    );
+}
+
+// 11. Generic Layout Container (card_box, flex_box, grid_box, split_hero_box)
+export function LayoutBoxComponent({
+    children,
+    style,
+    "box-display": boxDisplay,
+    "box-direction": boxDirection,
+    "box-align": boxAlign,
+    "box-justify": boxJustify,
+    "box-gap": boxGap,
+    "box-padding": boxPadding,
+    "box-radius": boxRadius,
+    "box-bg": boxBg,
+    "box-border": boxBorder,
+    splitRatio,
+    ...rest
+}: any) {
+    const finalStyle: React.CSSProperties = {
+        display: boxDisplay || undefined,
+        flexDirection: boxDirection === "col" ? "column" : boxDirection === "row" ? "row" : boxDirection || undefined,
+        alignItems: boxAlign === "center" ? "center" : boxAlign === "start" ? "flex-start" : boxAlign === "end" ? "flex-end" : boxAlign || undefined,
+        justifyContent: boxJustify === "center" ? "center" : boxJustify === "start" ? "flex-start" : boxJustify === "end" ? "flex-end" : boxJustify === "between" ? "space-between" : boxJustify || undefined,
+        gap: boxGap || undefined,
+        padding: boxPadding || undefined,
+        borderRadius: boxRadius || undefined,
+        backgroundColor: boxBg || undefined,
+        border: boxBorder || undefined,
+        ...style
+    };
+
+    if (splitRatio === "25-75") {
+        return (
+            <div style={{ ...finalStyle, display: "grid", gridTemplateColumns: "1fr 3fr" }} className="min-w-0 w-full">
+                {children}
+            </div>
+        );
+    }
+
+    return (
+        <div style={finalStyle} className="min-w-0">
+            {children}
+        </div>
+    );
+}
+
+// 12. Stack Container (stack_box)
+export function StackBoxComponent({ children, overlayColor, style }: any) {
+    return (
+        <div style={{ ...style, position: "relative" }} className="w-full overflow-hidden">
+            {React.Children.map(children, (child, idx) => {
+                if (idx === 0) {
+                    return <div className="w-full h-full relative z-0">{child}</div>;
+                }
+                return (
+                    <div 
+                        className="absolute inset-0 flex flex-col items-center justify-center z-10" 
+                        style={overlayColor ? { backgroundColor: overlayColor } : undefined}
+                    >
+                        {child}
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+// 13. Carousel Container (carousel_box)
+export function CarouselBoxComponent({ children, "auto-play": autoPlay, "interval-speed": intervalSpeed = 5000, "show-arrows": showArrows, "show-dots": showDots, style }: any) {
+    const slides = React.Children.toArray(children);
+    const [current, setCurrent] = useState(0);
+
+    useEffect(() => {
+        if (autoPlay !== "true" || slides.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrent((prev) => (prev + 1) % slides.length);
+        }, Number(intervalSpeed));
+        return () => clearInterval(interval);
+    }, [autoPlay, intervalSpeed, slides.length]);
+
+    if (slides.length === 0) return null;
+
+    return (
+        <div style={style} className="relative w-full overflow-hidden">
+            <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${current * 100}%)` }}>
+                {slides.map((slide, idx) => (
+                    <div key={idx} className="w-full flex-shrink-0">
+                        {slide}
+                    </div>
+                ))}
+            </div>
+            {showDots === "true" && slides.length > 1 && (
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+                    {slides.map((_, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => setCurrent(idx)}
+                            className={`w-2 h-2 rounded-full transition-all ${idx === current ? "bg-white w-4" : "bg-white/50"}`}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+// 14. SVG Icon Element (svg_icon)
+export function SvgIconComponent({ "icon-name": iconName, "icon-color": iconColor, "icon-size": iconSize, style }: any) {
+    if (!iconName) return null;
+    const formattedName = iconName
+        .split("-")
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join("");
+    const IconComponent = (Lucide as any)[formattedName] || (Lucide as any)[iconName] || Lucide.HelpCircle;
+    const size = iconSize || "22px";
+    return (
+        <IconComponent
+            style={{ color: iconColor, width: size, height: size, ...style }}
+            className="shrink-0"
+        />
+    );
+}
+
+// 15. Spacer Block Element (spacer_block)
+export function SpacerBlockComponent({ "spacer-height-desktop": desktopHeight, "spacer-height-mobile": mobileHeight, style }: any) {
+    return (
+        <div
+            style={{
+                ...style,
+                "--spacer-desktop": desktopHeight || "24px",
+                "--spacer-mobile": mobileHeight || "12px",
+            } as React.CSSProperties}
+            className="h-[var(--spacer-mobile)] md:h-[var(--spacer-desktop)] w-full"
+        />
+    );
+}
+
+// 16. Badge Element (badge_block)
+export function BadgeBlockComponent({ "badge-text": badgeText, children, style, className }: any) {
+    return (
+        <span style={style} className={className}>
+            {badgeText || children}
+        </span>
+    );
+}
+
+// 17. Button Block Element (button_block)
+export function ButtonBlockComponent({ "button-text": buttonText, href, children, style, className, onClick }: any) {
+    const label = buttonText || children || "Button";
+    const baseClass = "inline-flex items-center justify-center transition-all";
+    if (href) {
+        return (
+            <Link href={href} style={style} className={`${baseClass} ${className || ""}`} onClick={onClick}>
+                {label}
+            </Link>
+        );
+    }
+    return (
+        <button style={style} className={`${baseClass} ${className || ""}`} onClick={onClick}>
+            {label}
+        </button>
+    );
+}
+
+// 18. Product Loop Context Element (product_loop_context)
+export function ProductLoopContextComponent({ limit = 12, productSort = "default", style }: any) {
+    const pathname = usePathname() || "";
+    const searchParams = useSearchParams();
+    const query = searchParams ? searchParams.get("q") || "" : "";
+
+    const tenantInfo = useSelector((state: any) => state.editor?.tenantInfo);
+    const tenant = tenantInfo?.tenant || "";
+    const store = tenantInfo?.store || "";
+
+    const [products, setProducts] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        let isMounted = true;
+        setIsLoading(true);
+
+        const parts = pathname.split("/").filter(Boolean);
+        const handle = parts[parts.length - 1];
+
+        let fetchData = "featured";
+        if (pathname.includes("/category/") || pathname.includes("/collection/") || pathname.includes("/categories/") || pathname.includes("/collections/")) {
+            fetchData = `category:${handle}`;
+        } else if (pathname === "/search" && query) {
+            fetchData = `search:${query}`;
+        }
+
+        getProductsForContainer(fetchData, {
+            tenant,
+            store,
+            end: limit,
+        })
+            .then((data) => {
+                if (isMounted) {
+                    setProducts(data || []);
+                }
+            })
+            .catch((err) => {
+                console.error("Error fetching products in loop:", err);
+            })
+            .finally(() => {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [pathname, query, tenant, store, limit]);
+
+    if (isLoading) {
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 w-full" style={style}>
+                {Array.from({ length: 4 }).map((_, idx) => (
+                    <ProductCardSkeleton key={idx} />
+                ))}
+            </div>
+        );
+    }
+
+    if (products.length === 0) {
+        return (
+            <div className="flex align-center justify-center h-[200px] border border-dashed border-zinc-200 rounded-lg w-full" style={style}>
+                <span className="text-sm text-zinc-500 m-auto">No products found.</span>
+            </div>
+        );
+    }
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 w-full" style={style}>
+            {products.map((prod) => (
+                <ProductCardAppDisplay key={prod.id} {...prod} />
+            ))}
+        </div>
     );
 }

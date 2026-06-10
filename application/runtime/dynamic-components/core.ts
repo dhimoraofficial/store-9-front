@@ -3,6 +3,13 @@
 
 import { checkRegX } from "@/application/utility";
 import { CSSProperties } from "react";
+import * as Lucide from "lucide-react";
+
+export const LUCIDE_ICON_NAMES = Object.keys(Lucide).filter(key => 
+    /^[A-Z][a-zA-Z0-9]*$/.test(key) && 
+    (typeof (Lucide as any)[key] === "function" || typeof (Lucide as any)[key] === "object")
+);
+
 
 
 export type ComponentSchemaSettings = {
@@ -288,13 +295,33 @@ export function valdiateComponentSetting(settingConfig: ComponentSettingsSchema,
         return true;
     }
 
-    if (!settingConfig?.rgx && !settingConfig?.opt) {
-        return true;
-    }
     const valString = String(settingValue ?? "");
     if (valString === "") {
         return true;
     }
+
+    // Check if it's an icon setting field
+    const isIconField = 
+        settingConfig?.as === "icon" || 
+        settingConfig?.as === "icon-name" || 
+        settingConfig?.name?.toLowerCase().includes("icon") ||
+        settingConfig?.description?.toLowerCase().includes("icon");
+
+    if (isIconField) {
+        const formattedName = valString
+            .split("-")
+            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join("");
+        const isValidIcon = !!(Lucide as any)[formattedName] || !!(Lucide as any)[valString];
+        if (!isValidIcon) {
+            return false;
+        }
+    }
+
+    if (!settingConfig?.rgx && !settingConfig?.opt) {
+        return true;
+    }
+    
     let verification = checkRegX(settingConfig?.rgx, valString)
 
     if (settingConfig?.opt) {
