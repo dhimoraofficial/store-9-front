@@ -26,15 +26,15 @@ export const defaultNavbarSchema: ComponentSchema[] = [
                     align: "start"
                 },
                 children: [
-                    {
-                        id: "navbar-logo",
-                        type: "logo_block",
-                        settings: {
-                            brandName: "Generation Nepal",
-                            brandSlogan: "CURATED POWER GEAR",
-                            logoHeight: "40px"
-                        }
-                    }
+                    // {
+                    //     id: "navbar-logo",
+                    //     type: "logo_block",
+                    //     settings: {
+                    //         brandName: "",
+                    //         brandSlogan: "",
+                    //         logoHeight: "40px"
+                    //     }
+                    // }
                 ]
             },
             {

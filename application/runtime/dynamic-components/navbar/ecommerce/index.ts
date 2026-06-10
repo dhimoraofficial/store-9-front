@@ -21,7 +21,7 @@ export const ANavbarEcommerceComponent: ComponentRegistryEntry = {
             label: "Left: Logo Slot",
             settings: { direction: "row", width: "auto", align: "start" },
             children: [
-                { type: "logo_block", label: "Store Brand Logo", settings: { brandName: "Generation Nepal", brandSlogan: "CURATED POWER GEAR" } }
+                { type: "logo_block", label: "Store Brand Logo", settings: { brandName: "", brandSlogan: "" } }
             ]
         },
         {

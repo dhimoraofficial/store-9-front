@@ -10,7 +10,7 @@ export const defaultFooterSchema: ComponentSchema[] = [
         type: "footer_ecommerce",
         settings: {
             theme: "dark",
-            copyright: "© 2026 Generation Nepal. Powered by Dhimora Systems."
+            copyright: "© 2026 Company Name. Powered by Dhimora Systems."
         },
         children: [
             /* Column 1: Brand Info */
@@ -28,7 +28,7 @@ export const defaultFooterSchema: ComponentSchema[] = [
                         id: "footer-default-brand-desc",
                         type: "text_block",
                         settings: {
-                            content: "GENERATION NEPAL TECH",
+                            content: "",
                             fontWeight: "bold"
                         }
                     },

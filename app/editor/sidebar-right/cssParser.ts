@@ -313,3 +313,57 @@ export function syncCssEditToSettings(cssText: string, currentSettings: Record<s
 
     return updatedSettings;
 }
+
+// Validates CSS input format and returns a description of the first syntax issue found, or null if valid.
+export function validateCss(cssText: string): string | null {
+    const trimmed = cssText.trim();
+    if (!trimmed) return null;
+
+    // Check wrapper braces
+    if (!trimmed.startsWith("element") || !trimmed.includes("{")) {
+        return "Must start with 'element { ... }'";
+    }
+    if (!trimmed.endsWith("}")) {
+        return "Missing closing bracket '}'";
+    }
+
+    // Extract inside contents
+    const openBrace = cssText.indexOf("{");
+    const closeBrace = cssText.lastIndexOf("}");
+    const body = cssText.substring(openBrace + 1, closeBrace);
+
+    const lines = body.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        // Skip comments
+        if (line.startsWith("/*") || line.startsWith("*") || line.endsWith("*/")) {
+            continue;
+        }
+
+        // Check for missing colon
+        if (!line.includes(":")) {
+            return `Line ${i + 2}: Missing colon ':' in declaration`;
+        }
+
+        // Check for missing semicolon
+        if (!line.endsWith(";")) {
+            return `Line ${i + 2}: Declaration must end with a semicolon ';'`;
+        }
+
+        const colonIdx = line.indexOf(":");
+        const prop = line.substring(0, colonIdx).trim();
+        const val = line.substring(colonIdx + 1, line.length - 1).trim();
+
+        if (!prop) {
+            return `Line ${i + 2}: Property name is empty`;
+        }
+        if (!val) {
+            return `Line ${i + 2}: Value is empty for property '${prop}'`;
+        }
+    }
+
+    return null;
+}
+

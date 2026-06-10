@@ -30,7 +30,7 @@ export default function ClientComponent({
     };
 
     const getCleanBrandName = () => {
-        return sanitizeBrandName(brandName) || sanitizeBrandName(tenantInfo?.store) || "Generation Nepal";
+        return sanitizeBrandName(brandName) || sanitizeBrandName(tenantInfo?.store);
     };
 
     const getCleanBrandSlogan = () => {

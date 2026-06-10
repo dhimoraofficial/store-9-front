@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { ComponentSchema } from "@/application/runtime/builder/type";
-import { formatStyleObjectToCss, syncCssEditToSettings, getMatchedCSSRules, parseCssToStyleObject } from "./cssParser";
+import { formatStyleObjectToCss, syncCssEditToSettings, getMatchedCSSRules, parseCssToStyleObject, validateCss } from "./cssParser";
 import { getParsedSettings } from "@/application/runtime/dynamic-components/base";
-import { Eye, Edit2, Sparkles, Plus, Search } from "lucide-react";
+import { Eye, Edit2, Sparkles, Plus, Search, AlertTriangle } from "lucide-react";
 
 interface DevCssInspectorProps {
     selectedNode: ComponentSchema;
@@ -150,6 +150,7 @@ export default function DevCssInspector({
     styleSettings = []
 }: DevCssInspectorProps) {
     const [cssText, setCssText] = useState("");
+    const validationError = React.useMemo(() => validateCss(cssText), [cssText]);
     const [matchedRules, setMatchedRules] = useState<{ selector: string; cssText: string }[]>([]);
     
     // Autocomplete State (as-you-type suggestions)
@@ -654,8 +655,14 @@ export default function DevCssInspector({
                 </div>
                 
                 <div className="flex-1 rounded-lg overflow-hidden border border-zinc-200/80 bg-[#0d0f14] shadow-sm flex flex-col min-h-[200px] relative">
-                    <div className="flex items-center px-3 py-1.5 bg-[#12141b] border-b border-white/5 text-[10px] font-mono text-zinc-500 select-none">
-                        style.css
+                    <div className="flex items-center justify-between px-3 py-1.5 bg-[#12141b] border-b border-white/5 text-[10px] font-mono text-zinc-500 select-none">
+                        <span>style.css</span>
+                        {validationError && (
+                            <div className="flex items-center gap-1 text-amber-500 font-sans font-medium" title={validationError}>
+                                <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate max-w-[180px]">{validationError}</span>
+                            </div>
+                        )}
                     </div>
                     <textarea
                         ref={textareaRef}

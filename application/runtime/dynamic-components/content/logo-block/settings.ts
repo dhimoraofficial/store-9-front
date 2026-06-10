@@ -35,7 +35,7 @@ export function parseLogoBlockComponentSettings(type: string, settings: any) {
     const parsed = { ...settings };
     if (!parsed.logoSrc) parsed.logoSrc = "";
     if (!parsed.logoHeight) parsed.logoHeight = "40px";
-    if (!parsed.brandName) parsed.brandName = "Generation Nepal";
-    if (!parsed.brandSlogan) parsed.brandSlogan = "CURATED POWER GEAR";
+    if (!parsed.brandName) parsed.brandName = "";
+    if (!parsed.brandSlogan) parsed.brandSlogan = "";
     return parsed;
 }

@@ -50,7 +50,7 @@ export function parseFooterComponentSettings(type: string, settings: any) {
     // Fallbacks
     if (!parsed.theme) parsed.theme = "light";
     if (!parsed.backgroundColor) parsed.backgroundColor = "";
-    if (!parsed.copyright) parsed.copyright = `© ${new Date().getFullYear()} Generation Nepal. All rights reserved.`;
+    if (!parsed.copyright) parsed.copyright = `© ${new Date().getFullYear()}`;
     if (!parsed.mobileGridColumns) parsed.mobileGridColumns = "1";
     if (!parsed.mobileAlignment) parsed.mobileAlignment = "inherit";
 
@@ -68,8 +68,8 @@ export const ComponentFooterDefaultChildrensMap = [
         label: "Column 1: Info",
         settings: { direction: "column", width: "flex-grow" },
         children: [
-            { type: "text_block", label: "Brand Logo", settings: { text: "Generation Nepal", asLink: false, fontWeight: "bold" } },
-            { type: "text_block", label: "Description", settings: { text: "Premium eCommerce store representing local craftsmanship and next-gen gear.", asLink: false } }
+            { type: "text_block", label: "Brand Logo", settings: { text: "Company name", asLink: false, fontWeight: "bold" } },
+            { type: "text_block", label: "Description", settings: { text: "Company description", asLink: false } }
         ]
     },
     {
