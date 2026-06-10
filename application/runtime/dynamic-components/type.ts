@@ -38,6 +38,7 @@ export type BaseTypes =
     | "map_block"
     | "price_block"
     | "countdown_block"
+    | "faq_block"
     // 3. Stateful Form Elements & Intake
     | "form_wrapper"
     | "input_block"

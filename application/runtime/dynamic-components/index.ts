@@ -15,6 +15,7 @@ import { ASearchBarBlockComponent } from "./content/search-bar-block";
 import { ASocialLinksBlockComponent } from "./content/social-links";
 import { ATextBlockComponent } from "./content/text-block";
 import { ATextCarouselComponent } from "./content/text-carousel";
+import { AFAQBlockComponent } from "./content/faq-block";
 
 // Hero Blocks
 import { AHeroBannerBlockComponent } from "./hero/banner-block";
@@ -46,6 +47,7 @@ export const ComponentAllSchemaSettingsMap: Record<string, (ComponentRegistryEnt
     "logo_block": ALogoBlockComponent,
     "search_bar_block": ASearchBarBlockComponent,
     "nav_utilities_block": ANavUtilitiesBlockComponent,
+    "faq_block": AFAQBlockComponent,
 };
 
 export type { BaseTypes } from "./type";
