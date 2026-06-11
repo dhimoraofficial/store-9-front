@@ -39,15 +39,16 @@ export default function ClientComponent({
     children,
     style
 }: BoxBlockProps) {
-    // Width mapping matching old footer width options
+    // Width mapping — stays full-width on mobile/tablet, only constrains at lg
+    // where the footer parent switches to flex-row
     const widthClasses = {
-        "auto": "w-full md:w-auto md:flex-initial lg:min-w-[150px] max-w-full",
-        "1": "w-full md:w-[45%] lg:w-[15%] lg:flex-1 lg:min-w-[150px] max-w-full",
-        "2": "w-full md:w-[45%] lg:w-[20%] lg:flex-[2] lg:min-w-[180px] max-w-full",
-        "3": "w-full md:w-[45%] lg:w-[25%] lg:flex-[3] lg:min-w-[200px] max-w-full",
-        "flex-grow": "w-full md:w-[45%] lg:w-[35%] lg:flex-grow lg:min-w-[220px] max-w-full",
-        "flex-1": "w-full md:w-[45%] lg:w-[20%] lg:flex-1 lg:min-w-[180px] max-w-full",
-        "full": "w-full"
+        "auto":      "w-full lg:w-auto lg:flex-initial lg:min-w-[150px]",
+        "1":         "w-full lg:w-[15%] lg:flex-1 lg:min-w-[150px]",
+        "2":         "w-full lg:w-[20%] lg:flex-[2] lg:min-w-[180px]",
+        "3":         "w-full lg:w-[25%] lg:flex-[3] lg:min-w-[200px]",
+        "flex-grow": "w-full lg:w-[35%] lg:flex-grow lg:min-w-[220px]",
+        "flex-1":    "w-full lg:w-[20%] lg:flex-1 lg:min-w-[180px]",
+        "full":      "w-full"
     };
 
     const alignClasses = {

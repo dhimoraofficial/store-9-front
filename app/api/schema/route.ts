@@ -11,8 +11,12 @@ import {
     defaultNavbarSchema,
     defaultProductSchema,
     defaultSearchSchema,
-    defaultThemeConfig
+    defaultThemeConfig,
+    defaultAboutSchema,
+    defaultFaqSchema,
+    defaultContactSchema
 } from "../../[[...page]]/defaults";
+
 
 function getDefaultRouteInfo(route: string): { type: string, layout: string } {
     if (route === "/") {
@@ -35,6 +39,12 @@ function getDefaultRouteInfo(route: string): { type: string, layout: string } {
     }
     if (route === "/search") {
         return { type: "DB", layout: "search" };
+    }
+    if (route === "/faq" || route === "/faqs") {
+        return { type: "SP", layout: "faq" };
+    }
+    if (route === "/contact" || route === "/contact-us") {
+        return { type: "SP", layout: "contact" };
     }
 
     // Generic fallback for custom pages
@@ -64,7 +74,17 @@ function getDefaultLayoutSchema(layoutKey: string, route: string): any[] {
     if (layoutKey === "search" || route === "/search") {
         return defaultSearchSchema;
     }
+    if (layoutKey === "about" || layoutKey === "about-us" || route === "/about" || route === "/about-us") {
+        return defaultAboutSchema;
+    }
+    if (layoutKey === "faq" || layoutKey === "faqs" || route === "/faq" || route === "/faqs") {
+        return defaultFaqSchema;
+    }
+    if (layoutKey === "contact" || layoutKey === "contact-us" || route === "/contact" || route === "/contact-us") {
+        return defaultContactSchema;
+    }
     return [];
+
 }
 
 export async function GET(req: NextRequest) {
@@ -135,7 +155,29 @@ export async function GET(req: NextRequest) {
                         type: "custom"
                     });
                 }
+                if (keyParam === "about" || keyParam === "about-us") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultAboutSchema,
+                        type: "custom"
+                    });
+                }
+                if (keyParam === "faq" || keyParam === "faqs") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultFaqSchema,
+                        type: "custom"
+                    });
+                }
+                if (keyParam === "contact" || keyParam === "contact-us") {
+                    return NextResponse.json({
+                        success: true,
+                        schema: defaultContactSchema,
+                        type: "custom"
+                    });
+                }
                 return NextResponse.json({ error: `Layout not found: ${keyParam}` }, { status: 404 });
+
             }
 
             const schema = doc._c || [];

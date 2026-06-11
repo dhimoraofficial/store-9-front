@@ -15,7 +15,10 @@ import {
     defaultNavbarSchema,
     defaultProductSchema,
     defaultSearchSchema,
-    defaultThemeConfig
+    defaultThemeConfig,
+    defaultAboutSchema,
+    defaultFaqSchema,
+    defaultContactSchema
 } from "./defaults"
 
 function getDefaultRouteInfo(route: string): { type: string, layout: string } {
@@ -39,6 +42,12 @@ function getDefaultRouteInfo(route: string): { type: string, layout: string } {
     }
     if (route === "/search") {
         return { type: "DB", layout: "search" };
+    }
+    if (route === "/faq" || route === "/faqs") {
+        return { type: "SP", layout: "faq" };
+    }
+    if (route === "/contact" || route === "/contact-us") {
+        return { type: "SP", layout: "contact" };
     }
     
     // Generic fallback for custom pages
@@ -68,7 +77,17 @@ function getDefaultLayoutSchema(layoutKey: string, route: string): ComponentSche
     if (layoutKey === "search" || route === "/search") {
         return defaultSearchSchema;
     }
+    if (layoutKey === "about" || layoutKey === "about-us" || route === "/about" || route === "/about-us") {
+        return defaultAboutSchema;
+    }
+    if (layoutKey === "faq" || layoutKey === "faqs" || route === "/faq" || route === "/faqs") {
+        return defaultFaqSchema;
+    }
+    if (layoutKey === "contact" || layoutKey === "contact-us" || route === "/contact" || route === "/contact-us") {
+        return defaultContactSchema;
+    }
     return [];
+
 }
 
 
@@ -164,7 +183,14 @@ export async function getApplicationPageRender({ route, tenant, store, isEditor 
                 route.startsWith("/collections/") || 
                 route === "/cart" || 
                 route === "/checkout" || 
-                route === "/search";
+                route === "/search" ||
+                route === "/about" ||
+                route === "/about-us" ||
+                route === "/faq" ||
+                route === "/faqs" ||
+                route === "/contact" ||
+                route === "/contact-us";
+
 
             if (isValidDefaultRoute) {
                 routeDoc = {
